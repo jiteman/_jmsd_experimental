@@ -1,0 +1,3 @@
+[submodule "jmsd_exp_component"]
+	path = jmsd_exp_component
+	url = https://github.com/jiteman/jmsd_exp_component.git
