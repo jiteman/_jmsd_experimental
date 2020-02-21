@@ -25,7 +25,7 @@ public:
 	Exp_sfml_base_class() noexcept;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-protected:
+public:
 	Exp_sfml_base_class( Exp_sfml_base_class const &another ) noexcept;
 	Exp_sfml_base_class &operator =( Exp_sfml_base_class const &another ) noexcept;
 

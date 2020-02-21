@@ -33,7 +33,7 @@ public:
 	Exp_sfml_derived_class() noexcept;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-protected:
+public:
 	Exp_sfml_derived_class( Exp_sfml_derived_class const &another ) noexcept;
 	Exp_sfml_derived_class &operator =( Exp_sfml_derived_class const &another ) noexcept;
 
