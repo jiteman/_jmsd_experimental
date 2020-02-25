@@ -1,15 +1,13 @@
 #pragma once
 
 
-//#include "osl/libimage/il/il.h"
-//#include "osl/libimage/ilu/ilu.h"
+#include "osl/libimage/il/il.h"
+#include "osl/libimage/ilu/ilu.h"
 
 #include "open_gl.h"
 
-#include "glad/gl.h"
 
-
-#define TEX_TYPES 22 //РєРѕР»-РІРѕ С‚РµРєСЃС‚СѓСЂ
+#define TEX_TYPES 22 //кол-во текстур
 
 
 #define TEXTURE_CURSOR global_Textures[0]
@@ -35,27 +33,26 @@
 #define TEXTURE_UNITS_SELECTION(type) TEXTURE_UNITS
 
 
-// РЎРѕР·РґР°РґРёРј СЃС‚СЂСѓРєС‚СѓСЂСѓ TextureImage РґР»СЏ С…СЂР°РЅРµРЅРёСЏ РґР°РЅРЅС‹С… С‚РµРєСЃС‚СѓСЂС‹.
+// Создадим структуру TextureImage для хранения данных текстуры.
 struct TextureImage
 {
-	GLubyte *imageData;		// Р”Р°РЅРЅС‹Рµ С‚РµРєСЃС‚СѓСЂС‹
-	GLuint	bpp;			// Р‘Р°Р№С‚ РЅР° РїРёРєСЃРµР»
-	GLuint width,height;		// Р’С‹СЃРѕС‚Р° Рё С€РёСЂРёРЅР°
-	GLuint texID;			// ID С‚РµРєСЃС‚СѓСЂС‹
+	GLubyte *imageData;		// Данные текстуры
+	GLuint	bpp;			// Байт на пиксел
+	GLuint width,height;		// Высота и ширина
+	GLuint texID;			// ID текстуры
 };
-
-
-// РљР»Р°СЃСЃ С‚РµРєСЃС‚СѓСЂ. Р—Р°РіСЂСѓР·РєР° Рё РІС‹СЃРІРѕР±РѕР¶РґРµРЅРёРµ.
+ 
+ 
+// Класс текстур. Загрузка и высвобождение.
 class CTexture{
 public:
-
+ 
 	CTexture();
 	~CTexture();
-
-	// РЎРѕР±СЃС‚РІРµРЅРЅРѕ, РєР»Р°СЃСЃ РЅР°С€ РґРµР»Р°РµС‚ РЅРµРјРЅРѕРіРѕ - РІ РЅС‘Рј С‚РѕР»СЊРєРѕ 2 С„СѓРЅРєС†РёРё -
-	// Р·Р°РіСЂСѓР·РєР° Рё РѕСЃРІРѕР±РѕР¶РґРµРЅРёРµ С‚РµРєСЃС‚СѓСЂ =)
-//	void LoadTexture(ILenum FileType, char *filename, TextureImage *texture, bool bMultAlpha);
-	void LoadTexture( char const *filename, ::sf::Texture *out_texture, bool bMultAlpha );
+ 
+	// Собственно, класс наш делает немного - в нём только 2 функции - 
+	// загрузка и освобождение текстур =)
+	void LoadTexture(ILenum FileType, char *filename, TextureImage *texture, bool bMultAlpha);
 	void FreeTexture(TextureImage *texture);
 };
 

@@ -1,7 +1,7 @@
 #pragma once
 
 
-// #include "jmsf/types.h"
+#include "jmsf/types.h"
 
 
 template<class ele>
@@ -34,13 +34,13 @@ void DoForEach(el<T>*beg,void(*act)(T*))
 template<class T>
 void DoForEach(T*beg,void(*act)(T*),int num)
 {
-
+	
 	while(num)
 	{
 		num--;
 		act(beg);
 		beg++;
-
+		
 	}
 }
 
@@ -86,7 +86,7 @@ void st<ele>::DelEl(el<ele>*prv)
 		tmp=beg->next;
 		delete beg;
 		beg=tmp;
-	}else
+	}else 
 	{
 		tmp=prv->next->next;
 		delete prv->next;
@@ -112,7 +112,7 @@ bool st<ele>::Delete(ele v)
    {
 	   if(tmp->v==v)
 	   {
-
+		   
 		   tmp=tmp->next;
 		   if(tmp2)
 		   {
@@ -125,7 +125,7 @@ bool st<ele>::Delete(ele v)
 			   beg=tmp;
 		   }
 
-
+		   
 		   return 1;
 	   }
 	   tmp2=tmp;
@@ -165,12 +165,12 @@ void st<ele>::DelEl(ele vl)
 {
   el<ele>*tmp=beg,*tmp2;
   if(!beg)return;
-
+  
   if(beg->v==vl)
   {
 	  tmp2=beg->next;
 	  delete beg;
-
+	  
 	  beg=tmp2;
 	  return;
   }
@@ -188,7 +188,7 @@ void st<ele>::DelEl(ele vl)
 	  }
 	  tmp=tmp->next;
   }
-
+  
   if(tmp->next->v==vl)
   {
 	  delete (tmp->next);
@@ -231,19 +231,19 @@ public:
 	bool IsDone(){return (i==0);}
 	void DeleteCur()
 	{
-
+		
 		if(!i)return;
 		i=i->next;
 
 		if(!i1)
 		{
-
+			
 			delete ss->beg;
 			ss->beg=i;
 
 		}else
 		{
-
+			
 			delete i1->next;
 			i1->next=i;
 
@@ -319,19 +319,19 @@ public:
 	bool IsDone(){return (i==0);}
 	void DeleteCur()
 	{
-
+		
 		if(!i)return;
 		i=i->next;
 
 		if(!i1)
 		{
-
+			
 			delete ss->beg;
 			ss->beg=i;
 
 		}else
 		{
-
+			
 			delete i1->next;
 			i1->next=i;
 
@@ -373,7 +373,7 @@ template<class ele>
 void st2<ele>::AddStDBL(st2<ele>*s)
 {
 	el<ele>*tmp=beg;
-	if(!tmp)
+	if(!tmp)	
 	{
 		beg=s->beg;
 		n=s->n;
@@ -385,7 +385,7 @@ void st2<ele>::AddStDBL(st2<ele>*s)
 	}
 	s->n=0;
 	s->beg=NULL;
-
+	
 
 }
 template<class ele>
@@ -396,7 +396,7 @@ void st2<ele>::AddStDBL(el<ele>*bg)
 		AddElDBL(bg->v);
 		bg=bg->next;
 	}
-
+	
 
 }
 template<class ele>
@@ -426,24 +426,24 @@ void st2<ele>::DelEl(ele vl)
   if(!n)return;
   if(n==1 && beg->v==vl)
   {
-
+	  
 	  delete beg;
 	  beg=NULL;
 	  n=0;
 	  return;
   }
-
+  
   if(beg->v==vl)
   {
 	  tmp2=beg->next;
 	  delete beg;
-
+	  
 	  beg=tmp2;
 	  n--;
 	  return;
   }
 
-
+  
   while(tmp->next->next!=NULL)
   {
 	  if(tmp->next->v==vl)
@@ -456,7 +456,7 @@ void st2<ele>::DelEl(ele vl)
 	  }
 	  tmp=tmp->next;
   }
-
+  
   if(tmp->next->v==vl)
   {
 	  delete (tmp->next);
@@ -481,7 +481,7 @@ template<class ele>
 class stek
 {public:
   el<ele>*top,*beg;
-
+  
 
 
   stek(){top=nullptr;beg=nullptr;}
@@ -490,11 +490,11 @@ class stek
   int GetNum(){el<ele>*tmp=top;int res=0;while(tmp){tmp=tmp->next;res++;}return res;}
 
   void DeleteEl();
-
+  
   void renull();
-
-
-
+  
+  
+  
   ele GetElem()  {	return top->v;  }
 
   ~stek(){renull();}
@@ -506,15 +506,15 @@ void stek<ele>::DeleteEl()
 	if(!top)return;
 	if(!top->next)
 	{
-
+		
 		delete top;
 		top=nullptr;
 		beg=nullptr;
-
+		
 		return;
 	}
 	el<ele>*tmp=top;
-
+	
 	top=top->next;
 	delete tmp;
 }
@@ -525,7 +525,7 @@ void stek<ele>::AddEl(ele vl)
   if(!top)
   {
     top=new el<ele>;
-
+	
     top->next = nullptr;
     top->v=vl;
 	beg=top;
@@ -560,7 +560,7 @@ template<class ele>
 void stek<ele>::renull()
 {
   if(top)delel(top);
-
+  
   beg=nullptr;
   top=nullptr;
   return;
