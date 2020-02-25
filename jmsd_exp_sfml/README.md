@@ -1,2 +1,2 @@
-# jmsd_exp_component
-Jitemania's experimental component template
+# jmsd_exp_sfml
+Jitemania's sfml example

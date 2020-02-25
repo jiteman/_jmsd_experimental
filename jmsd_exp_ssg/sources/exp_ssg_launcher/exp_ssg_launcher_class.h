@@ -1,20 +1,20 @@
 #pragma once
 
 
-#include "exp_sfml_derived_class.h"
+#include "exp_ssg_launcher_lib_class.h"
 
 
 namespace jmsd {
 namespace exp_executable {
 
 
-class Exp_sfml_executable_class :
-	public exp_derived::Exp_sfml_derived_class
+class Exp_ssg_launcher_class :
+	public exp_derived::Exp_ssg_launcher_lib_class
 {
 
 public:
-	// virtuals Exp_sfml_derived_class
-	//~virtuals Exp_sfml_derived_class
+	// virtuals Exp_ssg_launcher_lib_class
+	//~virtuals Exp_ssg_launcher_lib_class
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 public:
@@ -22,22 +22,22 @@ public:
 
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 public:
-	// virtual Exp_sfml_derived_class
-	~Exp_sfml_executable_class() noexcept override;
+	// virtual Exp_ssg_launcher_lib_class
+	~Exp_ssg_launcher_class() noexcept override;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 public:
-	Exp_sfml_executable_class() noexcept;
+	Exp_ssg_launcher_class() noexcept;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 private:
-	Exp_sfml_executable_class( const Exp_sfml_executable_class &another ) noexcept;
-	Exp_sfml_executable_class &operator =( const Exp_sfml_executable_class &another ) noexcept;
+	Exp_ssg_launcher_class( const Exp_ssg_launcher_class &another ) noexcept;
+	Exp_ssg_launcher_class &operator =( const Exp_ssg_launcher_class &another ) noexcept;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 private:
-	Exp_sfml_executable_class( Exp_sfml_executable_class &&another ) noexcept;
-	Exp_sfml_executable_class &operator =( Exp_sfml_executable_class &&another ) noexcept;
+	Exp_ssg_launcher_class( Exp_ssg_launcher_class &&another ) noexcept;
+	Exp_ssg_launcher_class &operator =( Exp_ssg_launcher_class &&another ) noexcept;
 
 // # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 private:

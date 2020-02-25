@@ -1,43 +1,46 @@
 #pragma once
 
 
-#include "exp_sfml_derived_class.h"
+#include "exp_ssg_lib_class.h"
+
+
+#include "exp_ssg_launcher_lib.h"
 
 
 namespace jmsd {
-namespace exp_executable {
+namespace exp_derived {
 
 
-class Exp_sfml_executable_class :
-	public exp_derived::Exp_sfml_derived_class
+class JMSD_EXP_SSG_LAUNCHER_LIBRARY_SHARED_INTERFACE Exp_ssg_launcher_lib_class :
+	public exp_base::Exp_ssg_lib_class
 {
 
 public:
-	// virtuals Exp_sfml_derived_class
-	//~virtuals Exp_sfml_derived_class
+	// virtuals Exp_ssg_lib_class
+	//~virtuals Exp_ssg_lib_class
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 public:
-	char const *say_executable_hello() const noexcept;
+	char const *say_derived_hello() const noexcept;
 
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 public:
-	// virtual Exp_sfml_derived_class
-	~Exp_sfml_executable_class() noexcept override;
+	// virtual Exp_ssg_lib_class
+	~Exp_ssg_launcher_lib_class() noexcept override;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 public:
-	Exp_sfml_executable_class() noexcept;
+	Exp_ssg_launcher_lib_class() noexcept;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-private:
-	Exp_sfml_executable_class( const Exp_sfml_executable_class &another ) noexcept;
-	Exp_sfml_executable_class &operator =( const Exp_sfml_executable_class &another ) noexcept;
+protected:
+	Exp_ssg_launcher_lib_class( Exp_ssg_launcher_lib_class const &another ) noexcept;
+	Exp_ssg_launcher_lib_class &operator =( Exp_ssg_launcher_lib_class const &another ) noexcept;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-private:
-	Exp_sfml_executable_class( Exp_sfml_executable_class &&another ) noexcept;
-	Exp_sfml_executable_class &operator =( Exp_sfml_executable_class &&another ) noexcept;
+protected:
+	Exp_ssg_launcher_lib_class( Exp_ssg_launcher_lib_class &&another ) noexcept;
+	Exp_ssg_launcher_lib_class &operator =( Exp_ssg_launcher_lib_class &&another ) noexcept;
 
 // # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 private:
@@ -51,5 +54,5 @@ private:
 };
 
 
-} // namespace exp_executable
+} // namespace exp_derived
 } // namespace jmsd
