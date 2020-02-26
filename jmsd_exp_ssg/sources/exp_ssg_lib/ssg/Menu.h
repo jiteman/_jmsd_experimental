@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include "jmsf/stdal/stdal_stl.h"
+#include <string>
 
 template< class > class st;
 

@@ -1,6 +1,8 @@
 #include "MyFuns.h"
 
 
+#include <functional>
+
 int sqrtMem[(1<<SQRT_MEM_VAL)];
 unsigned my_seed=1;
 
@@ -16,7 +18,7 @@ tka LinesCross(tka v,tka u,tka d)
 // 	if(!ll)return;
 // 	cs.x=scalar(t)/ll;
 // 	cs.y=vect(t)/ll;
-// 
+//
 // }
 
 unsigned MyRand()
@@ -28,5 +30,5 @@ unsigned MyRand()
 }
 
 float KVAZIL( const tka &a, const tka &b ) {
-	return ::abs( a.getX() - b.getX() ) + ::abs( a.getY() - b.getY() );
+	return ::std::abs( a.getX() - b.getX() ) + ::abs( a.getY() - b.getY() );
 }

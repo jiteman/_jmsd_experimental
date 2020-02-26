@@ -1,14 +1,14 @@
 #pragma once
 
 
-#include "temporary_windows_include.h"
+#include "include_Windows.h"
 
 #include "open_gl.h"
 
 
 extern HGLRC hRC;		// Постоянный контекст рендеринга
 extern HDC hDC;			// Приватный контекст устройства GDI
-extern HWND		hWnd;// Сохранение дискриптора окна	   
+extern HWND		hWnd;// Сохранение дискриптора окна
 extern DEVMODE dmScreenSettings;			// Режим работы
 
 

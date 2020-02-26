@@ -1,9 +1,9 @@
 #pragma once
 
 
-#include "temporary_windows_include.h"
+#include <string>
 
-#include "jmsf/stdal/stdal_stl.h"
+#include "include_Windows.h"
 
 
 class CFile

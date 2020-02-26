@@ -1,8 +1,6 @@
 #pragma once
 
 
-#include "jmsf/stdal/stdal_stl.h"
-
 
 class CFile;
 extern CFile global_file;

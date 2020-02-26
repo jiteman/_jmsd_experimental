@@ -4,7 +4,7 @@
 #include "myfuns.h"
 #include "st.h"
 
-#include "jmsf/stdal/stdal_stl.h"
+#include <string>
 
 class remSnd;
 

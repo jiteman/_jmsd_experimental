@@ -1,5 +1,7 @@
 #pragma once
 
+#include <algorithm>
+
 
 template< class > class st;
 
@@ -8,7 +10,7 @@ struct Order;
 template<class T>
 void PackObj(char* bf, T* obj)
 {
-	
+
 	memcpy(bf,obj,sizeof(*obj));
 }
 template<class T>
@@ -36,11 +38,11 @@ public:
 
 	void PushBack(char*dt,int dt_num);
 	bool PopFront(char*dt,int dt_num);
-	
+
 	template<class T>
 	void PushBack(T Obj);
 
-	template<class T> 
+	template<class T>
 	void PushFront(T Obj);
 
 
@@ -53,30 +55,34 @@ private:
 	int num,t_num,start;
 	char*arr;
 
-	
+
 };
 
 
-template<class T> 
+template<class T>
 void Pocket::PushBack(T Obj)
 {
-	if(num+start+(int)sizeof(T)>=t_num)GrowBack( std::max( sizeof( T ), size_t( VECT_GROW_NUM ) ) );
-	memcpy(arr+num+start,&Obj,sizeof(T));
-	num+=sizeof(T);
+	if ( num + start + ( int )sizeof( T ) >= t_num ) {
+		GrowBack( ::std::max( sizeof( T ), size_t( VECT_GROW_NUM ) ) );
+	}
+
+	memcpy( arr + num + start, &Obj, sizeof( T ) );
+	num += sizeof( T );
 }
-template<class T> 
+
+template<class T>
 void Pocket::PushFront(T Obj)
 {
 	if(start<sizeof(T))
 		GrowFront( std::max( sizeof( T ), size_t( VECT_GROW_NUM ) ) );
 	else
 		start-=sizeof(T);
-	
+
 	memcpy(arr+start,&Obj,sizeof(T));
 	num+=sizeof(T);
 }
 
-template<class T> 
+template<class T>
 bool Pocket::PopFront(T& Obj)
 {
 	if(sizeof(T)>num)return false;

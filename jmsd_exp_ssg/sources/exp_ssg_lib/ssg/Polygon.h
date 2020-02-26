@@ -38,7 +38,7 @@ void LinePr(float cx,float cy,float *vx,float *vy);
 void LinePr2(float cx,float cy,float *vx,float *vy);
 
 
-bool LineCrossLine(tka*a1,tka*a2,tka*b1,tka*b2);
+bool LineCrossLine( tka const &a1, tka const &a2, tka const &b1, tka const &b2 );
 bool LineCrossSomething(tka a,tka b,int*ppoly=0, tka*pnt=0);
 int LineCrossPoly(tka* a,tka* b,tka*p,bool onetime=0);
 bool LineLine2(tka&a1,tka&a2,tka&b1,tka&b2,tka*v0);
@@ -83,7 +83,7 @@ void transfering_to_vector_AddElem( A_type el, A_type **vector ) {
 template< class A_type >
 bool transfering_to_vector_ExistsElem( A_type el, const A_type *const vector ) {
 	size_t n = 0;
-	
+
 	if ( vector ) {
 		n = transfering_to_vector_VectorSize( vector )
 	} else {
@@ -130,12 +130,12 @@ template<class T>
 bool ExistsElem(T el,T*vector)
 {
 	int n,i;
-	
+
 	if(vector)n=_msize(vector)/sizeof(T);else return 0;
 	for(i=0;i<n;i++)if(vector[i]==el)return 1;
 	return 0;
-	
-	
+
+
 }
 
 template<class T>

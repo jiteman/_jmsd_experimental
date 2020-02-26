@@ -5,8 +5,6 @@
 
 //#include "jmsf/stdal/stdal_stl.h"
 
-#include "SFML/Graphics.hpp"
-
 
 CTexture *Texture;
 // TextureImage global_Textures[TEX_TYPES];

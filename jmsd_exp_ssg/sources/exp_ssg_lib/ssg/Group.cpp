@@ -25,19 +25,19 @@ void UnGroup(int* i)
 	else
 		sel.beg=gg->un.beg;
 	gg->un.beg=0;
-	
+
 }*/
 
 void Group::UnGroup()
 {
 	if(!un.beg)return;
 	temp_i=-1;
-	
+
 	DoForEach(un.beg,Act_setId);
-	
+
 //	if(((Units+un.beg->v)->pl&7)==MyConf.MY_PLAYER)
 //	{}
-	un.renull();	
+	un.renull();
 }
 
 void Group::CorrectRoute() {
@@ -50,9 +50,9 @@ void Group::CorrectRoute() {
 	float ml = sldp1->pos.getLengthSquare( cc );
 	float ll;
 	int kk = un.beg->v;
-	
+
 	while ( tmp ) {
-		sldp = Units + tmp->v;		
+		sldp = Units + tmp->v;
 		ll = sldp->pos.getLengthSquare( cc );
 
 		if ( ml > ll ) {
@@ -91,9 +91,9 @@ void Group::CorrectRoute() {
 						sldp->way.AddEl( cc );
 					}
 
-					::CorrectRoute( sldp );					
+					::CorrectRoute( sldp );
 				}
-			}			
+			}
 		}
 
 		tmp = tmp->next;
@@ -113,7 +113,7 @@ void Group::CorrectRoute()
 		::CorrectRoute(sldp1);
 	group_way=sldp1->way.top;
 	cc=sldp1->pos;
-	
+
 	while(tmp)
 	{
 		sldp=Units+tmp->v;
@@ -130,7 +130,7 @@ void Group::CorrectRoute()
 				if(!(sldp->way.top->v==cc))
 					sldp->way.AddEl(cc);
 				::CorrectRoute(sldp);
-				
+
 			}
 		}
 		tmpi++;
@@ -141,7 +141,7 @@ void Group::CorrectRoute()
 		}
 		tmp=tmp->next;
 	}
-	
+
 
 }*/
 
@@ -167,7 +167,7 @@ void UpdateGroup(int id)
 		else
 			it.Next();
 	}
-	
+
 }
 
 
@@ -179,7 +179,7 @@ int CreateGroup(el<int>* beg)
 	Group* tmpgrp=global_groups;
 	for(i=0;i<MAX_GROUPS_NUM;i++,tmpgrp++)
 		if(!tmpgrp->un.beg)break;
-	
+
 	if(i==MAX_GROUPS_NUM)return -1;
 	temp_i=i;
 
@@ -188,7 +188,7 @@ int CreateGroup(el<int>* beg)
 //	tmpgrp->pos=CalcCenter(&tmpgrp->un);
 //	tmpgrp->nav=tmpgrp->pos+tka(1,0);
 //	tmpgrp->GoOnCurPos(0);
-	
+
 
 	UpdateGroup(i);
 	return i;
@@ -224,7 +224,7 @@ void JoinFromGroups(st<int>*ss)
 		}
 		tmpg=tmpg->next;
 	}
-	
+
 }*/
 
 int GetGroupsNum()
@@ -251,7 +251,7 @@ void DeleteAllGroups()
 		gg++;
 		i++;
 	}
-	
+
 }
 void GroupCheck(Group* g)
 {
@@ -281,45 +281,37 @@ void GroupLook(Group* g)
 }
 
 
-void GroupCorrectRoute(Group* g)
-{
-	el<int>* ss;
-	sld* sldp;
-	tka tmpt;
-	el<tka>* g_way;
-	bool fl=true;
+void GroupCorrectRoute( Group *g ) {
+	if ( g == nullptr ) return;
 
-	if(!g)return;
-	ss=g->un.beg;
-	while(ss)
-	{
-		sldp=Units+ss->v;
-		if(fl)
-		{
-			CorrectRoute(sldp);
-			tmpt=sldp->pos;
-			g_way=sldp->way.top;
-			fl=false;
-		}else
-		{
-			if(LineCrossSomething(sldp->pos,tmpt))
-			{
-				fl=true;
+	tka tmpt;
+	el< tka > *g_way = nullptr;
+	bool fl = true;
+
+	el< int > *ss = g->un.beg;
+
+	while ( ss ) {
+		sld *sldp = Units + ss->v;
+
+		if ( fl ) {
+			CorrectRoute( sldp );
+			tmpt = sldp->pos;
+			g_way = sldp->way.top;
+			fl = false;
+		} else {
+			if ( LineCrossSomething( sldp->pos, tmpt ) ) {
+				fl = true;
 				continue;
-			}else
-			{
+			} else {
 				sldp->way.renull();
-				CopyElements(&sldp->way.beg,g_way);
-				sldp->way.AddEl(tmpt);
-				
+				CopyElements( &sldp->way.beg, g_way );
+				sldp->way.AddEl( tmpt );
+
 			}
 		}
-		ss=ss->next;
+
+		ss = ss->next;
 	}
-
-
-
-
 }
 
 void Group::GoOnCurPos( const bool add ) {
@@ -328,34 +320,38 @@ void Group::GoOnCurPos( const bool add ) {
 
 int JoinUnitAuto(int id)
 {
-	int i,mn=MAX_NUM_IN_GROUP,n,k=-1;
-	sld *sldp=Units+id, *sldp2;
-	Group *gg=global_groups, *mg;
-	for(i=0;i<MAX_GROUPS_NUM;i++,gg++)
-		if(gg->un.beg)
-		{
+	int mn = MAX_NUM_IN_GROUP;
+	int n = 0;
+	int k = -1;
+	sld *sldp = Units + id;
+	sld *sldp2 = nullptr;
+	Group *gg = global_groups;
+	Group *mg = nullptr;
+
+	for( int i=0; i < MAX_GROUPS_NUM; i++, gg++ ) {
+		if(gg->un.beg) {
 			sldp2=Units+gg->un.beg->v;
 			if(!((sldp2->pl^sldp->pl)&7))
 				if(sldp2->type==sldp->type)
 				{
 					n=gg->un.GetNum();
-					
+
 					if(mn>n){mn=n;k=i;mg=gg;}
 				}
-			
-			
+
+
 		}
+	}
+
 	if(k!=-1)
 	{
 		sldp->group_id=k;
 		mg->un.AddEltoBeg(id);
 		mg->GoOnCurPos(0);
-		
-		
-
 	}
+
 	return k;
-		
+
 }
 
 void AutoCreateGroup( const char pl ) {
@@ -402,7 +398,7 @@ void SpreadGroupCenters(st<int>*sl)
 	if(!i)return;
 	cc=(Units+(global_groups+i->v)->un.beg->v)->pos;
 
-	
+
 	while(i)
 	{
 		gg=(global_groups+i->v);
@@ -420,7 +416,7 @@ void GroupUnits(st<int>*sl)
 	char type;
 	int ii,id;
 	st_iterator<int> it;
-	
+
 	while(sl->beg)
 	{
 		it.AcceptSt(sl);
@@ -436,10 +432,10 @@ void GroupUnits(st<int>*sl)
 				it.DeleteCur();
 				id++;
 				if(id==MAX_NUM_IN_GROUP)break;
-			
+
 			}else
 				it.Next();
-			
+
 		}
 		id=tmpst.GetNum();
 		if(id>=MIN_NUM_IN_GROUP)
@@ -463,8 +459,8 @@ void GroupSelected()
 	int ii,id;
 	st_iterator<int> it;
 
-	
-	
+
+
 	ng.AddStDBL(sel.beg);
 	while(tmp)
 	{
@@ -489,10 +485,10 @@ void GroupSelected()
 				it.DeleteCur();
 				id++;
 				if(id==MAX_NUM_IN_GROUP)break;
-			
+
 			}else
 				it.Next();
-			
+
 		}
 		id=tmpst.GetNum();
 		if(id>=MIN_NUM_IN_GROUP)
@@ -536,8 +532,8 @@ bool GroupSelected()
 			if(ii<2)return false;
 		}
 	}
-	
-	
+
+
 	while(!it.IsDone())
 	{
 		ii=*it.GetCurrent();
@@ -545,10 +541,10 @@ bool GroupSelected()
 		{
 			ng.AddEl(ii);
 			it.DeleteCur();
-			
+
 		}else
 			it.Next();
-			
+
 	}
 	int id=CreateGroup(ng.beg);
 	if(id!=-1)

@@ -13,7 +13,7 @@ float PolyColor[3];
 
 void GenVBOPoly(tka* p,float* arr,int* ind)
 {
-	int n=LNUM(p),j,k=n,l=0,cnt,ptt=0;
+	int n=LNUM(p),j,k=n,l=0,cnt; // ptt=0;
 	int vvv[3],nm=0;
 	float aaa=RND01*DOUBLE_PI,sinaaa=sin(aaa),cosaaa=cos(aaa);
 //	bool fff;
@@ -23,7 +23,7 @@ void GenVBOPoly(tka* p,float* arr,int* ind)
 
 	for ( j = 0; j < n; j += 1 ) {
 		tmpt = *( p + j ) * POLY_TEXT_SCALE;
-		tmpt.rotate( sinaaa, cosaaa );		
+		tmpt.rotate( sinaaa, cosaaa );
 		arr[ j * 4 ] = ( p + j )->getX();
 		arr[ j * 4 + 1 ] = ( p + j )->getY();
 		arr[ j * 4 + 2 ] = tmpt.getX();
@@ -32,28 +32,28 @@ void GenVBOPoly(tka* p,float* arr,int* ind)
 
 	tka tp,tk;//,old;
 //	int kk;
-	float d = 3;
-    
+//	float d = 3;
+
 	for( j = 0; j < n; j += 1 ) {
 		vv[ j ] = 0;
 	}
 
-	while ( k != 2 ) {			
+	while ( k != 2 ) {
 		cnt = 0;
 
 		do {
 			for ( j = 0; j < 3; j += 1 ) {
 				vvv[ j ] = ( j == 0 ) ? l : ( vvv[ j - 1 ] + 1 ) % n;
-				
+
 				while ( vv[ vvv[ j ] ] ) {
 					vvv[ j ] += 1;
-					
+
 					if ( vvv[ j ] == n ) {
 						vvv[ j ] = 0;
 					}
 				}
 			}
-			
+
 			for ( j = 0; j < n; j++ ) {
 				if ( j != vvv[ 0 ] && j != vvv[ 1 ] && j != vvv[ 2 ] ) {
 					if ( InsideTriangle( *( p + j ), *( p + vvv[ 0 ] ), *( p + vvv[ 1 ] ), *( p + vvv[ 2 ] ) ) ) {
@@ -62,15 +62,15 @@ void GenVBOPoly(tka* p,float* arr,int* ind)
 					}
 				}
 			}
-					
+
 			if ( j != -1 ) {
 				if ( ( *( p + vvv[ 1 ] ) - *( p + vvv[ 0 ] ) ).getVectorProduction( *( p + vvv[ 2 ] ) - *( p + vvv[ 1 ] ) ) < 0 ) {
 					break;
 				}
 			}
-				
+
 			l++;
-				
+
 			if ( l == n ) {
 				l = 0;
 			}
@@ -99,7 +99,7 @@ void DrawVboPolys() {
 
 	int tt = 0;
 
-	for ( int i = 0; i < global_quantityOfObstacles; i += 1 ) {
+	for ( size_t i = 0; i < global_quantityOfObstacles; i += 1 ) {
 		if ( IsHere( PolyCent[ i ], PolyRad[ i ] ) ) {
 			const int ntt = ( i * POLY_TYPES_NUM ) / ( global_quantityOfObstacles + 1 );
 
@@ -181,10 +181,10 @@ void GenVBOPolyShadow(tka* p,float** arr,int** ind) {
 	tka tp,tk;//,old;
 	float d=3;
 	float tmpel[6]={0,0,0,0,0,SHADOW_KOEF};
-	
+
 	*arr=0;
 	*ind=0;
-	
+
 	for(j=0;j<n;j++)
 	{
 		tp=p[j+1]-p[j];
@@ -213,7 +213,7 @@ void GenVBOPolyShadow(tka* p,float** arr,int** ind) {
             AddElemVBO( tmpel, 6, arr, ind );
 		}
 	}
-	
+
 	for(j=0;j<n;j++) {
 		tp=p[j+1]-p[j];
 
@@ -259,7 +259,7 @@ void GenVBOPolyShadow(tka* p,float** arr,int** ind) {
 				tmpel[ 0 ] = ( p + j )->getX();
                 tmpel[ 1 ] = ( p + j )->getY();
                 AddElemVBO( tmpel, 6, arr, ind );
-				
+
 				tmpel[ 0 ] = ( p + j )->getX() + SHADOW_DIST_POLY + tp.getX() * fl1;
                 tmpel[ 1 ] = ( p + j )->getY() + SHADOW_DIST_POLY + tp.getY() * fl1;
                 AddElemVBO( tmpel, 6, arr, ind );
@@ -296,7 +296,7 @@ void GenVBOPolyFrame(tka* p,float** arr,int** ind) {
 	int n=LNUM(p),j,l=0,ptt=0;
 	bool fff;
 	tka tmpt;
-	
+
 	float tmpel[6]={0,0,0,0,0,0};
 	//glPushAttrib(GL_CURRENT_BIT);
 
@@ -304,9 +304,9 @@ void GenVBOPolyFrame(tka* p,float** arr,int** ind) {
 	int kk;
 	float d=3;
 	*arr=0;
-	
+
 	*ind=0;
-	
+
 
 	for(kk=0;kk<2;kk++)
 		for(j=0;j<n;j++)
@@ -317,13 +317,13 @@ void GenVBOPolyFrame(tka* p,float** arr,int** ind) {
 			tmpel[1]=(p+j)->getY();
 			tmpel[5]=1;
 			AddElemVBO(tmpel,6,arr,ind);
-			
+
 
 			tp=p[j+1]-p[j];
 			tmpt=p[j]-p[(j-1+n)%n];
 			fff = ( tp.getVectorProduction(tmpt)<0);
 			tk=tp/tp.getLength()-tmpt/tmpt.getLength();
-			tk.normalize();		
+			tk.normalize();
 
 //			swap(tp.getX(),tp.getY());
             tp.setBoth( tp.getY(), tp.getX() );
@@ -362,12 +362,12 @@ void GenVBOPolyFrame(tka* p,float** arr,int** ind) {
 			AddElemVBO(tmpel,6,arr,ind);
 
 
-			
+
 			tp=p[(j+2)%n]-p[j+1];
 			tmpt=p[j+1]-p[j];
 			fff = ( tp.getVectorProduction(tmpt)<0);
 			tk=tp/tp.getLength()-tmpt/tmpt.getLength();
-			tk.normalize();		
+			tk.normalize();
 
 //			swap(tp.getX(),tp.getY());
             tp.setBoth( tp.getY(), tp.getX() );
@@ -386,12 +386,12 @@ void GenVBOPolyFrame(tka* p,float** arr,int** ind) {
 			}
 
 			tmpt+=p[j+1];
-			
+
 			//glColor4d(0,0,0,0);
 			//glVertex2f(tmpt.x,tmpt.y);
 			tmpel[0]=tmpt.getX();
 			tmpel[1]=tmpt.getY();
 			tmpel[5]=0;
 			AddElemVBO(tmpel,6,arr,ind);
-		}	
+		}
 }

@@ -8,6 +8,8 @@
 
 #include "glad/gl.h"
 
+#include "SFML/Graphics.hpp"
+
 
 #define TEX_TYPES 22 //кол-во текстур
 

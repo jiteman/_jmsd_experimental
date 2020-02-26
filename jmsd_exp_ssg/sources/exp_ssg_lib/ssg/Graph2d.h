@@ -4,10 +4,8 @@
 #include "Textures.h"
 #include "myfuns.h"
 
-#include "temporary_windows_include.h"
-
 //#include "Units.h"
-#include "jmsf/stdal/stdal_stl.h"
+
 
 
 struct sld;

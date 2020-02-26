@@ -10,10 +10,13 @@ class Pocket;
 struct Order
 {
 
-	char type, prm,pl,prm2;
-	//type: 
+	char type;
+	bool prm;
+	char pl;
+	char prm2;
+	//type:
 		//0-SendU prm=add
-		//1-SendB 
+		//1-SendB
 		//2-SendG prm=add
 		//3-SetU prm: 0-group   1-Del 2-status(prm2=filter)
 		//4-SetG prm: 0-ungroup 1-Del 2-status(prm2=filter)
@@ -21,15 +24,15 @@ struct Order
 
 	st<int> sl;
 	tka pos, nav;
-	
+
 	void SetDefault();
 	Order(){SetDefault();}
 	Order(Pocket& pc);
 	Order(char ntype,st<int>*nsl,tka t1,tka t2,char nprm);
 	Order(char ntype,st<int>*nsl,char nprm,char nprm2=0);
 	Order(char ntype,char nprm,char nprm2=0);
-	
-	
+
+
 	void Pack(Pocket& pc);
 	void UnPack(Pocket& pc);
 };

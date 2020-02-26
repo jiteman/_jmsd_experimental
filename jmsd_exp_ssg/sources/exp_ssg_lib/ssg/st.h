@@ -253,12 +253,12 @@ public:
 };
 
 template<class ele>
-void st<ele>::AddStDBL(el<ele>*beg)
+void st<ele>::AddStDBL(el<ele>*p_beg)
 {
-	while(beg)
+	while(p_beg)
 	{
-		AddEltoBeg(beg->v);
-		beg=beg->next;
+		AddEltoBeg(p_beg->v);
+		p_beg=p_beg->next;
 	}
 }
 

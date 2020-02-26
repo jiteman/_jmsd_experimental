@@ -5,8 +5,6 @@
 
 #include <memory.h>
 
-#include "jmsf/stdal/stdal_stl.h"
-
 
 Pocket::Pocket()
 	: t_num( 0 ), num( 0 ), start( 0 )
@@ -58,7 +56,7 @@ void Pocket::GrowBack(int d_num)
 		delete[]arr;
 	}
 	arr=tmp;
-	
+
 	t_num+=d_num;
 }
 
@@ -117,7 +115,7 @@ void PackSel(Pocket&pc, st<int>* sl)
 	__int16 i,i2=0,i1=32000;
 	el<int>*tmpt=sl->beg;
 	memset(tmpa,0,MAXSLD/8+1);
-	
+
 	while(tmpt)
 	{
 		i=tmpt->v;
@@ -126,7 +124,7 @@ void PackSel(Pocket&pc, st<int>* sl)
 		tmpa[i>>3]|=(1<<(i&7));
 		tmpt=tmpt->next;
 	}
-	
+
 	i1/=8;
 	i2/=8;
 	pc.PushBack(i1);
@@ -145,17 +143,17 @@ void UnPackSel(Pocket& pc,st<int>*sl)
 	for(i=i1;i<=i2;i++,b++)
 	if(*b)
 	{
-		
+
 		tmpc=1;
-		
+
 		for(j=0;j<8;j++)
 		{
 			if((*b)&tmpc){	sl->AddEltoBeg(cn);}
-			
+
 			cn++;
 			tmpc=tmpc<<1;
 		}
-		
+
 	}else cn+=8;
 
 	pc.PopFront(0,i2-i1+1);

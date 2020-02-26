@@ -8,9 +8,7 @@
 
 #include "st.h"
 
-#include "jmsf/types.h"
-
-#include "jmsf/stdal/stdal_stl.h"
+#include <algorithm>
 
 
 miss ms[MAX_MISSILES];//снаряды
@@ -39,7 +37,7 @@ void AddMiss(tka npos,tka nv,int ndes,char npl)
 }
 void DelMiss(int i)
 {
-	MisNum--;	
+	MisNum--;
 	*(ms+i)=*(ms+MisNum);
 }
 
@@ -58,7 +56,7 @@ void FlyMiss()
 	tka ttt;
 	while(i<MisNum)
 	{
-		
+
 		tmp->pos.x+=tmp->vel.x;
 		tmp->pos.y+=tmp->vel.y;
 		tmp->des--;
@@ -68,12 +66,12 @@ void FlyMiss()
 	    jj=int(tmp->pos.y)/KLET_SIZE;
 
 		tmppl=global_diplomation.d[tmp->pl];
-		
+
         if(here(ii,jj))
 		{
 			if((QUNex[ii][jj])&tmppl)
 		{
-			
+
 			ss=QUNid[ii][jj].beg;
 
 			while ( ss != nullptr ) {
@@ -84,15 +82,15 @@ void FlyMiss()
 	    			{
 						if((sldp->type!=1) || ((i+GameTime)&7)==0)
 						{
-					
-						   sldp->life -= std::max(1,MISSATTACK-MissDefend[sldp->type]);
-						   
+
+						   sldp->life -= ::std::max(1,MISSATTACK-MissDefend[sldp->type]);
+
 		    			   if(sldp->life<=0)DeleteUnit(ss->v);
 						   sldp->vel.x+=(tmp->vel.x)*MISSPUSHKOEF;
 						   sldp->vel.y+=(tmp->vel.y)*MISSPUSHKOEF;
 						   PlayWavFile(std::string("pmon"),tmp->pos);
 						   tmp->des=1;
-						}else 
+						}else
 						{
 							tmp->vel.x=-tmp->vel.x+RND11;
 							tmp->vel.y=-tmp->vel.y+RND11;
@@ -103,32 +101,34 @@ void FlyMiss()
 				}
 				ss=ss->next;
 			}
-			
+
 		}
-		tmpt=Qpoly[ii][jj];
-		if(tmpt)
-		{
-			ii=_msize(tmpt)/sizeof(tka*);
-			for(jj=0;jj<ii;jj++,tmpt++)
-			if(LineCrossLine(&tmp->pos,&(tmp->pos+tmp->vel),*tmpt,*tmpt+1))
-			{
-				ttt=**tmpt-*(*tmpt+1);
-				tmp->vel=ttt*(2*((tmp->vel.x*ttt.x+tmp->vel.y*ttt.y)/(ttt.x*ttt.x+ttt.y*ttt.y)))-tmp->vel;
-				tmp->des=MISSDES*(GameTime&3)+1;
-						
-				PlayWavFile(std::string("wall"),tmp->pos);
-						//tmp.des=1;
-				break;
+
+		tmpt = Qpoly[ ii ][ jj ];
+
+		if ( tmpt ) {
+			ii = _msize( tmpt ) / sizeof( tka * );
+
+			for ( jj = 0; jj < ii; jj++,tmpt++ ) {
+				if ( LineCrossLine( tmp->pos, ( tmp->pos + tmp->vel ), **tmpt, *( *tmpt + 1 ) ) ) {
+					ttt = **tmpt - *( *tmpt + 1 );
+					tmp->vel = ttt * ( 2 * ( ( tmp->vel.x * ttt.x + tmp->vel.y * ttt.y ) / ( ttt.x * ttt. x + ttt.y * ttt.y ) ) ) - tmp->vel;
+					tmp->des = MISSDES * ( GameTime & 3 ) + 1;
+
+					PlayWavFile( std::string( "wall" ), tmp->pos );
+							//tmp.des=1;
+					break;
+				}
 			}
 		}
 	}
 
-		
+
 		i++;
 		tmp++;
 
 
 	}
 
-	
+
 }
