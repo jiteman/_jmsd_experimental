@@ -29,7 +29,7 @@ struct Order
 	Order(){SetDefault();}
 	Order(Pocket& pc);
 	Order(char ntype,st<int>*nsl,tka t1,tka t2,bool nprm);
-	Order(char ntype,st<int>*nsl,bool nprm,char nprm2=0);
+boo!	Order(char ntype,st<int>*nsl, bool nprm,char nprm2=0);
 	Order(char ntype,bool nprm,char nprm2=0);
 
 

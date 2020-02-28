@@ -48,8 +48,10 @@ GLvoid LoadGLTextures(GLvoid)
 	}
 
 	f1.Read( ArialFont.ch, 224 * sizeof( FontChar ) );
-	ArialFont.txt = &TEXTURE_ARIAL_FONT;
+	ArialFont.txt = &( TEXTURE_ARIAL_FONT );
 	f1.Close();
+
+	Te
 }
 
 void MultAlpha( TextureImage *txt )

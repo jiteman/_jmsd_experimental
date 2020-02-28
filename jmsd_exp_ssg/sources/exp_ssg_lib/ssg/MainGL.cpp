@@ -9,7 +9,7 @@
 
 HGLRC hRC;		// Постоянный контекст рендеринга
 HDC hDC;			// Приватный контекст устройства GDI
-HWND		hWnd;// Сохранение дискриптора окна	   
+HWND		hWnd;// Сохранение дискриптора окна
 DEVMODE dmScreenSettings;			// Режим работы
 
 
@@ -25,7 +25,9 @@ void Begin2D ( void )
   glMatrixMode(GL_PROJECTION);
   glPushMatrix();
   glLoadIdentity();
+
   gluOrtho2D(0, WIDTH, HEIGHT,0);
+
   glMatrixMode(GL_MODELVIEW);
   glPushMatrix();
   glLoadIdentity();
@@ -37,7 +39,7 @@ void End2D ( void )
   glMatrixMode(GL_PROJECTION);
   glPopMatrix();
   glMatrixMode(GL_MODELVIEW);
-  
+
 }
 
 
@@ -50,18 +52,18 @@ GLvoid ReSizeGLScene(GLsizei Width, GLsizei Height)
 GLvoid InitGL(GLsizei Width, GLsizei Height)	// Вызвать после создания окна GL
 {
 	Texture = new CTexture();
- 
 
-    LoadGLTextures();	
+
+    LoadGLTextures();
 	glClearColor(0,0,0,0);
-	
+
 
 //	ChangeBackColor(0);
 
 	glDisable(GL_NORMALIZE);
 
-	
-	
+
+
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	Begin2D();
@@ -69,7 +71,7 @@ GLvoid InitGL(GLsizei Width, GLsizei Height)	// Вызвать после соз
 
 
 	//glShadeModel(GL_FLAT);
-//	glEnable(GL_LINE_STIPPLE); 
+//	glEnable(GL_LINE_STIPPLE);
 	//glEnable(GL_LINE_SMOOTH);
 }
 
@@ -85,12 +87,12 @@ void InitWindow()
 	dmScreenSettings.dmPelsWidth	= WIDTH;			// Ширина экрана
 	dmScreenSettings.dmPelsHeight	= HEIGHT;			// Высота экрана
 	dmScreenSettings.dmFields	= DM_PELSWIDTH | DM_PELSHEIGHT | DM_DISPLAYFREQUENCY;	// Режим Пиксела
-	
+
 	dmScreenSettings.dmDisplayFrequency=tmpd.dmDisplayFrequency;
-	
 
 
-	ChangeDisplaySettings(&dmScreenSettings, CDS_FULLSCREEN);	
+
+	ChangeDisplaySettings(&dmScreenSettings, CDS_FULLSCREEN);
 	OnCreate(hWnd);
 }
 void SetResolution(char res)
@@ -105,7 +107,7 @@ void SetResolution(char res)
 		case 3:WIDTH= 1280;HEIGHT=768;break;
 		case 4:WIDTH= 800;HEIGHT=600;break;
 	}
-	
+
 
 }
 
@@ -122,7 +124,7 @@ void ChangeResolution( const char res ) {
 	InitWDJ();
 	UpdateWidData();
 	Begin2D();
-	
+
 //	GenList(PolyList,DrawPoly);
 //	GenList(PolyShadowList,DrawPolyShadow);
 
@@ -133,13 +135,13 @@ void ChangeResolution( const char res ) {
 	}
 }
 
-GLvoid OnCreate( HWND hWnd ) {
+GLvoid OnCreate( HWND hWnd_p ) {
 	RECT Screen; // используется позднее для размеров окна
 	GLuint PixelFormat;
 	PIXELFORMATDESCRIPTOR pfd = { sizeof( PIXELFORMATDESCRIPTOR ) };
 
     pfd.nVersion = 1;
-    pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER; 
+    pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
     pfd.iPixelType = PFD_TYPE_RGBA;
     pfd.cColorBits = 32;
     pfd.cRedBits = 8;
@@ -148,36 +150,40 @@ GLvoid OnCreate( HWND hWnd ) {
     pfd.cAlphaBits = 8;
     pfd.iLayerType = PFD_MAIN_PLANE;
 
-	hDC = GetDC( hWnd ); // Получить контекст устройства для окна
+	hDC = GetDC( hWnd_p ); // Получить контекст устройства для окна
 	PixelFormat = ChoosePixelFormat( hDC, &pfd );
 
 	// Найти ближайшее совпадение для нашего формата пикселов
 	if ( !PixelFormat ) {
-		MessageBox( 0, L"Can't Find A Suitable PixelFormat.", L"Error", MB_OK | MB_ICONERROR );
+		MessageBox( 0, "Can't Find A Suitable PixelFormat.", "Error", MB_OK | MB_ICONERROR );
 		PostQuitMessage( 0 );
 		return;
 	}
 
 	if ( !SetPixelFormat( hDC, PixelFormat, &pfd ) ) {
-		MessageBox( 0, L"Can't Set The PixelFormat.", L"Error", MB_OK | MB_ICONERROR );
+		MessageBox( 0, "Can't Set The PixelFormat.", "Error", MB_OK | MB_ICONERROR );
 		PostQuitMessage( 0 );
 		return;
 	}
 
-	hRC = wglCreateContext( hDC );
+	hRC = ::wglCreateContext( hDC );
 
 	if ( !hRC ) {
-		MessageBox( 0, L"Can't Create A GL Rendering Context.", L"Error", MB_OK | MB_ICONERROR );
+		MessageBox( 0, "Can't Create A GL Rendering Context.", "Error", MB_OK | MB_ICONERROR );
 		PostQuitMessage( 0 );
 		return;
 	}
 
 	if ( !wglMakeCurrent( hDC, hRC ) ) {
-		MessageBox( 0, L"Can't activate GLRC.", L"Error", MB_OK | MB_ICONERROR );
+		MessageBox( 0, "Can't activate GLRC.", "Error", MB_OK | MB_ICONERROR );
 		PostQuitMessage( 0 );
 		return;
 	}
 
-	GetClientRect( hWnd, &Screen );
+	GetClientRect( hWnd_p, &Screen );
 	InitGL( Screen.right, Screen.bottom );
+}
+
+GLvoid gluOrtho2D( GLdouble const left, GLdouble const right, GLdouble const bottom, GLdouble const top ) {
+    return ::glOrtho( left, right, bottom, top, -1, 1 );
 }

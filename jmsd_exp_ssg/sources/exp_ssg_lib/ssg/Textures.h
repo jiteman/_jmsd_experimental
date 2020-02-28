@@ -6,8 +6,6 @@
 
 #include "open_gl.h"
 
-#include "glad/gl.h"
-
 #include "SFML/Graphics.hpp"
 
 
@@ -62,7 +60,8 @@ public:
 };
 
 extern CTexture *Texture;
-extern TextureImage global_Textures[TEX_TYPES];
+//extern TextureImage global_Textures[TEX_TYPES];
+extern ::sf::Texture global_Textures[ TEX_TYPES ];
 
 GLvoid LoadGLTextures(GLvoid);
 

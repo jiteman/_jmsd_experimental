@@ -20,8 +20,8 @@ public:
 	void Close();
 };
 
-bool LoadGame(std::string fn);
-void SaveGame(std::string fn);
+bool LoadGame( ::std::string const &fn );
+void SaveGame( ::std::string const &fn );
 
 
 void SaveSetings();
@@ -34,4 +34,4 @@ void WtoS(std::string &dest, const std::wstring &src);
 std::string WtoS(const std::wstring &src);
 */
 
-void GetFiles(std::string& res, std::string type);
+void GetFiles( ::std::string *out_result, ::std::string const &type );

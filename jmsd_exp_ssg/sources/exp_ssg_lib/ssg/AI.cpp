@@ -30,15 +30,15 @@ void RenullAI() {
 }
 
 void UpDateEnemy() {
-	int cost[] = { 1, 4, 5, 2, 4, 8 };
-	int pl_bases_num[ 8 ];
-	int pl_num = 0;
-	unsigned summ = 0;
-	int i;
-	int j;
-	int k = 0;//,m=0;
+//	unsigned summ = 0;
+//	int m = 0;
 
-	for ( i = 0; i < PLAYERS_NUM; i++ ) {
+	int const cost[] = { 1, 4, 5, 2, 4, 8 };
+
+	size_t pl_num = 0;
+	size_t pl_bases_num[ 8 ] = {};
+
+	for ( size_t i = 0; i < PLAYERS_NUM; i++ ) {
 		if ( PLAYER_IS_HERE( i ) ) {
 			pl_num++;
 		}
@@ -46,15 +46,15 @@ void UpDateEnemy() {
 		pl_bases_num[ i ] = 0;
 		score[ i ] = 0;
 
-		for ( j = 0; j < UNIT_TYPES; j += 1 ) {
+		for ( size_t j = 0; j < UNIT_TYPES; j += 1 ) {
 			score[ i ] += UnInfo[ i ][ j ] * cost[ j ];
 		}
 	}
 
-	if ( !pl_num )return;
+	if ( !pl_num ) return;
 
-	for ( j = 0; j < BasesNum; j += 1 ) {
-		i = ( Bases + j )->pl;
+	for ( size_t j = 0; j < BasesNum; j += 1 ) {
+		size_t const i = ( Bases + j )->pl;
 
 		if ( i != -1 ) {
 //			if((Bases+j)->level)
@@ -64,7 +64,9 @@ void UpDateEnemy() {
 		}
 	}
 
-	for ( i = 1; i < PLAYERS_NUM; i += 1 ) {
+	size_t k = 0;
+
+	for ( size_t i = 1; i < PLAYERS_NUM; i += 1 ) {
 		if ( score[ k ] < score[ i ] ) {
 			k = i;
 		}
@@ -81,7 +83,9 @@ void UpDateEnemy() {
 	}
 	//if(is_online){enemy=(char)k;return;}
 
-	for ( i = 0; i < PLAYERS_NUM; i += 1 ) {
+	unsigned int summ = 0;
+
+	for ( size_t i = 0; i < PLAYERS_NUM; i += 1 ) {
 		if ( i != k ) {
 			summ += score[ i ];
 		}
@@ -106,7 +110,7 @@ void UpDateEnemy() {
 	enemy = ( char )k;
 
 	{
- 	    for ( char i = 0; i < PLAYERS_NUM; i += 1 ) {
+ 	    for ( size_t i = 0; i < PLAYERS_NUM; i += 1 ) {
 			if ( i != k ) {
 				//Dipl.MakeFriends(i,m);
 				global_diplomation.MakeEnemies( i, enemy );
@@ -143,7 +147,7 @@ void ActAIFormation( Formation *ff ) {
 	int k = -1;
 
 	{
-		for ( int i = 0; i < BasesNum; i++, bp++ ) {
+		for ( size_t i = 0; i < BasesNum; i++, bp++ ) {
 			if ( bp->pl == -1 || MyPow2( bp->pl ) & tmpc ) {
 				const float ll = KVAZIL( bp->pos, tmpt );
 

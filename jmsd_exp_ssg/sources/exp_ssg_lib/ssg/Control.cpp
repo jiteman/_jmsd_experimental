@@ -19,7 +19,7 @@ tka omL;//для мышки - хранить коорд. угла прямоуг
 tka omR;//для мышки - задать направление построения //правая кнопка мыши
 float dscale=0;
 
-float SCALE=10; 
+float SCALE=10;
 
 bool SelIs = false;
 bool SelIsR = false;
@@ -38,13 +38,13 @@ tka MOUSETKA() {
 }
 
 
-void SelectArea( tka t1, tka t2, bool addU ) {	
+void SelectArea( tka t1, tka t2, bool addU ) {
 	if ( t1.getX() > t2.getX() ) {
         const float temp = t1.getX();
         t1.setX( t2.getX() );
         t2.setX( temp );
     }
-    
+
 //    swap(t1.getX(),t2.getX());
 
 	if ( t1.getY() > t2.getY() ) {
@@ -62,12 +62,12 @@ void SelectArea( tka t1, tka t2, bool addU ) {
 	{
 		UnSelect();
 	}
-	
+
 	if(ax<0)ax=0;
 	if(ay<0)ay=0;
 	if(bx>=MapW)bx=MapW-1;
 	if(by>=MapH)by=MapH-1;
-	
+
 	for(i=ax;i<=bx;i++)
 		for(j=ay;j<=by;j++)
 		{
@@ -88,13 +88,10 @@ void SelectArea( tka t1, tka t2, bool addU ) {
 				ss=ss->next;
 			}
 		}
-		
+
 }
 
-void SelectAreaB(tka t1,tka t2,bool addU)
-{
-	int i;
-	
+void SelectAreaB(tka t1,tka t2,bool addU) {
 	if ( t1.getX() > t2.getX() ) {
         const float temp = t1.getX();
         t1.setX( t2.getX() );
@@ -108,18 +105,22 @@ void SelectAreaB(tka t1,tka t2,bool addU)
         t1.setY( t2.getY() );
         t2.setY( temp );
     }
-    
+
 //    swap(t1.getY(),t2.getY());
 
-	if(!addU)
-	{
+	if ( !addU ) {
 		UnSelect();
 	}
-	for(i=0;i<BasesNum;i++)
-		if((Bases+i)->pl==MyConf.MY_PLAYER)
-			if((Bases+i)->pos.getX()>t1.getX()&&(Bases+i)->pos.getY()>t1.getY()&&(Bases+i)->pos.getX()<t2.getX()&&(Bases+i)->pos.getY()<t2.getY())
+
+	for ( size_t i = 0; i < BasesNum; i++ ) {
+		if ( ( Bases + i )->pl == MyConf.MY_PLAYER ) {
+			if ( ( Bases + i )->pos.getX() > t1.getX() && ( Bases + i )->pos.getY() > t1.getY() && ( Bases + i )->pos.getX() < t2.getX() && ( Bases + i )->pos.getY() < t2.getY() ) {
 				selB.AddEl(i);
+			}
+		}
+	}
 }
+
 void SendGroups(st<int>*gst,tka t1,tka t2,bool add)
 {
 	el<int> *tmp=gst->beg;
@@ -133,17 +134,17 @@ void SendGroups(st<int>*gst,tka t1,tka t2,bool add)
 		{
 			if ( !nv.getX() && !nv.getY() ) {
                 nv = t2-cc;
-                
+
                 if ( !nv.getX() && !nv.getY() )
                     nv.setX( 1 );
             }
-			
+
 			gg=(global_groups+tmp->v);
 			if(!gg->nav.getX() && !gg->nav.getY())			{	gg->nav=nv;	}
 
             const CosinusAndSinus cosinusAndSinus = nv.getCosSinWith( gg->nav );
 			nv.setBoth( cosinusAndSinus.cosinus, cosinusAndSinus.sinus );
-				
+
 			fl=true;
 		}
 	}
@@ -168,19 +169,19 @@ void SendSelectedUnits(tka t1,tka t2,bool add) {
 	if(selB.beg)global_OrdMan.AddOrder(new Order(1,&selB,t2,t2,add));
 	if(GrpSel.beg)global_OrdMan.AddOrder(new Order(2,&GrpSel,t1,t2,add));
 
-	
+
 }
 
-void SendUnits(st<int>*sel1,int num,tka t1,tka t2,bool add,float FormKoef,float FormSpread) {	
+void SendUnits(st<int>*sel1,int num,tka t1,tka t2,bool add,float FormKoef,float FormSpread) {
 	if(!sel1->beg)return;
 	int i,j,k,numFront=int(sqrtInt(int(num*FormKoef)));
-	
+
 	tka tp,tf;
 	el<int>*sl=sel1->beg;
 
 	sld*ss;
 	if(numFront<=0)numFront=1;
-	
+
 	tf=t2-t1;
 
 	if(tf.getLengthSquare()<1)
@@ -188,9 +189,9 @@ void SendUnits(st<int>*sel1,int num,tka t1,tka t2,bool add,float FormKoef,float 
 		tf=t1-CalcCenter(sel1);
 		if(tf.x==0&&tf.y==0)tf.y=1;
 	}
-	
+
 	tf.normalize();
-	
+
 	tp.setBoth(tf.y,-tf.x);
 	i=0;k=0;
 	while(i<num)
@@ -200,7 +201,7 @@ void SendUnits(st<int>*sel1,int num,tka t1,tka t2,bool add,float FormKoef,float 
 		{
 			ss=Units+sl->v;
 			sl=sl->next;
-			
+
 
 		    if(!add)
 		    {
@@ -212,13 +213,13 @@ void SendUnits(st<int>*sel1,int num,tka t1,tka t2,bool add,float FormKoef,float 
 			if(add)ss->way.AddElToBeg(ss->way.beg->v);
 		    ss->enemy=-1;
 
-			
+
 		    i++;
 			j++;
 		}
 		k++;
 	}
-	
+
 }
 void SelectAllUnits(char filt,bool add)
 {
@@ -252,7 +253,7 @@ void CorrectCurPos()
 	if(curpos.getY()<=0)curpos.setY(0);
 	if(curpos.getX()>=MapW*KLET_SIZE)curpos.setX((float)MapW*KLET_SIZE );
 	if(curpos.getY()>=MapH*KLET_SIZE)curpos.setY((float)MapH*KLET_SIZE );
-			
+
 
 }
 void ChangeScale(float ns, bool toCursor)
@@ -298,13 +299,13 @@ void UnSelect()
 }
 void UpdateSelInfo()
 {
-	
+
 	sld* sldp;
 	st_iterator<int> it(&GrpSel);
 	st_iterator<int> itu(&sel);
 	Group* gg;
 	memset(SelInfo,0,UNIT_TYPES*sizeof(int));
-	
+
 	while(!it.IsDone())
 	{
 		gg=global_groups+*it.GetCurrent();
@@ -312,7 +313,7 @@ void UpdateSelInfo()
 			it.DeleteCur();
 		else
 			it.Next();
-		
+
 	}
 
 	while(!itu.IsDone())
@@ -331,7 +332,7 @@ void UpdateSelInfo()
 	}
 
 
-	
+
 }
 
 

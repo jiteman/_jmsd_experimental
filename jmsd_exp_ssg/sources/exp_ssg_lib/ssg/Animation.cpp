@@ -34,8 +34,9 @@ void DeleteAnimation(int id)
 }
 
 void DrawAnimations() {
-	::glBindTexture( GL_TEXTURE_2D, TEXTURE_ANIM.texID );
-	
+//	::glBindTexture( GL_TEXTURE_2D, TEXTURE_ANIM.texID );
+	::sf::Texture::bind( &( TEXTURE_ANIM ) );
+
 	for ( int i = 0; i < AnimNum; i += 1 ) 	{
 		Anim *cur_anim = anim[ i ];
 
@@ -48,7 +49,7 @@ void DrawAnimations() {
 			}
 
 			cur_anim->Draw();
-			::glPopMatrix();		
+			::glPopMatrix();
 		}
 	}
 }
@@ -69,16 +70,17 @@ FlashAnim::FlashAnim(tka& npos,int a)
 	ang=a;
 
 }
-void FlashAnim::Draw()
-{
-	float des1=(100-3*des)*0.03f+0.3f;
-	float tmpf=des/(30.0f);
-	if(des1>1)
-	{
-		glColor4f(tmpf,tmpf,tmpf,tmpf);
-		DrawQuad2(0.0f,-des1,des1*5.0f,des1,0,0,32,16,TEXTURE_ANIM);
+
+void FlashAnim::Draw() {
+	float const des1 = ( 100 - 3 * des ) * 0.03f + 0.3f;
+	float const tmpf = des / 30.0f;
+
+	if ( des1 > 1.0f ) {
+		::glColor4f( tmpf, tmpf, tmpf, tmpf );
+		DrawQuad2( 0.0f, -des1, des1 * 5.0f, des1, 0, 0, 32, 16, TEXTURE_ANIM );
 	}
 }
+
 PMonAnim::PMonAnim(sld& ss)
 {
 	des=79;
@@ -92,7 +94,7 @@ PMonAnim::PMonAnim(sld& ss)
 void PMonAnim::Draw()
 {
 	int id=7-des/10,tmpi = 2;
-	
+
 	if(SCALE>1)
 	{
 		color[3]=(des%10)/10.0f;

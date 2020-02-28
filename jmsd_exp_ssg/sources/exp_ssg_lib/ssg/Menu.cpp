@@ -41,19 +41,19 @@ bool ActMenu( const bool bt ) {
 
 	for(i=0;i<UNIT_TYPES;i++)
 		if(SelInfo[i]){tp[ct]=i;ct++;}
-	
+
 	/*
 	{
 		if(!sel.beg)return false;
 
 		if(mPos.x<ICON_RAMA+BASE_STATES_NUM*ICON_SIZE && mPos.x>ICON_RAMA && mPos.y<HEIGHT-ICON_RAMA && mPos.y>HEIGHT-ICON_RAMA-ICON_SIZE )
 		{
-		
+
 			//plpl=(Bases+ttt->v)->status;
-		
+
 			//filter=((1<<(int)((mPos.x-ICON_RAMA)/ICON_SIZE)))^plpl;
 			filter=(int)((mPos.x-ICON_RAMA)/ICON_SIZE);
-	
+
 			while(ttt)
 			{
 				bp=(Bases+ttt->v);
@@ -63,8 +63,8 @@ bool ActMenu( const bool bt ) {
 			return true;
 		}
 		return false;
-	
-	}	
+
+	}
 	*/
 
 	if(sel.beg)
@@ -73,7 +73,7 @@ bool ActMenu( const bool bt ) {
 		global_OrdMan.AddOrder(new Order(3,&sel,0));
 		return true;
 	}
-	
+
 
 	if(!ct && !GrpSel.beg)return false;
 	if(ct)
@@ -86,18 +86,18 @@ bool ActMenu( const bool bt ) {
 		if(bt)filter=~filter;else GrpSel.renull();
     	for(i=0;i<UNIT_TYPES;i++)
 	  	   SelInfo[i]=0;
-		
+
 		while(ttt)
 		{
-			
+
 			if((MyPow2((Units+ttt->v)->type)&filter)){nsel.AddEl(ttt->v);SelInfo[(Units+ttt->v)->type]++;}
 			ttt=ttt->next;
 		}
-		
+
 		sel.renull();
 		sel.beg=nsel.beg;
 		nsel.beg=0;
-		
+
 		return true;
 
 	}
@@ -127,7 +127,7 @@ bool ActMenu( const bool bt ) {
 
 	}
 	}
-	
+
 	if(mPos.x<ICON_RAMA+3*ICON_SIZE && mPos.x>ICON_RAMA && mPos.y<HEIGHT-ICON_RAMA && mPos.y>HEIGHT-ICON_RAMA-ICON_SIZE )
 	{
 		if(ttt)
@@ -151,8 +151,12 @@ bool ActMenu( const bool bt ) {
 			ttt=(Grp+ttt1->v)->un.beg;
 			ttt1=ttt1->next;
 		}*/
-		
-		if(sel.beg)global_OrdMan.AddOrder(new Order(3,&sel,2,filter));
+
+		if ( sel.beg ) {
+//			global_OrdMan.AddOrder( new Order( 3, &sel, 2, filter ) );
+	global_OrdMan.AddOrder( new Order( 3, &sel, 2, filter ) );
+		}
+
 		if(GrpSel.beg)global_OrdMan.AddOrder(new Order(4,&GrpSel,2,filter));
 		return true;
 	}

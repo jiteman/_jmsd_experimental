@@ -35,26 +35,42 @@ void DrawButton( float x, float y, float w, float h,std::string text,int style)
 {
 	bool mon=(mPos.x>x && mPos.y>y && mPos.x<x+w && mPos.y<y+h);
 	switch(style)
-	{ 
+	{
 	case 0:
 		glColor3f(0.3f,0.3f,0.1f);
-		glBindTexture ( GL_TEXTURE_2D, TEXTURE_WID.texID);
+//		::glBindTexture( GL_TEXTURE_2D, TEXTURE_WID.texID );
+		::sf::Texture::bind( &( TEXTURE_WID ) );
 		DrawQuad(x,y,x+w,y+h,(1.0f/64));
 		DrawFrame(x,y,w,h,0);
 		glColor3f(1,1,1);
-		DrawMyText(x,y+h/4,w,h/2,text,ArialFont);
+		DrawMyText_float_box( x, y + h / 4, w, h / 2, text, ArialFont );
 		break;
+
 	case 1:
-		if(mon)glColor3f(0.5f,0.5f,0.3f);else glColor3f(0.3f,0.3f,0.2f);
-		glBindTexture ( GL_TEXTURE_2D, TEXTURE_POLY(7).texID );
-		DrawQuad(x,y,x+w,y+h,(1.0f/64));
-		if(mon)glColor3f(0.0f,0.0f,0.0f);else glColor3f(0.1f,0.1f,0);
-		DrawFrame(x,y,w,h,0);
-		if(!text.empty())
-		{
-			if(mon)glColor3f(1,1,1);else glColor3f(0.5f,0.6f,0.7f);
-			DrawMyText(x,y+h/8,w,(6*h)/8,text,ArialFont);
+		if ( mon ) {
+			::glColor3f( 0.5f, 0.5f, 0.3f );
+		} else {
+			::glColor3f( 0.3f, 0.3f, 0.2f );
 		}
+
+//		::glBindTexture( GL_TEXTURE_2D, TEXTURE_POLY( 7 ).texID );
+		::sf::Texture::bind( &( TEXTURE_POLY( 7 ) ) );
+
+		DrawQuad(x,y,x+w,y+h,(1.0f/64));
+
+		if ( mon )glColor3f(0.0f,0.0f,0.0f);else glColor3f(0.1f,0.1f,0);
+		DrawFrame(x,y,w,h,0);
+
+		if ( !text.empty() ) {
+			if ( mon ) {
+				::glColor3f( 1.0f, 1.0f, 1.0f );
+			} else {
+				::glColor3f( 0.5f, 0.6f, 0.7f );
+			}
+
+			DrawMyText_float_box( x, y + h / 8, w, ( 6 * h ) / 8, text, ArialFont );
+		}
+
 		break;
 	}
 }
@@ -88,21 +104,25 @@ void DrawQuad2 ( int x, int y, int x1, int y1,float tx1, float ty1,float tx2, fl
 {
 	DrawQuad2 ((float)x,(float)y,(float)x1,(float)y1,tx1,ty1,tx2,ty2);
 }
-void DrawQuad2 ( int x, int y, int x1, int y1,int txi1, int tyi1,int txi2, int tyi2,TextureImage& txt)
-{
-	DrawQuad2 ((float)x,(float)y,(float)x1,(float)y1,txi1,tyi1,txi2,tyi2,txt);
+
+//void DrawQuad2( int x, int y, int x1, int y1,int txi1, int tyi1,int txi2, int tyi2, TextureImage &txt ) {
+//	DrawQuad2( ( float )x, ( float )y, ( float )x1, ( float )y1, txi1, tyi1, txi2, tyi2, txt );
+//}
+void DrawQuad2( int x, int y, int x1, int y1,int txi1, int tyi1,int txi2, int tyi2, ::sf::Texture const &txt ) {
+	DrawQuad2( ( float )x, ( float )y, ( float )x1, ( float )y1, txi1, tyi1, txi2, tyi2, txt );
 }
+
 
 void DrawQuad ( float x, float y, float x1, float y1)
 {
-	
+
   glBegin ( GL_TRIANGLE_STRIP );
     glTexCoord2i ( 0, 0 );    glVertex2f ( x,  y );
     glTexCoord2i ( 1, 0 );    glVertex2f ( x1, y );
     glTexCoord2i ( 0, 1 );    glVertex2f ( x,  y1 );
     glTexCoord2i ( 1, 1 );    glVertex2f ( x1, y1 );
   glEnd();
-  
+
 }
 
 void DrawQuadSimple( const float x, const float y, const float x1, const float y1 ) {
@@ -125,28 +145,46 @@ void DrawQuad ( float x, float y, float x1, float y1,float txt_size)
 }
 
 
-void DrawQuad2 ( float x, float y, float x1, float y1,float tx1, float ty1,float tx2, float ty2)
+void DrawQuad2 ( float x, float y, float x1, float y1, float tx1, float ty1, float tx2, float ty2 )
 {
-  
-  glBegin ( GL_TRIANGLE_STRIP );
-    glTexCoord2f ( tx1, ty1 );    glVertex2f ( x,     y );
-    glTexCoord2f ( tx2, ty1 );    glVertex2f ( x1, y );
-    glTexCoord2f ( tx1, ty2 );    glVertex2f ( x,     y1 );
-    glTexCoord2f ( tx2, ty2 );    glVertex2f ( x1, y1 );
-  glEnd();
+	::glBegin( GL_TRIANGLE_STRIP );
+    ::glTexCoord2f( tx1, ty1 ); glVertex2f( x, y );
+    ::glTexCoord2f( tx2, ty1 ); glVertex2f( x1, y );
+    ::glTexCoord2f( tx1, ty2 ); glVertex2f( x,  y1 );
+    ::glTexCoord2f( tx2, ty2 ); glVertex2f( x1, y1 );
+	::glEnd();
 }
-void DrawQuad2 ( float x, float y, float x1, float y1,int txi1, int tyi1,int txi2, int tyi2,TextureImage& txt)
-{
-	float tx1=txi1/(float)txt.width;
-	float tx2=txi2/(float)txt.width;
-	float ty1=tyi1/(float)txt.height;
-	float ty2=tyi2/(float)txt.height;
-    glBegin ( GL_TRIANGLE_STRIP );
-    glTexCoord2f ( tx1, ty1 );    glVertex2f ( x,     y );
-    glTexCoord2f ( tx2, ty1 );    glVertex2f ( x1, y );
-    glTexCoord2f ( tx1, ty2 );    glVertex2f ( x,     y1 );
-    glTexCoord2f ( tx2, ty2 );    glVertex2f ( x1, y1 );
-    glEnd();
+
+//void DrawQuad2( float x, float y, float x1, float y1,int txi1, int tyi1,int txi2, int tyi2, TextureImage &txt ) {
+//	float const tx1 = txi1 / ( float )txt.width;
+//	float const tx2 = txi2 / ( float )txt.width;
+//	float const ty1 = tyi1 / ( float )txt.height;
+//	float const ty2 = tyi2 / ( float )txt.height;
+//    ::glBegin ( GL_TRIANGLE_STRIP );
+//    ::glTexCoord2f ( tx1, ty1 );    glVertex2f ( x,     y );
+//    ::glTexCoord2f ( tx2, ty1 );    glVertex2f ( x1, y );
+//    ::glTexCoord2f ( tx1, ty2 );    glVertex2f ( x,     y1 );
+//    ::glTexCoord2f ( tx2, ty2 );    glVertex2f ( x1, y1 );
+//    ::glEnd();
+//}
+
+void DrawQuad2( float x, float y, float x1, float y1,int txi1, int tyi1,int txi2, int tyi2, ::sf::Texture const &txt ) {
+//	float const tx1 = txi1 / ( float )txt.width;
+//	float const tx2 = txi2 / ( float )txt.width;
+//	float const ty1 = tyi1 / ( float )txt.height;
+//	float const ty2 = tyi2 / ( float )txt.height;
+
+	float const tx1 = txi1 / ( float )txt.getSize().x;
+	float const tx2 = txi2 / ( float )txt.getSize().x;
+	float const ty1 = tyi1 / ( float )txt.getSize().y;
+	float const ty2 = tyi2 / ( float )txt.getSize().y;
+
+    ::glBegin ( GL_TRIANGLE_STRIP );
+    ::glTexCoord2f ( tx1, ty1 );    glVertex2f ( x,     y );
+    ::glTexCoord2f ( tx2, ty1 );    glVertex2f ( x1, y );
+    ::glTexCoord2f ( tx1, ty2 );    glVertex2f ( x,     y1 );
+    ::glTexCoord2f ( tx2, ty2 );    glVertex2f ( x1, y1 );
+    ::glEnd();
 }
 
 void GoToTkaOnMap(tka ps) {
@@ -154,7 +192,7 @@ void GoToTkaOnMap(tka ps) {
 }
 
 
-void DrawArrow(float x1,float y1,float x2,float y2) 
+void DrawArrow(float x1,float y1,float x2,float y2)
 {
 	float tx=(y2-y1),ty=(x1-x2),bx=(x2*3+x1)/4,by=(y2*3+y1)/4;
 /*
@@ -181,7 +219,7 @@ void DrawCursor() {
 	::glColor3f( 1, 1, 1 );
 	MouseOnBase = -1;
 
-    for ( int i = 0; i < BasesNum; i++ ) {
+    for ( size_t i = 0; i < BasesNum; i++ ) {
 		if ( global_diplomation.AreEnemies( ( Bases + i)->pl, MyConf.MY_PLAYER ) || ( Bases + i )->pl == -1 ) {
 			if ( KVAZIL( ( Bases + i )->pos, ttt ) < MAX_DEFENDER_DIST ) {
 				MouseOnBase = i;
@@ -191,9 +229,11 @@ void DrawCursor() {
 	}
 
 	if ( MouseOnBase == -1 || cur_wdj != -1 ) {
-	   ::glBindTexture( GL_TEXTURE_2D, TEXTURE_CURSOR.texID );
+//	   ::glBindTexture( GL_TEXTURE_2D, TEXTURE_CURSOR.texID );
+	   ::sf::Texture::bind( &( TEXTURE_CURSOR ) );
 	} else {
-	    ::glBindTexture( GL_TEXTURE_2D, TEXTURE_ATTACK_CURSOR.texID );
+//	    ::glBindTexture( GL_TEXTURE_2D, TEXTURE_ATTACK_CURSOR.texID );
+	    ::sf::Texture::bind( &( TEXTURE_ATTACK_CURSOR ) );
 	}
 
 	::DrawQuad( mPos.x, mPos.y, mPos.x + 30, mPos.y + 60 );
@@ -207,7 +247,7 @@ void DrawUnitSelection(int *id)
 
 //	if(sldp->life)
 	{
-		
+
 		x=sldp->pos.x;
 		y=sldp->pos.y;
 
@@ -220,11 +260,11 @@ void DrawUnitSelection(int *id)
 				glColor4fv(GroupSelCol);
 		}
         glMYRectangle(x-1,y-1,x+1,y+1);
-		
+
 		if(MyConf.show_tracks)
 		{
 			glBegin(GL_LINE_STRIP);
-			ttt=sldp->way.top;	
+			ttt=sldp->way.top;
 			glVertex2fv(&sldp->pos.x);
 			if(sldp->enemy!=-1)
 			{
@@ -294,28 +334,28 @@ void DrawUnitLifebar(int *id)
 
 //	if(sldp->life)
 	{
-		
+
 		glColor4fv(SelCol);
 		v[0]=sldp->pos.x-1;
 		v[1]=sldp->pos.y+1;
 		glVertex2fv(v);
 		v[0]+=(sldp->life*0.02f);
-		
+
 		glVertex2fv(v);
 		glColor4fv(RedLifeCol);
 		glVertex2fv(v);
-		
+
 		v[0]=sldp->pos.x+1;
 		glVertex2fv(v);
-		
-			
+
+
 
 	}
 }
 void DrawSelection()
 {
 	el<int> *tmp=selB.beg;
-	
+
 //	float x0;
 //	sld*sldp;
 	base*bbb;
@@ -341,7 +381,7 @@ void DrawSelection()
 			x+=2*BASE_SIZE;
 			glColor4fv(RedLifeCol);
 			*/
-		}		
+		}
 
 		tmp=tmp->next;
 	}
@@ -359,7 +399,7 @@ void DrawSelection()
 		}
 		glEnd();
 		glLineWidth(1);
-		
+
 	}
 	DoForEach(sel.beg,DrawUnitSelection);
 	tmp=GrpSel.beg;
@@ -373,19 +413,21 @@ void DrawSelection()
 		glColor4fv(OrderCol);
 		DoForEach(global_OrdMan.ord_out[global_OrdMan.cur_ord].top,DrawOrder);
 	}
-		
+
 }
 void DrawBases()
 {
-	int i;
+//	int i;
 	float x,y;
-	char plpl,o_pl=-2,o_type=-1;
-	
+	char plpl,o_pl=-2;
+	unsigned int o_type = reinterpret_cast< unsigned int >( ~0 );
+
 	base *bp=Bases;
-	glBindTexture ( GL_TEXTURE_2D, TEXTURE_BASES.texID );
+//	glBindTexture( GL_TEXTURE_2D, TEXTURE_BASES.texID );
+	::sf::Texture::bind( &( TEXTURE_BASES ) );
 
 	vbo.StartBase();
-    for(i=0;i<BasesNum;i++,bp++)
+    for ( size_t i = 0; i < BasesNum; i++,bp++ )
 	if(IsHere(bp->pos,BASE_SIZE))
 	{
 		x=bp->pos.x;
@@ -400,19 +442,19 @@ void DrawBases()
 			else
 				glColor3fv(BackColor);
 			o_pl=plpl;
-		
+
 		}
-		
-		
-		if(o_type!=bp->level)
+
+
+		if ( o_type != bp->level )
 		{
 			o_type=bp->level;
 			vbo.SwitchToBase(bp->level);
 		}
 		glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, 0 );
 		glPopMatrix();
-	}	
-	
+	}
+
 }
 void DrawBasesRects()
 {
@@ -434,13 +476,13 @@ void DrawBasesRects()
 			else
 				glColor3fv(blCol);
 			o_pl=plpl;
-		
+
 		}
 		glBegin(GL_LINE_LOOP);
 		glVertex2f(x-MAX_DEFENDER_DIST,y);
-		glVertex2f(x,y-MAX_DEFENDER_DIST);	   
-		glVertex2f(x+MAX_DEFENDER_DIST,y);	   
-		glVertex2f(x,y+MAX_DEFENDER_DIST);	   
+		glVertex2f(x,y-MAX_DEFENDER_DIST);
+		glVertex2f(x+MAX_DEFENDER_DIST,y);
+		glVertex2f(x,y+MAX_DEFENDER_DIST);
 		glEnd();
 	}
 
@@ -460,15 +502,15 @@ void DrawUnitDots()
 		if(sldp->life)
 		if(IsHere(sldp->pos,1))
 		{
-			
+
 			plpl=sldp->pl&7;
 			if(o_pl!=plpl)
 			{
 				o_pl=plpl;
 				glColor3fv(PLColor[plpl]);
 			}
-			
-			glVertex2fv(&sldp->pos.x);	
+
+			glVertex2fv(&sldp->pos.x);
 
 		}
 	}
@@ -479,7 +521,7 @@ void DrawSlds()
 {
 //	el<int> *sss1,*sss2;
 
-	
+
 	int i,j=DEAD_SLD_NUM;
 	char type,plpl,lf,o_type=-1,o_lf=-1,o_pl=-1;
 	sld*sldp=Units;
@@ -491,20 +533,21 @@ void DrawSlds()
 
 	BB(18);
 
-	glBindTexture ( GL_TEXTURE_2D, TEXTURE_UNITS.texID );
+//	glBindTexture ( GL_TEXTURE_2D, TEXTURE_UNITS.texID );
+	::sf::Texture::bind( &( TEXTURE_UNITS ) );
 
 	i=Current_dead-1;
 	tmpf2=0.6f*Func01(0.3f*(SCALE-2));
 	if(tmpf2)
 	do  //рисуем трупеги
 	{
-		
+
 		if(i==-1){ i=DEAD_SLD_NUM-1; sldd=DeadUnits+DEAD_SLD_NUM-1; }
-		
-	    
+
+
 	    if(IsHere(sldd->pos,1))
 	    {
-		
+
 			type=sldd->type>>3;
 			if(o_type!=type)
 			{
@@ -517,7 +560,7 @@ void DrawSlds()
 				o_pl=plpl;
 				col[0]=PLColor[plpl][0];
 				col[1]=PLColor[plpl][1];
-				col[2]=PLColor[plpl][2]; 
+				col[2]=PLColor[plpl][2];
 				col[3]=tmpf2*(j/(float)DEAD_SLD_NUM);
 				glColor4fv(col);
 			}
@@ -526,12 +569,12 @@ void DrawSlds()
 			glTranslatef(sldd->pos.x,sldd->pos.y,0.0f);
 			glRotated(sldd->ang*2,0,0,1);
 			glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, 0 );
-			
+
 
 			glPopMatrix();
 
-        }	
-		
+        }
+
 		j--;
 
 		i--;
@@ -542,14 +585,14 @@ void DrawSlds()
 	BB1(18);
 	BB(19);
 
-	
+
 
 	for(i=0;i<MAXSLD;i++,sldp++)// рисуем солдатегов
 	{
 		if(sldp->life)
 		if(IsHere(sldp->pos,1))
 		{
-			
+
 			type=sldp->type;
 			lf=(sldp->life-1)/25;
 			plpl=sldp->pl&7;
@@ -576,20 +619,22 @@ void DrawSlds()
 				glColor3fv(PLColor[plpl]);
 			}
 			glPushMatrix();
-			glTranslatef(sldp->pos.x,sldp->pos.y,0.0f);	
+			glTranslatef(sldp->pos.x,sldp->pos.y,0.0f);
 
 			glRotated(sldp->a*0.5,0,0,1);
-		
-			
+
+
 			glDrawElements( GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, 0 );
-			glPopMatrix();	
+			glPopMatrix();
 
 		}
 	}
 	BB1(19);
 	BB(20);
-	
-	glBindTexture ( GL_TEXTURE_2D, TEXTURE_MISSILE.texID );
+
+//	glBindTexture ( GL_TEXTURE_2D, TEXTURE_MISSILE.texID );
+	::sf::Texture::bind( &( TEXTURE_MISSILE ) );
+
 	vbo.StartMissile();
     for(i=0;i<MisNum;i++,mmm++)
 	{
@@ -599,9 +644,9 @@ void DrawSlds()
 			y=mmm->pos.y;
 			glPushMatrix();
 			glTranslatef(x,y,0.0f);
-	
+
 			plpl=mmm->pl;
-	
+
 			if(MyConf.shadows_on)
 			{
 				glColor4fv(ShadowCol);
@@ -615,7 +660,7 @@ void DrawSlds()
 	}
 	BB1(20);
 
-	
+
 }
 
 void DrawBackground()
@@ -631,12 +676,14 @@ BB(8);
 	else
 		glColor4f(BackColor[0],BackColor[1],BackColor[2],tmpf);
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture ( GL_TEXTURE_2D, TEXTURE_BG2.texID );
+//	glBindTexture ( GL_TEXTURE_2D, TEXTURE_BG2.texID );
+	::sf::Texture::bind( &( TEXTURE_BG2 ) );
+
 	DrawQuad(0,0,MapW*KLET_SIZE,MapH*KLET_SIZE,0.05f);
 BB1(8);
 }
 void SetVSync(bool sync)
-{ 
+{
 	typedef bool (APIENTRY *PFNWGLSWAPINTERVALFARPROC)(int);
 
 	PFNWGLSWAPINTERVALFARPROC wglSwapIntervalEXT = 0;
@@ -666,10 +713,10 @@ BB1(12);
 
 BB(13);
 
-	
+
 //	if(MyConf.shadows_on)
 //		glCallList(PolyShadowList);
-	
+
 //	glCallList(PolyList);
 //glEnable(GL_TEXTURE_2D);
 
@@ -680,7 +727,7 @@ BB(13);
 		DrawVboPolyShadows();
 		glEnable(GL_TEXTURE_2D);
 	}
-	
+
 	DrawVboPolys();
 	glDisable(GL_TEXTURE_2D);
 
@@ -701,7 +748,7 @@ void DrawMyLines() {
 		::glColor4fv( SelCol );
 		::glMYRectangle( omL.x, omL.y, MOUSEX(), MOUSEY() );
 	}
-	
+
 	if ( SelIsR ) {
 		if ( !SelIs ) {
 			::glColor4fv( SelCol );
@@ -729,18 +776,18 @@ void MyDisplay()
 	glTranslated(-curpos.x,-curpos.y,0);
 
 	glDisable(GL_TEXTURE_2D);
-	
+
 	if(Warfog_is)
 	{
 BB(21);
-		
+
 		glBlendFunc(GL_ONE, GL_ONE);
 		::DrawWarfog();
-		
+
 		//glEnable(GL_TEXTURE_2D);
 BB1(21);
 	}else DrawBackground();
-		
+
 
 	glBlendFunc(GL_DST_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	if(Warfog_is)DrawBackground();
@@ -749,7 +796,7 @@ BB1(21);
 BB(36);
 	DrawMyLines();
 	glPopMatrix();
-	
+
 BB1(36);
 BB1(9);
 
@@ -769,7 +816,7 @@ BB(15);
 BB1(15);
 
 glFlush();
-} 
+}
 
 
 bool IsHere( const tka &t, const float p_size ) {

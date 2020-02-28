@@ -26,8 +26,8 @@ struct base
 //	void MakeAction(int id);
 };
 
-extern base Bases[MAX_BASE];//базы
-extern int BasesNum;
+extern base Bases[ MAX_BASE ];//базы
+extern size_t BasesNum;
 //extern int BaseUpgradeCost[BASE_LEVEL_NUM-1];
 //extern int Building;
 

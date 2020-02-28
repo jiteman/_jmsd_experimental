@@ -22,15 +22,15 @@
 #define MANREACHTARGET 0.3f // квадрат точности прибытия юнита
 #define MANSIZE_DOUBLE_AND_SQ 4//  (MANSIZE*2)^2
 #define PUSHKOEF 0.035f// сила отталкивания
-#define SMALLNAV 0.4f //чем меньше, тем точнее навигация - не переборщи, а то не сдвинется  
+#define SMALLNAV 0.4f //чем меньше, тем точнее навигация - не переборщи, а то не сдвинется
 #define SMALLNAV3 0.02f //чем меньше, тем точнее навигация - для стрельбы
 #define SMALLNAV2 0.01f //чем меньше, тем точнее навигация
 #define SMALLVEL 0.001f //скорость-остановка
 
 #define ANG_VAL_NUM 5//число чкоростей поворота юнита (в рад.: 0.5 1 2 4 8)
 
-#define FORMKOEF 2 //построение солдат в прямоугольник 
-#define FORMSPREAD 3 //расстояние между рядами 
+#define FORMKOEF 2 //построение солдат в прямоугольник
+#define FORMSPREAD 3 //расстояние между рядами
 #define MAN_LOOK_DIST 200 //радиус обзора юнита
 #define MAN_LOOK_DIST_SQR 10000 //квадрат радиуса обзора юнита
 
@@ -39,7 +39,7 @@
 
 
 #define MAXSLD 20000
-#define UNIT_TYPES 6//число типов юнитов 
+#define UNIT_TYPES 6//число типов юнитов
 #define DEAD_SLD_NUM 1000// Мах кол-во трупов юнитов на карте
 
 //////параметры карты/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -54,7 +54,7 @@
 #define TOKLETSIZE(a) (int(a)/KLET_SIZE)
 
 #define OUT_FIELD 64//значение границы поля
-#define SCROLLDIST 1  // 
+#define SCROLLDIST 1  //
 
 
 struct sld_dead
@@ -71,13 +71,13 @@ struct sld
 	__int16 enemy;
 	__int16 group_id;
 	stek<tka>way;//маршрут движения(промеж.)
-	
+
 	char pl;//&7 игрок(первые 3 бита)...&8-защита, &16-всегда атакует &32-не двигается
-	char type; 
+	char type;
 	unsigned char zar;//перезарядка
 	char life;//жизни
-	
-	
+
+
 
 };
 
@@ -89,7 +89,7 @@ extern st<int>**QUNid;
 //extern char **QUNex;// - наличие игроков
 extern char QUNex[FIELDSIZEX][FIELDSIZEY];
 
-extern int UnitsNum;
+extern size_t UnitsNum;
 
 extern unsigned int GameTime;
 

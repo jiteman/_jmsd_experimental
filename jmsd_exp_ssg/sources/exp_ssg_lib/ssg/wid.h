@@ -1,7 +1,7 @@
 #pragma once
 
-#include "jmsf/stdal/stdal_stl.h"
 
+#include <string>
 
 #define WID_DATA_SIZE 1
 #define MAX_WDJ_HISTORY 10
@@ -28,8 +28,8 @@ public:
 	void set(char ntype,int nx,int ny,int nw,int nh,std::string ntext,int n_id);
 	void InitDefaultData();
 	wid(void){InitDefaultData();}
-	
-	
+
+
 	wid(char ntype,int nx,int ny,int nw,int nh,std::string ntext,int n_id=-1);
 	wid(const wid& a);
 	wid& operator=(const wid& a);
@@ -41,8 +41,8 @@ public:
 
 	bool GetEnable();
 	void  SetEnable(bool en);
-	
-	
+
+
 };
 
 

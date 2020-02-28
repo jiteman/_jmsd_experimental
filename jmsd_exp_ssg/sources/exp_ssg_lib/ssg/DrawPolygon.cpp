@@ -95,7 +95,8 @@ void GenVBOPoly(tka* p,float* arr,int* ind)
 
 void DrawVboPolys() {
 	::glColor3fv( PolyColor );
-	::glBindTexture( GL_TEXTURE_2D, TEXTURE_POLY( 0 ).texID );
+//	::glBindTexture( GL_TEXTURE_2D, TEXTURE_POLY( 0 ).texID );
+	::sf::Texture::bind( &( TEXTURE_POLY( 0 ) ) );
 
 	int tt = 0;
 
@@ -105,7 +106,8 @@ void DrawVboPolys() {
 
 			if ( ntt != tt ) {
 				tt = ntt;
-				::glBindTexture( GL_TEXTURE_2D, TEXTURE_POLY( tt ).texID );
+//				::glBindTexture( GL_TEXTURE_2D, TEXTURE_POLY( tt ).texID );
+				::sf::Texture::bind( &( TEXTURE_POLY( tt ) ) );
 			}
 
 			const int n = global_obstacleVerticesQuantities[ i ];
@@ -185,7 +187,7 @@ void GenVBOPolyShadow( tka *p, float **arr, int **ind ) {
 //	tka tk;
 //	//tka old;
 //	float d = 3.0f;
-	float tmpel[ 6 ] = { 0, 0, 0, 0, 0, SHADOW_KOEF };
+//	float tmpel[ 6 ] = { 0, 0, 0, 0, 0, SHADOW_KOEF };
 
 	*arr = nullptr;
 	*ind = nullptr;
@@ -202,6 +204,8 @@ void GenVBOPolyShadow( tka *p, float **arr, int **ind ) {
 			bool const fl2 = ( ( tk.getX() < tk.getY() ) && ( tp.getVectorProduction( tk ) < 0 ) );
 			tp.normalize();
 			tp *= SHADOW_DIST_POLY3;
+
+			float tmpel[ 6 ] = { 0, 0, 0, 0, 0, SHADOW_KOEF };
 
 			tmpel[ 0 ] = ( p + j )->getX();
             tmpel[ 1 ] = ( p + j )->getY();
@@ -221,17 +225,18 @@ void GenVBOPolyShadow( tka *p, float **arr, int **ind ) {
 		}
 	}
 
-	for( j = 0; j < n; j++ ) {
-		tp = p[ j + 1 ] - p[ j ];
+	for( size_t j = 0; j < n; j++ ) {
+		tka tp = p[ j + 1 ] - p[ j ];
 
 		if ( tp.getX() > tp.getY() ) {
-			tk = p[ j ] - p[ ( j - 1 + n ) % n ];
-			fl1 = ( ( tk.getX() < tk.getY() ) && ( tp.getVectorProduction( tk ) > 0 ) );
+			tka tk = p[ j ] - p[ ( j - 1 + n ) % n ];
+			bool const fl1 = ( ( tk.getX() < tk.getY() ) && ( tp.getVectorProduction( tk ) > 0 ) );
 			tk = p[ ( j + 2 ) % n ] - p[ j + 1 ];
-			fl2 = ( ( tk.getX() < tk.getY() ) && ( tp.getVectorProduction( tk ) < 0 ) );
+			bool const fl2 = ( ( tk.getX() < tk.getY() ) && ( tp.getVectorProduction( tk ) < 0 ) );
 			tp.normalize();
 			tp *= SHADOW_DIST_POLY3;
-			tmpel[ 5 ] = SHADOW_KOEF;
+
+			float tmpel[ 6 ] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, SHADOW_KOEF };
 
 			tmpel[ 0 ] = ( p + j + 1 )->getX() + SHADOW_DIST_POLY - tp.getX() * fl2;
             tmpel[ 1 ] = ( p + j + 1 )->getY() + SHADOW_DIST_POLY - tp.getY() * fl2;
@@ -241,7 +246,7 @@ void GenVBOPolyShadow( tka *p, float **arr, int **ind ) {
             tmpel[ 1 ] = ( p + j )->getY() + SHADOW_DIST_POLY + tp.getY() * fl1;
             AddElemVBO( tmpel, 6, arr, ind );
 
-			tmpel[5]=0;
+			tmpel[ 5 ] = 0.0f;
 
 			tmpel[ 0 ] = ( p + j )->getX() + SHADOW_DIST_POLY2 + tp.getX() * fl1;
             tmpel[ 1 ] = ( p + j )->getY() + SHADOW_DIST_POLY2 + tp.getY() * fl1;
@@ -252,45 +257,46 @@ void GenVBOPolyShadow( tka *p, float **arr, int **ind ) {
             AddElemVBO( tmpel, 6, arr, ind );
 
 			if ( fl1 ) {
-				tmpel[ 0 ] = ( p + j )->getX() + SHADOW_DIST_POLY2 + tp.getX() * fl1;
-                tmpel[ 1 ] = ( p + j )->getY() + SHADOW_DIST_POLY2 + tp.getY() * fl1;
-                AddElemVBO( tmpel, 6, arr, ind );
+				float tmpel_1[ 6 ] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
+				tmpel_1[ 0 ] = ( p + j )->getX() + SHADOW_DIST_POLY2 + tp.getX() * fl1;
+                tmpel_1[ 1 ] = ( p + j )->getY() + SHADOW_DIST_POLY2 + tp.getY() * fl1;
+                AddElemVBO( tmpel_1, 6, arr, ind );
 
-				tmpel[ 0 ] = ( p + j )->getX() + ( SHADOW_DIST_POLY - tp.getX() * fl1 * 0.2f ) * 0.2f;
-                tmpel[ 1 ] = ( p + j )->getY() + ( SHADOW_DIST_POLY - tp.getY() * fl1 * 0.2f ) * 0.2f;
-                AddElemVBO( tmpel, 6, arr, ind );
+				tmpel_1[ 0 ] = ( p + j )->getX() + ( SHADOW_DIST_POLY - tp.getX() * fl1 * 0.2f ) * 0.2f;
+                tmpel_1[ 1 ] = ( p + j )->getY() + ( SHADOW_DIST_POLY - tp.getY() * fl1 * 0.2f ) * 0.2f;
+                AddElemVBO( tmpel_1, 6, arr, ind );
 
-				tmpel[5]=SHADOW_KOEF;
+				tmpel_1[ 5 ] = SHADOW_KOEF;
 
-				tmpel[ 0 ] = ( p + j )->getX();
-                tmpel[ 1 ] = ( p + j )->getY();
-                AddElemVBO( tmpel, 6, arr, ind );
+				tmpel_1[ 0 ] = ( p + j )->getX();
+                tmpel_1[ 1 ] = ( p + j )->getY();
+                AddElemVBO( tmpel_1, 6, arr, ind );
 
-				tmpel[ 0 ] = ( p + j )->getX() + SHADOW_DIST_POLY + tp.getX() * fl1;
-                tmpel[ 1 ] = ( p + j )->getY() + SHADOW_DIST_POLY + tp.getY() * fl1;
-                AddElemVBO( tmpel, 6, arr, ind );
+				tmpel_1[ 0 ] = ( p + j )->getX() + SHADOW_DIST_POLY + tp.getX() * fl1;
+                tmpel_1[ 1 ] = ( p + j )->getY() + SHADOW_DIST_POLY + tp.getY() * fl1;
+                AddElemVBO( tmpel_1, 6, arr, ind );
 			}
 
 			if ( fl2 ) {
-				tmpel[ 5 ] = 0;
+				float tmpel_2[ 6 ] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
 
-				tmpel[ 0 ] = ( p + j + 1 )->getX() + SHADOW_DIST_POLY2 - tp.getX() * fl2;
-                tmpel[ 1 ] = ( p + j + 1 )->getY() + SHADOW_DIST_POLY2 - tp.getY() * fl2;
-                AddElemVBO( tmpel, 6, arr, ind );
+				tmpel_2[ 0 ] = ( p + j + 1 )->getX() + SHADOW_DIST_POLY2 - tp.getX() * fl2;
+                tmpel_2[ 1 ] = ( p + j + 1 )->getY() + SHADOW_DIST_POLY2 - tp.getY() * fl2;
+                AddElemVBO( tmpel_2, 6, arr, ind );
 
-				tmpel[ 0 ] = ( p + j + 1 )->getX() + ( SHADOW_DIST_POLY + tp.getX() * fl2 * 0.2f ) * 0.2f;
-                tmpel[ 1 ] = ( p + j + 1 )->getY() + ( SHADOW_DIST_POLY + tp.getY() * fl2 * 0.2f ) * 0.2f;
-                AddElemVBO( tmpel, 6, arr, ind );
+				tmpel_2[ 0 ] = ( p + j + 1 )->getX() + ( SHADOW_DIST_POLY + tp.getX() * fl2 * 0.2f ) * 0.2f;
+                tmpel_2[ 1 ] = ( p + j + 1 )->getY() + ( SHADOW_DIST_POLY + tp.getY() * fl2 * 0.2f ) * 0.2f;
+                AddElemVBO( tmpel_2, 6, arr, ind );
 
-				tmpel[5]=SHADOW_KOEF;
+				tmpel_2[ 5 ] = SHADOW_KOEF;
 
-				tmpel[ 0 ] = ( p + j + 1 )->getX();
-                tmpel[ 1 ] = ( p + j + 1 )->getY();
-                AddElemVBO( tmpel, 6, arr, ind );
+				tmpel_2[ 0 ] = ( p + j + 1 )->getX();
+                tmpel_2[ 1 ] = ( p + j + 1 )->getY();
+                AddElemVBO( tmpel_2, 6, arr, ind );
 
-				tmpel[ 0 ] = ( p + j + 1 )->getX() + SHADOW_DIST_POLY - tp.getX() * fl2;
-                tmpel[ 1 ] = ( p + j + 1 )->getY() + SHADOW_DIST_POLY - tp.getY() * fl2;
-                AddElemVBO( tmpel, 6, arr, ind );
+				tmpel_2[ 0 ] = ( p + j + 1 )->getX() + SHADOW_DIST_POLY - tp.getX() * fl2;
+                tmpel_2[ 1 ] = ( p + j + 1 )->getY() + SHADOW_DIST_POLY - tp.getY() * fl2;
+                AddElemVBO( tmpel_2, 6, arr, ind );
 			}
 
 		}
@@ -298,37 +304,47 @@ void GenVBOPolyShadow( tka *p, float **arr, int **ind ) {
 
 }
 
-void GenVBOPolyFrame(tka* p,float** arr,int** ind) {
-	int n=LNUM(p),j,l=0,ptt=0;
-	bool fff;
-	tka tmpt;
+void GenVBOPolyFrame( tka *p, float **arr, int **ind ) {
 
-	float tmpel[6]={0,0,0,0,0,0};
-	//glPushAttrib(GL_CURRENT_BIT);
+//
+//	int l = 0;
+//	int ptt = 0;
+//	bool fff = false;
+//	tka tmpt;
 
-	tka tp,tk;//,old;
-	int kk;
-	float d=3;
-	*arr=0;
+//	float tmpel[ 6 ] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
+//	//glPushAttrib(GL_CURRENT_BIT);
 
-	*ind=0;
+//
+//	tka tk;
+//	//tka old;
+//
+//
 
+	*arr = nullptr;
+	*ind = nullptr;
 
-	for(kk=0;kk<2;kk++)
-		for(j=0;j<n;j++)
-		{
+	float const d = 3.0f;
+
+	size_t n = LNUM( p );
+
+	for ( size_t kk = 0; kk < 2; kk++ ) {
+		for ( size_t j = 0; j < n; j++ ) {
 			//glColor3d(0,0,0);
 			//glVertex2f((Poly[i]+j)->getX(),(Poly[i]+j)->getY());
-			tmpel[0]=(p+j)->getX();
-			tmpel[1]=(p+j)->getY();
-			tmpel[5]=1;
-			AddElemVBO(tmpel,6,arr,ind);
+
+			float tmpel[ 6 ] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
+
+			tmpel[ 0 ] = ( p + j )->getX();
+			tmpel[ 1 ] = ( p + j )->getY();
+			tmpel[ 5 ] = 1;
+			AddElemVBO( tmpel, 6, arr, ind );
 
 
-			tp=p[j+1]-p[j];
-			tmpt=p[j]-p[(j-1+n)%n];
-			fff = ( tp.getVectorProduction(tmpt)<0);
-			tk=tp/tp.getLength()-tmpt/tmpt.getLength();
+			tka tp = p[ j + 1 ] - p[ j ];
+			tka tmpt = p[ j ] - p[ ( j - 1 + n ) % n ];
+			bool const fff = tp.getVectorProduction( tmpt ) < 0;
+			tka tk = tp / tp.getLength() - tmpt / tmpt.getLength();
 			tk.normalize();
 
 //			swap(tp.getX(),tp.getY());
@@ -339,65 +355,71 @@ void GenVBOPolyFrame(tka* p,float** arr,int** ind) {
             tp.setY( -tp.getY() ); tp.normalize();
 			tmpt = tk * ( ( kk ? -0.1f : 1 ) * d / tk.getScalarProduction( tp ) );
 
-			if(!kk&&fff)if(tmpt.getLengthSquare()>d*d)
-			{
-				tk*=(-d);
-				tp=tk;
+			if ( kk == 0 && fff ) {
+				if ( tmpt.getLengthSquare() > d * d ) {
+					tk *= -d;
+					tp = tk;
 
-//				swap(tp.getX(),tp.getY());
-                tp.setBoth( tp.getY(), tp.getX() );
+//					swap(tp.getX(),tp.getY());
+					tp.setBoth( tp.getY(), tp.getX() );
 
-				tp.setY( -tp.getY() );
-				tmpt=tk+LinesCross(tp,p[j+1]-p[j],tmpt-tk);
+					tp.setY( -tp.getY() );
+					tmpt = tk + LinesCross( tp, p[ j + 1 ] - p[ j ], tmpt - tk );
+				}
 			}
-			tmpt+=p[j];
+
+			tmpt += p[ j ];
 //			glColor4d(0,0,0,0);
 //			glVertex2f(tmpt.x,tmpt.y);
 
-			tmpel[0]=tmpt.getX();
-			tmpel[1]=tmpt.getY();
-			tmpel[5]=0;
-			AddElemVBO(tmpel,6,arr,ind);
+			tmpel[ 0 ] = tmpt.getX();
+			tmpel[ 1 ] = tmpt.getY();
+			tmpel[ 5 ] = 0;
+			AddElemVBO( tmpel, 6, arr, ind );
 //			(*arr)[vr+5]=1;
 
 //			glColor3d(0,0,0);
 //			glVertex2f((Poly[i]+j+1)->getX(),(Poly[i]+j+1)->getY());
-			tmpel[0]=(p+1+j)->getX();
-			tmpel[1]=(p+1+j)->getY();
-			tmpel[5]=1;
-			AddElemVBO(tmpel,6,arr,ind);
+			tmpel[ 0 ] = ( p + 1 + j )->getX();
+			tmpel[ 1 ] = ( p + 1 + j )->getY();
+			tmpel[ 5 ] = 1;
+			AddElemVBO( tmpel, 6, arr, ind );
 
+			tp = p[ ( j + 2 ) % n ] - p[ j + 1 ];
+			tmpt = p[ j + 1 ] - p[ j ];
 
+			bool const fff_1 = tp.getVectorProduction( tmpt ) < 0;
 
-			tp=p[(j+2)%n]-p[j+1];
-			tmpt=p[j+1]-p[j];
-			fff = ( tp.getVectorProduction(tmpt)<0);
-			tk=tp/tp.getLength()-tmpt/tmpt.getLength();
+			tk = tp / tp.getLength() - tmpt / tmpt.getLength();
 			tk.normalize();
 
 //			swap(tp.getX(),tp.getY());
             tp.setBoth( tp.getY(), tp.getX() );
             tp.setY( -tp.getY() );
             tp.normalize();
-			tmpt=tk*((kk?-0.1f:1)*d/tk.getScalarProduction(tp));
+			tmpt = tk * ( ( kk != 0 ? -0.1f : 1 ) * d / tk.getScalarProduction( tp ) );
 			//if(fff)if(tmpt.getLengthSquare()>d*d){tmpt.normalize();tmpt*=d;}
-			if(!kk&&fff)if(tmpt.getLengthSquare()>d*d)
-			{
-				tk*=(-d);
-				tp=tk;
-//				swap(tp.getX(),tp.getY());
-                tp.setBoth( tp.getY(), tp.getX() );
-				tp.setY( -tp.getY() );
-				tmpt=tk+LinesCross(tp,p[j+1]-p[j],tmpt-tk);
+
+			if ( kk == 0 && fff_1 ) {
+				if ( tmpt.getLengthSquare() > d * d ) {
+					tk *= -d;
+					tp = tk;
+	//				swap(tp.getX(),tp.getY());
+					tp.setBoth( tp.getY(), tp.getX() );
+					tp.setY( -tp.getY() );
+					tmpt = tk + LinesCross( tp, p[ j + 1 ] - p[ j ], tmpt - tk );
+				}
 			}
 
-			tmpt+=p[j+1];
+			tmpt += p[ j + 1 ];
 
 			//glColor4d(0,0,0,0);
 			//glVertex2f(tmpt.x,tmpt.y);
-			tmpel[0]=tmpt.getX();
-			tmpel[1]=tmpt.getY();
-			tmpel[5]=0;
-			AddElemVBO(tmpel,6,arr,ind);
+
+			tmpel[ 0 ] = tmpt.getX();
+			tmpel[ 1 ] = tmpt.getY();
+			tmpel[ 5 ] = 0;
+			AddElemVBO( tmpel, 6, arr, ind );
 		}
+	}
 }
