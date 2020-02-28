@@ -1,8 +1,8 @@
 #pragma once
 
 
-//#include "Report.h" 
-#include "Math.h" 
+//#include "Report.h"
+#include "Math.h"
 //#include "matrix.h"
 #include "AllDefinitions.h"
 
@@ -24,7 +24,7 @@ inline int sqrtInt(int a)
 		d=d/2;
 	}while(d);
 
-	
+
 	return i+1;
 }
 
@@ -100,7 +100,7 @@ public:
 // 		_x += nx;
 // 		_y += ny;
 // 	}
-	
+
 	tka( const tka &other ) {
 		x = other.x;
 		y = other.y;
@@ -178,8 +178,8 @@ public:
 	}
 
 	void normalize() {
-		const float ll = ::sqrt( x * x + y * y );
-		
+		float const ll = ::sqrt( x * x + y * y );
+
 		if ( ll == 0 ) return;
 		x /= ll;
 		y /= ll;

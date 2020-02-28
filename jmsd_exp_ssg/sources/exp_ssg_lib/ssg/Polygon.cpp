@@ -135,23 +135,10 @@ bool LineCrossLine( tka const &a1, tka const &a2, tka const &b1, tka const &b2 )
 
 }
 
-template< typename Destination_type, typename Source_type >
-Destination_type fully_reinterpret_cast( Source_type source_value ) {
-	enum {
-		Destination_type destination_type_value;
-		Source_type source_type_value;
-	} convertion_enum;
-
-	convertion_enum.source_type_value = source_value;
-	return convertion_enum.destination_type_value;
-}
-
 bool LineCrossSomething(tka a,tka b,int*ppoly, tka* pnt)
 {
 	tka d(0,0),**t;
 //1	st<tka*> oldl;
-	float const float_value = 1.0f;
-	int const integer_value = fully_reinterpret_cast< int >( float_value );
 	int n = ( ( int )maxF( ::std::abs( b.x - a.x ), ::std::abs( b.y - a.y ) ) ) / ( KLET_SIZE );
 	int ii = 0;
 	int jj = 0;
@@ -234,38 +221,39 @@ bool LineLine2(tka&a1,tka&a2,tka&b1,tka&b2,tka*v0)
 	return 0;
 }
 
-int LineCrossPoly2(tka* a,tka* b,tka*p,tka*v0)
-{
+int LineCrossPoly2(tka* a,tka* b,tka*p,tka*v0) {
+	size_t const n = LNUM( p );
+	int k = -1;
+	float ml = 0.0f;
 
+	for ( size_t i = 0; i < n; i++ ) {
+		if ( ( b->x-a->x ) * ( ( p + i + 1 )->y - ( p + i )->y ) - ( b->y-a->y ) * ( ( p + i + 1 )->x - ( p + i )->x ) > 0 ) {
+			tka tmpt;
 
-	int n=LNUM(p),i,k=-1;
-	float l,ml;
-	tka tmpt;
+			if ( LineLine2( *a, *b, p[ i ], p[ i + 1 ], &tmpt ) ) {
+				float const l = ( a->x-tmpt.x ) * ( a->x - tmpt.x ) + ( a->y - tmpt.y ) * ( a->y - tmpt.y );
 
-	for(i=0;i<n;i++)
-		if((b->x-a->x)*((p+i+1)->y-(p+i)->y)-(b->y-a->y)*((p+i+1)->x-(p+i)->x)>0)
-		if(LineLine2(*a,*b,p[i],p[i+1],&tmpt))
-	    {
-			l=(a->x-tmpt.x)*(a->x-tmpt.x)+(a->y-tmpt.y)*(a->y-tmpt.y);
-			if(k==-1||ml>l)
-			{
-				ml=l;
-				k=i;
-				*v0=tmpt;
+				if ( k == -1 || ml > l ) {
+					ml = l;
+					k = i;
+					*v0 = tmpt;
+				}
+
 			}
+		}
+	}
 
-	    }
 	return k;
 
 }
 
 bool PolyCrossPoly(tka*p1,tka*p2)
 {
-	int n[]={LNUM(p1),LNUM(p2)};
+	size_t n[]={LNUM(p1),LNUM(p2)};
 
 	for ( size_t i = 0; i < n[ 0 ]; i++ ) {
 		for ( size_t j = 0; j < n[ 1 ]; j++ ) {
-			if ( LineCrossLine( p1 + i, p1 + i + 1, p2 + j, p2 + j + 1 ) ) {
+			if ( LineCrossLine( *( p1 + i ), *( p1 + i + 1 ), *( p2 + j ), *( p2 + j + 1 ) ) ) {
 				return 1;
 			}
 		}
@@ -462,9 +450,16 @@ void LineMark(tka*a,tka*b,int ip)
 void PolyMark(tka*p,int ip)
 {
 
-	int j,n=LNUM(p);
-	int i1,j1,i2,j2,ii,jj;
-	tka tmpt,tmpt2;
+	int j = 0;
+	int n = LNUM( p );
+	int i1 = 0;
+	int j1 = 0;
+	int i2 = 0;
+	int j2 = 0;
+	int ii = 0;
+	int jj = 0;
+	tka tmpt;
+	tka tmpt2;
 
 	for(j=0;j<n;j++)
 	{
@@ -721,16 +716,24 @@ void UnInitPoly()
 
 void DelPolys()
 {
-	int i,j;
 	vbo.UnInitPolyVBO();
-	for(i=0;i<global_quantityOfObstacles;i++){delete[]Poly[i];delete[]TPoly[i];}
 
-	for(i=0;i<FIELDSIZEX;i++)
-	{
-		for(j=0;j<FIELDSIZEY;j++)
-		{
-			if(Qpoly[i][j]){delete[]Qpoly[i][j];Qpoly[i][j]=0;}
-			if(Qip[i][j]){delete[]Qip[i][j];Qip[i][j]=0;}
+	for ( size_t i = 0; i < global_quantityOfObstacles; i++ ) {
+		delete[] Poly[ i ];
+		delete[] TPoly[ i ];
+	}
+
+	for ( size_t i = 0; i < FIELDSIZEX; i++ ) {
+		for ( size_t j = 0; j < FIELDSIZEY; j++ ) {
+			if ( Qpoly[ i ][ j ] != nullptr ){
+				delete[] Qpoly[ i ][ j ];
+				Qpoly[ i ][ j ] = nullptr;
+			}
+
+			if ( Qip[ i ][ j ] != nullptr ) {
+				delete[] Qip[ i ][ j ];
+				Qip[ i ][ j ] = 0;
+			}
 		}
 	}
 	if(global_quantityOfObstacles)

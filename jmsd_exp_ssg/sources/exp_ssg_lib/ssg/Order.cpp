@@ -17,7 +17,7 @@ void Order::SetDefault() {
 	pl = MyConf.MY_PLAYER;
 }
 
-Order::Order(char ntype,char nprm,char nprm2)
+Order::Order(char ntype,bool nprm,char nprm2)
 {
 	SetDefault();
 	type=ntype;
@@ -30,17 +30,17 @@ Order::Order(Pocket& pc)
 	UnPack(pc);
 }
 
-Order::Order(char ntype,st<int>*nsl,char nprm,char nprm2)
+Order::Order(char ntype,st<int>*nsl,bool nprm,char nprm2)
 {
 	SetDefault();
 	type=ntype;
 	prm=nprm;
 	prm2=nprm2;
 
-	AddSortedIntSt(&sl,nsl);	
+	AddSortedIntSt(&sl,nsl);
 }
 
-Order::Order(char ntype,st<int>*nsl,tka t1,tka t2,char nprm)
+Order::Order(char ntype,st<int>*nsl,tka t1,tka t2,bool nprm)
 {
 	SetDefault();
 	type=ntype;
@@ -48,7 +48,7 @@ Order::Order(char ntype,st<int>*nsl,tka t1,tka t2,char nprm)
 //	CopyElements(&sl,nsl->beg);
 //	sl.AddStDBL(nsl->beg);
 	AddSortedIntSt(&sl,nsl);
-	
+
 	pos=t1;
 	nav=t2;
 }
@@ -56,7 +56,7 @@ Order::Order(char ntype,st<int>*nsl,tka t1,tka t2,char nprm)
 void Order::Pack( Pocket &pc ) {
 	pc.PushBack(type);
 	pc.PushBack(pl);
-	
+
 	if(sl.beg)PackSel(pc,&sl);
 	if(type<=2)
 	{
@@ -71,14 +71,14 @@ void Order::Pack( Pocket &pc ) {
 		pc.PushBack(prm);
 		pc.PushBack(prm2);
 	}
-	
+
 
 }
 void Order::UnPack(Pocket&pc)
 {
 	pc.PopFront(type);
 	pc.PopFront(pl);
-	
+
 	if(type<5)UnPackSel(pc,&sl);
 	if(type<=2)
 	{
@@ -93,9 +93,9 @@ void Order::UnPack(Pocket&pc)
 		pc.PopFront(prm);
 		pc.PopFront(prm2);
 	}
-	
 
-	
+
+
 }
 
 void OrderManager::AddOrder(Order* nord)
@@ -121,7 +121,7 @@ bool OrderManager::RecvOrders()
 	}else
 		return false;
 
-	
+
 
 }
 void OrderManager::renull()
@@ -158,7 +158,7 @@ void OrderManager::DoOrders()
 	el<Order*>*tmp;
 	if(ord_in.top)ord_in.beg=ord_out[!cur_ord].top;
 	else ord_in.top=ord_out[!cur_ord].top;
-	
+
 	for(i=0;i<8;i++)
 	{
 		tmp=ord_in.top;
@@ -197,7 +197,7 @@ void DeleteGroup(int* id)
 {
 	Group*gg=(global_groups+*id);
 	while(gg->un.beg)DeleteUnit(gg->un.beg->v);
-	
+
 }
 void SetStatusU(st<int>*sl,char prm,char prm2)
 {
@@ -215,7 +215,7 @@ void SetStatusU(st<int>*sl,char prm,char prm2)
 }
 void SetStatusG(st<int>*sl,char prm,char prm2)
 {
-	
+
 	switch(prm)
 	{
 	case 0:	DoForEach(sl->beg,UnGroup);

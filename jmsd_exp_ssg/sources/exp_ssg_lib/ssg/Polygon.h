@@ -105,8 +105,8 @@ size_t transfering_to_vector_VectorSize( const A_type *const vector ) {
 
 template< class T >
 void AddElem( T el, T **vector ) {
-	int n;
-	int mm;
+	size_t n = 0;
+	size_t mm = 0;
 
 	if ( *vector ) {
 		mm = _msize( *vector );

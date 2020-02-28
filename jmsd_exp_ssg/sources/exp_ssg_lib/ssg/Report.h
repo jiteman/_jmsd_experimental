@@ -1,6 +1,8 @@
 #pragma once
 
 
+#include <string>
+
 
 class CFile;
 extern CFile global_file;

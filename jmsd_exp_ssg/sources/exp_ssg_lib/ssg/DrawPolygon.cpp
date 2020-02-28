@@ -125,7 +125,7 @@ void DrawVboPolyFrames() {
 	::glDisableClientState( GL_TEXTURE_COORD_ARRAY );
 	::glEnableClientState( GL_COLOR_ARRAY );
 
-	for ( int i = 0; i < global_quantityOfObstacles; i += 1 ) {
+	for ( size_t i = 0; i < global_quantityOfObstacles; i += 1 ) {
 		if ( IsHere( PolyCent[ i ], PolyRad[ i ] ) ) {
 			const int n = global_obstacleVerticesQuantities[ i ];
 			::glBindBufferARB( GL_ARRAY_BUFFER_ARB, vbo._obstacleFrameVertexIdentifiers[ i ] );
@@ -154,7 +154,7 @@ void DrawVboPolyShadows() {
 	::glDisableClientState ( GL_TEXTURE_COORD_ARRAY );
 	::glEnableClientState ( GL_COLOR_ARRAY );
 
-	for ( int i = 0; i < global_quantityOfObstacles; i += 1 ) {
+	for ( size_t i = 0; i < global_quantityOfObstacles; i += 1 ) {
 		if ( IsHere( PolyCent[ i ], PolyRad[ i ] +SHADOW_DIST_POLY2 ) ) {
 			const int n = global_obstacleVerticesQuantities[ i ];
 			::glBindBufferARB( GL_ARRAY_BUFFER_ARB, vbo._obstacleShadowVertexIdentifiers[ i ] );
@@ -173,28 +173,35 @@ void DrawVboPolyShadows() {
 	//glDisable(GL_STENCIL_TEST);
 }
 
-void GenVBOPolyShadow(tka* p,float** arr,int** ind) {
-	int j,l=0,ptt=0;
-	int n=LNUM(p);
-	bool fl1,fl2;
-	tka tmpt;
-	tka tp,tk;//,old;
-	float d=3;
-	float tmpel[6]={0,0,0,0,0,SHADOW_KOEF};
+void GenVBOPolyShadow( tka *p, float **arr, int **ind ) {
+//	int j = 0;
+//	int l = 0;
+//	int ptt = 0;
+//
+//	bool fl1;
+//	bool fl2;
+//	tka tmpt;
+//
+//	tka tk;
+//	//tka old;
+//	float d = 3.0f;
+	float tmpel[ 6 ] = { 0, 0, 0, 0, 0, SHADOW_KOEF };
 
-	*arr=0;
-	*ind=0;
+	*arr = nullptr;
+	*ind = nullptr;
 
-	for(j=0;j<n;j++)
-	{
-		tp=p[j+1]-p[j];
+	size_t const n = LNUM( p );
+
+	for ( size_t j = 0; j < n; j++ ) 	{
+		tka tp = p[ j + 1 ] - p[ j ];
+
 		if ( tp.getX() > tp.getY() ) {
-			tk=p[j]-p[(j-1+n)%n];
-			fl1 = ( ( tk.getX() < tk.getY() ) && ( tp.getVectorProduction( tk ) > 0 ) );
-			tk=p[(j+2)%n]-p[j+1];
-			fl2 = ( ( tk.getX() < tk.getY() ) && ( tp.getVectorProduction( tk ) < 0 ) );
+			tka tk = p[ j ] - p[ ( j - 1 + n ) % n ];
+			bool const fl1 = ( ( tk.getX() < tk.getY() ) && ( tp.getVectorProduction( tk ) > 0 ) );
+			tk = p [ ( j + 2 ) % n ] - p[ j + 1 ];
+			bool const fl2 = ( ( tk.getX() < tk.getY() ) && ( tp.getVectorProduction( tk ) < 0 ) );
 			tp.normalize();
-			tp*=SHADOW_DIST_POLY3;
+			tp *= SHADOW_DIST_POLY3;
 
 			tmpel[ 0 ] = ( p + j )->getX();
             tmpel[ 1 ] = ( p + j )->getY();
@@ -214,17 +221,17 @@ void GenVBOPolyShadow(tka* p,float** arr,int** ind) {
 		}
 	}
 
-	for(j=0;j<n;j++) {
-		tp=p[j+1]-p[j];
+	for( j = 0; j < n; j++ ) {
+		tp = p[ j + 1 ] - p[ j ];
 
 		if ( tp.getX() > tp.getY() ) {
-			tk=p[j]-p[(j-1+n)%n];
+			tk = p[ j ] - p[ ( j - 1 + n ) % n ];
 			fl1 = ( ( tk.getX() < tk.getY() ) && ( tp.getVectorProduction( tk ) > 0 ) );
-			tk=p[(j+2)%n]-p[j+1];
+			tk = p[ ( j + 2 ) % n ] - p[ j + 1 ];
 			fl2 = ( ( tk.getX() < tk.getY() ) && ( tp.getVectorProduction( tk ) < 0 ) );
 			tp.normalize();
-			tp*=SHADOW_DIST_POLY3;
-			tmpel[5]=SHADOW_KOEF;
+			tp *= SHADOW_DIST_POLY3;
+			tmpel[ 5 ] = SHADOW_KOEF;
 
 			tmpel[ 0 ] = ( p + j + 1 )->getX() + SHADOW_DIST_POLY - tp.getX() * fl2;
             tmpel[ 1 ] = ( p + j + 1 )->getY() + SHADOW_DIST_POLY - tp.getY() * fl2;
@@ -244,8 +251,7 @@ void GenVBOPolyShadow(tka* p,float** arr,int** ind) {
             tmpel[ 1 ] = ( p + j + 1 )->getY() + SHADOW_DIST_POLY2 - tp.getY() * fl2;
             AddElemVBO( tmpel, 6, arr, ind );
 
-			if(fl1)
-			{
+			if ( fl1 ) {
 				tmpel[ 0 ] = ( p + j )->getX() + SHADOW_DIST_POLY2 + tp.getX() * fl1;
                 tmpel[ 1 ] = ( p + j )->getY() + SHADOW_DIST_POLY2 + tp.getY() * fl1;
                 AddElemVBO( tmpel, 6, arr, ind );
@@ -264,9 +270,9 @@ void GenVBOPolyShadow(tka* p,float** arr,int** ind) {
                 tmpel[ 1 ] = ( p + j )->getY() + SHADOW_DIST_POLY + tp.getY() * fl1;
                 AddElemVBO( tmpel, 6, arr, ind );
 			}
-			if(fl2)
-			{
-				tmpel[5]=0;
+
+			if ( fl2 ) {
+				tmpel[ 5 ] = 0;
 
 				tmpel[ 0 ] = ( p + j + 1 )->getX() + SHADOW_DIST_POLY2 - tp.getX() * fl2;
                 tmpel[ 1 ] = ( p + j + 1 )->getY() + SHADOW_DIST_POLY2 - tp.getY() * fl2;
