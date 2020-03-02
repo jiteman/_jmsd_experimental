@@ -17,7 +17,7 @@ void Order::SetDefault() {
 	pl = MyConf.MY_PLAYER;
 }
 
-Order::Order(char ntype,bool nprm,char nprm2)
+Order::Order(char ntype,char nprm,char nprm2)
 {
 	SetDefault();
 	type=ntype;
@@ -30,7 +30,7 @@ Order::Order(Pocket& pc)
 	UnPack(pc);
 }
 
-Order::Order(char ntype,st<int>*nsl,bool nprm,char nprm2)
+Order::Order(char ntype,st<int>*nsl,char nprm,char nprm2)
 {
 	SetDefault();
 	type=ntype;
@@ -40,7 +40,7 @@ Order::Order(char ntype,st<int>*nsl,bool nprm,char nprm2)
 	AddSortedIntSt(&sl,nsl);
 }
 
-Order::Order(char ntype,st<int>*nsl,tka t1,tka t2,bool nprm)
+Order::Order(char ntype,st<int>*nsl,tka t1,tka t2,char nprm)
 {
 	SetDefault();
 	type=ntype;

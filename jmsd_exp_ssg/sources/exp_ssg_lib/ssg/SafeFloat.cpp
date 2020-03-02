@@ -17,10 +17,10 @@ void MySend( char *bf, const int num ) {
 	int sm = 0;
 
 	if ( !is_online ) return;
-	
+
 	do {
 		nm=send(my_sock,bf+sm,num-sm,0);
-		
+
 		if ((nm==0)||(nm==SOCKET_ERROR))
 		{
 		   //printf("Error send:  Player %d quit!\n",i);
@@ -39,7 +39,7 @@ void MyRecv(char* bf,int num)
 	{
 //		Sleep((int)(400*RND01)+520);
 		nm=recv(my_sock,bf+sm,num-sm,0);
-		
+
 		if ((nm==0)||(nm==SOCKET_ERROR))
 		{
 		   //printf("Error recv:  Player %d quit!\n",i);
@@ -80,16 +80,16 @@ char* RecvPocket(int* num)
 	return bf;
 }
 
-void PocketExchange(void*v)
+void PocketExchange( void * /*v*/ )
 {
 	BB(27);
 	pock_exch_is=true;
-	
+
 
 	while(global_OrdMan.RecvOrders()){}
 	SendOrders();
 	while(global_OrdMan.RecvOrders()){}
-	
+
 
 	MyRecv((char*)&ServParams,sizeof(ServParams));
 

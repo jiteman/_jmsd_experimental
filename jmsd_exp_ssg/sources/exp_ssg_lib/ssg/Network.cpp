@@ -25,22 +25,22 @@ void DoOrder(Order** ord)
 
 	switch((*ord)->type)
 	{
-		case 0: 
-			SendUnits(&(*ord)->sl,(*ord)->sl.GetNum(),(*ord)->pos,(*ord)->nav,(*ord)->prm, 2, 4);
+		case 0:
+			SendUnits(&(*ord)->sl,(*ord)->sl.GetNum(),(*ord)->pos,(*ord)->nav,(*ord)->prm != 0, 2, 4);
 			break;
-		case 1: 
+		case 1:
 			SetBasesSend(&(*ord)->sl,(*ord)->pos);
 			break;
-		case 2: 
-			SendGroups(&(*ord)->sl,(*ord)->pos,(*ord)->nav,(*ord)->prm);
+		case 2:
+			SendGroups(&(*ord)->sl,(*ord)->pos,(*ord)->nav,(*ord)->prm != 0 );
 			break;
-		case 3: 
+		case 3:
 			SetStatusU(&(*ord)->sl,(*ord)->prm,(*ord)->prm2);
 			break;
-		case 4: 
+		case 4:
 			SetStatusG(&(*ord)->sl,(*ord)->prm,(*ord)->prm2);
 			break;
-		case 5: 
+		case 5:
 			DoPlAction(*ord);
 			break;
 	}
@@ -75,7 +75,7 @@ void MakeDataExchange()
 //	RecvOrders();
 	BB(28);
 	global_OrdMan.DoOrders();
-	
+
 
 	global_OrdMan.SwapOut();
 	BB1(28);
@@ -88,7 +88,7 @@ void MakeDataExchange()
 void PrepareClientMessage()
 {
 	net_time=ServParams.net_time;
-	
+
 	switch(ServParams.prm1)
 	{
 	case 0:ClientParamsTMP.game_summ=SafeGame(0,1000);
@@ -100,8 +100,8 @@ void PrepareClientMessage()
 	case 3:RecvGameContent();
 		break;
 
-	}		
-	
+	}
+
 	//////
 	memcpy(&ClientParams,&ClientParamsTMP,sizeof(ClientParams));
 	ClientParamsTMP.prm=0;

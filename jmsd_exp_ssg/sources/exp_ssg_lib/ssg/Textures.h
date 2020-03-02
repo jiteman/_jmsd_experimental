@@ -35,34 +35,35 @@
 #define TEXTURE_UNITS_SELECTION(type) TEXTURE_UNITS
 
 
-// Создадим структуру TextureImage для хранения данных текстуры.
-struct TextureImage
-{
-	GLubyte *imageData;		// Данные текстуры
-	GLuint	bpp;			// Байт на пиксел
-	GLuint width,height;		// Высота и ширина
-	GLuint texID;			// ID текстуры
-};
+//// Создадим структуру TextureImage для хранения данных текстуры.
+//struct TextureImage
+//{
+//	GLubyte *imageData;		// Данные текстуры
+//	GLuint	bpp;			// Байт на пиксел
+//	GLuint width,height;		// Высота и ширина
+//	GLuint texID;			// ID текстуры
+//};
 
 
-// Класс текстур. Загрузка и высвобождение.
-class CTexture{
-public:
+//// Класс текстур. Загрузка и высвобождение.
+//class CTexture{
+//public:
 
-	CTexture();
-	~CTexture();
+//	CTexture();
+//	~CTexture();
 
-	// Собственно, класс наш делает немного - в нём только 2 функции -
-	// загрузка и освобождение текстур =)
-//	void LoadTexture(ILenum FileType, char *filename, TextureImage *texture, bool bMultAlpha);
-	void LoadTexture( char const *filename, ::sf::Texture *out_texture, bool bMultAlpha );
-	void FreeTexture(TextureImage *texture);
-};
+//	// Собственно, класс наш делает немного - в нём только 2 функции -
+//	// загрузка и освобождение текстур =)
+////	void LoadTexture(ILenum FileType, char *filename, TextureImage *texture, bool bMultAlpha);
+//	void LoadTexture( char const *filename, ::sf::Texture *out_texture, bool bMultAlpha );
+//	void FreeTexture(TextureImage *texture);
+//};
 
-extern CTexture *Texture;
+//extern CTexture *Texture;
 //extern TextureImage global_Textures[TEX_TYPES];
 extern ::sf::Texture global_Textures[ TEX_TYPES ];
 
+::sf::Image LoadTextureWithAlphaFromFile( ::std::string const path_to_texture_file );
 GLvoid LoadGLTextures(GLvoid);
 
-void MultAlpha(TextureImage* txt);
+// void MultAlpha(TextureImage* txt);

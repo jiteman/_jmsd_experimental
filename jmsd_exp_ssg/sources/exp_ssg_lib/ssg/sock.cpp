@@ -27,7 +27,7 @@ void ClearSock()
 	WSACleanup ();
 }
 
-void InitSockC(void*v)
+void InitSockC( void * /*v*/ )
 {
 	int error;
 	// Setup WinSock
@@ -36,7 +36,7 @@ void InitSockC(void*v)
 	sock_init=4;
 
     char a[]="127.0.0.1                 ";
-    
+
 	CFile file;
 	if(file.Open("ServerIP.txt",OPEN_EXISTING))
 	{
@@ -68,34 +68,34 @@ void InitSockC(void*v)
 
 	my_sock = socket (AF_INET,SOCK_STREAM,0); // create socket
 
-	
-	
+
+
 
 	// connect to server
 	you.sin_family = AF_INET;
 	you.sin_port = htons (5555);	// RPSS port is 5555
 	you.sin_addr.s_addr = inet_addr (a);
-	
+
 	if (connect(my_sock,(LPSOCKADDR)&you,sizeof(you))==SOCKET_ERROR)
 	    if (WSAGetLastError()==WSAEWOULDBLOCK)
 		{
-		
+
 			connect(my_sock,(LPSOCKADDR)&you,sizeof(you));
 			//mes.AddElToBeg(MyMessage("Есть соединение с сервером."));
-		
+
 		}else
 		{
 			global_onScreenMessages.AddElToBeg(MyMessage(LSTRING("Unable to connect to server","Не удалось соединиться с сервером")));
 			sock_init=3;
 			_endthread();
-		
+
 		}
 	//mes.AddElToBeg(MyMessage("Ожидаем подключения остальных игроков"));
-	
+
 	is_online=true;
 //	MyDisplay();
 //	SwapBuffers(hDC);
-	
+
 
 	sock_init=6;
 	if(!RecvPocket((char*)&nGameParams))
@@ -109,19 +109,19 @@ void InitSockC(void*v)
 		sock_init=6;
 		RecvPocket((char*)&nGameParams);
 	}
-	
-	
-	
+
+
+
 //	char ccc;	RecvPocket(&ccc);
-	
-	
+
+
 
 	if(is_online)
 	{
 		sock_init=2;
 	}else
 		sock_init=3;
-	
+
 	_endthread();
 }
 void InitSockProc()

@@ -420,7 +420,7 @@ void DrawBases()
 //	int i;
 	float x,y;
 	char plpl,o_pl=-2;
-	unsigned int o_type = reinterpret_cast< unsigned int >( ~0 );
+	unsigned int o_type = ~0U;
 
 	base *bp=Bases;
 //	glBindTexture( GL_TEXTURE_2D, TEXTURE_BASES.texID );
@@ -456,37 +456,36 @@ void DrawBases()
 	}
 
 }
-void DrawBasesRects()
-{
-	int i;
-	float x,y;
-	char plpl,o_pl=-2;
-	float blCol[3]={0.8f,0.8f,0.8f};
 
-	for(i=0;i<BasesNum;i++)
-	if(IsHere((Bases+i)->pos,BASE_SIZE))
-	{
-		x=(Bases+i)->pos.x;
-		y=(Bases+i)->pos.y;
-		plpl=(Bases+i)->pl;
-		if(o_pl!=plpl)
-		{
-			if(plpl!=-1)
-				glColor3fv(PLColor[plpl]);
-			else
-				glColor3fv(blCol);
-			o_pl=plpl;
+void DrawBasesRects() {
+//	char plpl,o_pl=-2;
+//	float blCol[3]={0.8f,0.8f,0.8f};
 
+	float const blCol[ 3 ] = { 0.8f, 0.8f, 0.8f };
+
+	char o_pl = -1;
+
+	for ( size_t i = 0; i < BasesNum; i++ ) {
+		if ( IsHere( ( Bases + i )->pos, BASE_SIZE ) ) {
+			float const x = ( Bases + i )->pos.x;
+			float const y = ( Bases + i )->pos.y;
+			char const plpl = ( Bases + i )->pl;
+
+			if ( o_pl != plpl ) {
+				::glColor3fv( plpl != -1 ? PLColor[ plpl ] : blCol );
+				o_pl = plpl;
+			}
+
+			::glBegin( GL_LINE_LOOP );
+			::glVertex2f( x - MAX_DEFENDER_DIST, y );
+			::glVertex2f( x, y - MAX_DEFENDER_DIST );
+			::glVertex2f( x + MAX_DEFENDER_DIST, y );
+			::glVertex2f( x, y + MAX_DEFENDER_DIST );
+			::glEnd();
 		}
-		glBegin(GL_LINE_LOOP);
-		glVertex2f(x-MAX_DEFENDER_DIST,y);
-		glVertex2f(x,y-MAX_DEFENDER_DIST);
-		glVertex2f(x+MAX_DEFENDER_DIST,y);
-		glVertex2f(x,y+MAX_DEFENDER_DIST);
-		glEnd();
 	}
-
 }
+
 void DrawUnitDots()
 {
 	int i;

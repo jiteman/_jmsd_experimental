@@ -11,7 +11,7 @@ struct Order
 {
 
 	char type;
-	bool prm;
+	char prm;
 	char pl;
 	char prm2;
 	//type:
@@ -28,9 +28,9 @@ struct Order
 	void SetDefault();
 	Order(){SetDefault();}
 	Order(Pocket& pc);
-	Order(char ntype,st<int>*nsl,tka t1,tka t2,bool nprm);
-boo!	Order(char ntype,st<int>*nsl, bool nprm,char nprm2=0);
-	Order(char ntype,bool nprm,char nprm2=0);
+	Order(char ntype,st<int>*nsl,tka t1,tka t2,char nprm);
+	Order(char ntype,st<int>*nsl, char nprm,char nprm2=0);
+	Order(char ntype,char nprm,char nprm2=0);
 
 
 	void Pack(Pocket& pc);

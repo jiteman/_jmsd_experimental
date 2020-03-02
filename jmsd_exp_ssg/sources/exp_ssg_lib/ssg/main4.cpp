@@ -19,7 +19,7 @@
 
 #include "sock.h"
 
-#include "temporary_windows_include.h"
+#include "include_Windows.h"
 
 #include "sss.h"
 
@@ -32,7 +32,7 @@ LRESULT CALLBACK WndProc( HWND hWnd, unsigned int Message, WPARAM wParam, LPARAM
 			}
 
 			//status&=~5;
-			omR = MOUSETKA();		
+			omR = MOUSETKA();
 			SelIsR = 1;
 			break;
 
@@ -50,7 +50,7 @@ LRESULT CALLBACK WndProc( HWND hWnd, unsigned int Message, WPARAM wParam, LPARAM
 
 			SelIsR = 0;
 			::SendSelectedUnits( MouseOnBase == -1 ? omR : ( Bases + MouseOnBase )->pos, MOUSETKA(), wParam == MK_CONTROL );
-			//SetBasesSend(MOUSETKA);		
+			//SetBasesSend(MOUSETKA);
 			break;
   //  case WM_MOUSEMOVE:
 
@@ -66,13 +66,13 @@ LRESULT CALLBACK WndProc( HWND hWnd, unsigned int Message, WPARAM wParam, LPARAM
 			} else {
 				if ( ::ActMenu( 0 ) ) {
 					::PlayWavFile( std::string( "click" ) );
-					break;				
+					break;
 				}
 
 				omL = ::MOUSETKA();
 				SelIs = 1;
 			}
-			
+
 			break;
 
 		case WM_LBUTTONUP:
@@ -92,7 +92,7 @@ LRESULT CALLBACK WndProc( HWND hWnd, unsigned int Message, WPARAM wParam, LPARAM
 				tka tmpt = ( omL + ::MOUSETKA() ) * 0.5f;
 				::ChangeScale( 1 / ::minF( ( ::absF( ::MOUSEX() - omL.x ) / WIDTH ) , ::absF( ::MOUSEY() - omL.y ) / HEIGHT ), false );
 				::GoToTkaOnMap(tmpt);
-			
+
 				/*float ns=minF((WIDTH*SCALE)/(absF(omx-curx-mPos.x)+1),(HEIGHT*SCALE)/(absF(omy-cury-mPos.y)+1));
 				if(ns>30)ns=30;
 				curx=(int)(((curx+minF(omx-curx,int(mPos.x)))*ns)/SCALE);
@@ -100,7 +100,7 @@ LRESULT CALLBACK WndProc( HWND hWnd, unsigned int Message, WPARAM wParam, LPARAM
 
 				SCALE=ns;*/
 			}
-			
+
 			break;
 
     case WM_KEYDOWN:
@@ -122,7 +122,7 @@ LRESULT CALLBACK WndProc( HWND hWnd, unsigned int Message, WPARAM wParam, LPARAM
 			break;
 		}
 
-		
+
 		if(status&64){if(wParam==8)mess.resize(mess.size()-1);else mess.push_back((char)(wParam));break;}
 */
 		if(wParam==27)
@@ -145,19 +145,19 @@ LRESULT CALLBACK WndProc( HWND hWnd, unsigned int Message, WPARAM wParam, LPARAM
 				OrdMan.AddOrder(new Order(3,&sel,1));
 			if(GrpSel.beg)
 				OrdMan.AddOrder(new Order(4,&GrpSel,1));
-		
-		}*/
-		
 
-		if(wParam=='G')		
+		}*/
+
+
+		if(wParam=='G')
 		{
 			if(sel.beg)
 				global_OrdMan.AddOrder(new Order(3,&sel,0));
 			else
 				global_OrdMan.AddOrder(new Order(5,0));
 
-			//if(sel.beg) GroupSelected();else AutoCreateGroup(MyConf.MY_PLAYER);			
-			break;		
+			//if(sel.beg) GroupSelected();else AutoCreateGroup(MyConf.MY_PLAYER);
+			break;
 		}
 
 		if ( wParam == 'B' ) {
@@ -180,13 +180,13 @@ LRESULT CALLBACK WndProc( HWND hWnd, unsigned int Message, WPARAM wParam, LPARAM
 		if(wParam=='Z'){dscale=-1;break;}
 		if(wParam=='I'){status^=8;break;}
 		if(wParam=='S'){GoToWDJ(10);break;}
-		
-		
-		
+
+
+
 		if(wParam==113){GoToWDJ(8);break;}
 		if(wParam==114){GoToWDJ(7);break;}
-		
-		
+
+
 		if ( wParam == 32 ) {
 			if ( sel.beg ) {
 				::GoToTkaOnMap( ( Units + sel.beg->v )->pos );
@@ -201,15 +201,15 @@ LRESULT CALLBACK WndProc( HWND hWnd, unsigned int Message, WPARAM wParam, LPARAM
 					}
 				}
 			}
-			
-			break;	
+
+			break;
 		}
 
 		if ( wParam == 'D' ) {
 			status ^= 128;
 			break;
 		}
-		
+
 		if ( is_online ) {
 			break;
 		}
@@ -238,7 +238,7 @@ LRESULT CALLBACK WndProc( HWND hWnd, unsigned int Message, WPARAM wParam, LPARAM
 			} else {
 				global_onScreenMessages.AddElToBeg( MyMessage( LSTRING( "I agree to have friends", "Эй! Если что - я союзник." ) ) );
 			}
-			
+
 			::UpDateEnemy();
 			break;
 		}
@@ -247,17 +247,17 @@ LRESULT CALLBACK WndProc( HWND hWnd, unsigned int Message, WPARAM wParam, LPARAM
 			revansh();
 		}
 
-	break;	    
+	break;
 
 	case WM_CREATE:
 		OnCreate(hWnd);
-		
+
 	break;
 
 	case WM_DESTROY:
-		
+
 		//UnInitUnits();
-	case WM_CLOSE:		
+	case WM_CLOSE:
 		global_uninitializeSoundSubsystem();
 
 		//::CloseHandle(map_inserter_thread);
@@ -277,15 +277,15 @@ LRESULT CALLBACK WndProc( HWND hWnd, unsigned int Message, WPARAM wParam, LPARAM
 		wglMakeCurrent(hDC,NULL);
 		wglDeleteContext(hRC);
 		ReleaseDC(hWnd,hDC);
-		
-		
+
+
 	OpenRpt();
 	ZZZ.WriteReport();
 	CloseRpt();
 
 
 		PostQuitMessage(0);
-		
+
 	break;
 	case WM_SIZE:
 	ReSizeGLScene(LOWORD(lParam),HIWORD(lParam));
@@ -320,16 +320,16 @@ int sss_WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, 
 	wc.hbrBackground	= NULL;
 	wc.lpszMenuName		= NULL;
 	wc.lpszClassName	= L"OpenGL WinClass";
-	
+
 	if ( !RegisterClass( &wc ) ) {
 		MessageBox( 0, L"Failed To Register The Window Class.", L"Error", MB_OK | MB_ICONERROR );
 		return FALSE;
 	}
 
 	hWnd = CreateWindow( L"OpenGL WinClass", L"Str", WS_POPUP | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, WIDTH, HEIGHT, NULL, NULL,	hInstance, NULL );
-	
+
 	if ( !hWnd ) {
-		MessageBox( 0, L"Window Creation Error.", L"Error", MB_OK | MB_ICONERROR ); 
+		MessageBox( 0, L"Window Creation Error.", L"Error", MB_OK | MB_ICONERROR );
 		return FALSE;
 	}
 
@@ -338,15 +338,15 @@ int sss_WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, 
 	ShowWindow(hWnd, SW_SHOW);
 	SetCursorPos(WIDTH/2, HEIGHT/2);
 //	ShowCursor(1);
-	
+
 	UpdateWindow(hWnd);
 	SetFocus(hWnd);
-   
+
 	SetVSync(1);
-	
+
 	prepare();
 
-	
+
 	if(!vbo.InitVBO())return 0;
 
 	timeBeginPeriod(1);
@@ -392,7 +392,7 @@ int sss_WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, 
 						BB( 32 );
 						SwapBuffers( hDC );			// Переключить буфер экрана
 						BB1( 32 );
-					
+
 						if ( sock_init ) {
 							InitSockProc();
 						}
@@ -418,7 +418,6 @@ int sss_WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, 
 					default:
 				}
 			}
-		}	   
+		}
 	}
 }
- 

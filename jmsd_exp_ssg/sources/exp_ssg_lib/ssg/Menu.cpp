@@ -20,12 +20,12 @@ bool ActMenu( const bool bt ) {
     int i;
 	int ct = 0;
 	el< int > *ttt = sel.beg;
-	el< int > *ttt1 = GrpSel.beg;
+//	el< int > *ttt1 = GrpSel.beg;
 	st< int >nsel;
 	char filter;
 	char plpl;
 	int tp[ UNIT_TYPES ];
-	el< int > *tmp = GrpSel.beg;
+//	el< int > *tmp = GrpSel.beg;
 //	sld* sldp;
 //	base* bp;
 	i = global_onScreenMessages.GetNum();
@@ -67,15 +67,15 @@ bool ActMenu( const bool bt ) {
 	}
 	*/
 
-	if(sel.beg)
-	if(MouseOnButton((float)(WIDTH-ICON_RAMA-ICON_SIZE*(ct+1)),(float)(HEIGHT-ICON_SIZE-ICON_RAMA+ICON_SIZE/4),ICON_SIZE/2,ICON_SIZE/2))
-	{
-		global_OrdMan.AddOrder(new Order(3,&sel,0));
-		return true;
+	if ( sel.beg ) {
+		if ( MouseOnButton( ( float )( WIDTH - ICON_RAMA - ICON_SIZE * ( ct + 1 ) ), ( float )( HEIGHT - ICON_SIZE - ICON_RAMA + ICON_SIZE / 4 ), ICON_SIZE / 2, ICON_SIZE / 2 ) ) {
+			global_OrdMan.AddOrder(new Order(3,&sel,0));
+			return true;
+		}
 	}
 
-
 	if(!ct && !GrpSel.beg)return false;
+
 	if(ct)
 	if(mPos.x<WIDTH-ICON_RAMA && mPos.x>WIDTH-ICON_RAMA-ICON_SIZE*(ct+1) && mPos.y<HEIGHT-ICON_RAMA && mPos.y>HEIGHT-ICON_RAMA-ICON_SIZE )
 	{

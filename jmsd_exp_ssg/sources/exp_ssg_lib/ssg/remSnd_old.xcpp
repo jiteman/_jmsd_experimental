@@ -1,13 +1,18 @@
-#include "OLD_remSnd.h"
-#include <windows.h>
+#include "_OLD_remSnd.h"
+
+#include "vorbis/codec.h"
+
 #include "al.h"
 #include "alc.h"
 #include "alu.h"
 #include "alut.h"
+
 #include <map>
 #include <string>
 #include <sstream>
-#include "vorbis/codec.h"
+
+
+// #include <windows.h>
 
 
 // #pragma comment(lib, "alut.lib")
@@ -24,7 +29,7 @@
 #define ERRMSG(Msg) MessageBox(NULL, Msg, "Error", MB_OK | MB_ICONEXCLAMATION)
 
 // Typedefs
-typedef struct 
+typedef struct
 {
 	unsigned int	ID;
 	std::string		Filename;
@@ -161,7 +166,7 @@ int SeekOgg(void *datasource, ogg_int64_t offset, int whence)
 	std::istream *File = reinterpret_cast<std::istream*>(datasource);
 	std::ios_base::seekdir Dir;
 	File->clear();
-	switch (whence) 
+	switch (whence)
 	{
 		case SEEK_SET: Dir = std::ios::beg;  break;
 		case SEEK_CUR: Dir = std::ios::cur;  break;
@@ -192,7 +197,7 @@ OLD_remSnd::OLD_remSnd() {
 		mPos[i] = mVel[i] = 0.0f;
 	}
 
-	mInfo		= NULL; 
+	mInfo		= NULL;
 	mVF			= NULL;
 	mComment	= NULL;
 }
@@ -201,17 +206,17 @@ OLD_remSnd::~OLD_remSnd()
 {}
 
 bool OLD_remSnd::Open( const std::string &Filename, const bool Looped, const bool Streamed ) {
-	// Check file existance 
+	// Check file existance
 	std::ifstream a(Filename.c_str());
 	if (!a.is_open()) return false;
 	a.close();
 
 	mLooped = Looped;
 
-	// Create source	
+	// Create source
 	alGenSources(1, &mSourceID);
-	
-	if (!CheckALError()) return false;	 
+
+	if (!CheckALError()) return false;
 
 	alSourcef(mSourceID, AL_PITCH, 1.0f);
 	alSourcef(mSourceID, AL_GAIN, 1.0f);
@@ -222,7 +227,7 @@ bool OLD_remSnd::Open( const std::string &Filename, const bool Looped, const boo
 	// Extract ext
 	std::string Ext = ExtractFileExt(Filename).data();
 	if (Ext == "WAV") return LoadWavFile(Filename);
-	if (Ext == "OGG") 
+	if (Ext == "OGG")
 	{
 		mStreamed = Streamed;
 		return LoadOggFile(Filename, Streamed);
@@ -243,7 +248,7 @@ bool OLD_remSnd::LoadWavFile( const std::string &Filename ) {
 	ALboolean	loop;
 	ALuint		BufID = 0;
 
-	// Fill buffer struct 
+	// Fill buffer struct
 	buffer.Filename = Filename;
 	// Check for existance of sound
 	for (TBuf::iterator i = Buffers.begin(); i != Buffers.end(); i++)
@@ -260,7 +265,7 @@ bool OLD_remSnd::LoadWavFile( const std::string &Filename ) {
 		// Load wav data
 		alutLoadWAVFile((ALbyte *)Filename.data(), &format, &data, &size, &freq, &loop);
 		if (!CheckALError()) return false;
-	
+
 		buffer.Format			= format;
 		buffer.Rate				= freq;
 		// Fill buffer
@@ -272,7 +277,7 @@ bool OLD_remSnd::LoadWavFile( const std::string &Filename ) {
 
 		Buffers[buffer.ID] = buffer;
 	}
-	else 
+	else
 		buffer = Buffers[BufID];
 
 	alSourcei (mSourceID, AL_BUFFER,	buffer.ID);
@@ -321,7 +326,7 @@ bool OLD_remSnd::LoadOggFile( const std::string &Filename, const bool Streamed )
 		DynBuffs	= NUM_OF_DYNBUF;
 		alSourcei( mSourceID, AL_LOOPING, AL_FALSE );
 	}
-	
+
 	// Return vorbis_comment and vorbis_info structures
 	mComment = ov_comment( mVF, -1 );
 	mInfo = ov_info( mVF, -1 );
@@ -412,7 +417,7 @@ void OLD_remSnd::Close() {
 		alDeleteSources( 1, &mSourceID );
 	}
 
-	if ( !mVF ) {	
+	if ( !mVF ) {
 		ov_clear( mVF );
 		delete mVF;
 	}
@@ -422,7 +427,7 @@ void OLD_remSnd::Update() {
 	if ( !mStreamed ) {
 		return;
 	}
-	
+
 	int Processed = 0;
 	ALuint BufID;
 

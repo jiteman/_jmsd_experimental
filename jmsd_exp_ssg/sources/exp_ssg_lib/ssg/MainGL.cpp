@@ -43,15 +43,15 @@ void End2D ( void )
 }
 
 
-GLvoid ReSizeGLScene(GLsizei Width, GLsizei Height)
+GLvoid ReSizeGLScene(GLsizei /*Width*/, GLsizei /*Height*/)
 {
 //	End2D();
 //	Begin2D();
 }
 
-GLvoid InitGL(GLsizei Width, GLsizei Height)	// Вызвать после создания окна GL
+GLvoid InitGL( GLsizei /*Width*/, GLsizei /*Height*/ )	// Вызвать после создания окна GL
 {
-	Texture = new CTexture();
+//	Texture = new CTexture();
 
 
     LoadGLTextures();
