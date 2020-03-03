@@ -5,6 +5,8 @@
 #include "Control.h"
 #include "Graph2d.h"
 
+#include <cassert>
+
 
 char param=0;//&1-nosound
 
@@ -14,7 +16,7 @@ st<std::string> CurPlay;
 
 int operator==( const std::string &s1, const std::string &s2 ) {
 	return !strcmp( s1.c_str(), s2.c_str() );
-} 
+}
 
 std::string operator +( const std::string &s1, const std::string &s2 ) {
 	std::string res = s1;
@@ -22,7 +24,7 @@ std::string operator +( const std::string &s1, const std::string &s2 ) {
 	return res;
 }
 
-void InitMusic() {	
+void InitMusic() {
 	for ( int i = 0; i < MUSICS_NUMBER; i++ ) {
 		remSnd *newMusic = new remSnd;
 
@@ -58,7 +60,7 @@ void PlayMusic()
 
 void PlayWavFile( const std::string &fname, tka pos ) //=tka(-999,-999))
 {
-    
+
 	static int cursnd=0;
 
 	float sx=0,sy=0,sz=0;
@@ -68,28 +70,28 @@ void PlayWavFile( const std::string &fname, tka pos ) //=tka(-999,-999))
 	std::string fn("Sound//");
 	fn+=fname;
 	fn+=".WAV";
-	
+
 	CurPlay.AddEltoBeg(fname);
 
 
 	if(pos.x!=-999||pos.y!=-999)
 	{
 		if(SCALE<2 || !IsHere(pos,SOUND_HERE))return;
-	
+
 		sx=((pos.x-curpos.x)*SCALE)*0.01f;
 		sy=((curpos.y-pos.y)*SCALE)*0.01f;
 		sz=2.0f+30.0f/SCALE;
 	}
-	
-	
+
+
 	remSnd *currentSound = global_Snd3D[ cursnd ];
-	::jmsf::Should::neverBeNull( currentSound );
+	assert( currentSound != nullptr );
 
 	if ( currentSound != nullptr ) {
 
 		currentSound->Stop();
 		currentSound->Close();
-	
+
 		if ( currentSound->Open( fn, false, true ) ) {
 			currentSound->Move( sx, sy, sz );
 			currentSound->Play();
@@ -102,18 +104,14 @@ void PlayWavFile( const std::string &fname, tka pos ) //=tka(-999,-999))
 	}
 }
 
-void SetEffectsVolume(float v)
-{
-	for(int i=0;i<SOUNDS_NUMBER;i++) {
-		// JMFSC: transfering to Audiere
-//		alSourcef(Snd3D[i].mSourceID, AL_GAIN, v);
+void SetEffectsVolume( float const v ) {
+	for ( size_t i = 0; i < SOUNDS_NUMBER; i++ ) {
+		::alSourcef( global_Snd3D[ i ]->mSourceID, AL_GAIN, v );
 	}
 }
 
-void SetMusucVolume(float v)
-{
-	for(int i=0;i<SOUNDS_NUMBER;i++) {
-		// JMSFC: transfering to Audiere
-//		alSourcef(Music[i].mSourceID, AL_GAIN, v);
+void SetMusucVolume( float const v ) {
+	for ( size_t i = 0; i < SOUNDS_NUMBER; i++ ) {
+		::alSourcef( global_Music[ i ]->mSourceID, AL_GAIN, v );
 	}
 }

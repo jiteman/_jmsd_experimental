@@ -4,8 +4,8 @@
 
 #include "AL/alc.h"
 
-// #include "alu.h"
-// #include "alut.h"
+// #include "AL/alu.h"
+#include "AL/alut.h"
 
 #include <map>
 #include <string>
@@ -81,7 +81,7 @@ ALboolean CheckALError()
 	return AL_TRUE;
 }
 
-bool InitializeOpenAL()
+bool global_initializeSoundSubsystem()
 {
 
 	// Position of the Listener.
@@ -115,7 +115,7 @@ bool InitializeOpenAL()
 	return true;
 }
 
-void DestroyOpenAL()
+void global_uninitializeSoundSubsystem()
 {
 	// Clear all buffers and sources
 	for (TBuf::iterator i = Buffers.begin(); i != Buffers.end(); i++)
@@ -176,7 +176,7 @@ long TellOgg(void *datasource)
 	return File->tellg();
 }
 
-int CloseOgg(void *datasource)
+int CloseOgg(void * /*datasource*/)
 {
 	return 0;
 }
@@ -185,7 +185,7 @@ int CloseOgg(void *datasource)
 //    Sound class
 //-----------------------------------------------------------
 
-OLD_remSnd::OLD_remSnd() {
+remSnd::remSnd() {
 	for (int i = 0; i < 3; i++) {
 		mPos[i] = mVel[i] = 0.0f;
 	}
@@ -195,10 +195,10 @@ OLD_remSnd::OLD_remSnd() {
 	mComment	= NULL;
 }
 
-OLD_remSnd::~OLD_remSnd()
+remSnd::~remSnd()
 {}
 
-bool OLD_remSnd::Open( const std::string &Filename, const bool Looped, const bool Streamed ) {
+bool remSnd::Open( const std::string &Filename, const bool Looped, const bool Streamed ) {
 	// Check file existance
 	std::ifstream a(Filename.c_str());
 	if (!a.is_open()) return false;
@@ -228,11 +228,11 @@ bool OLD_remSnd::Open( const std::string &Filename, const bool Looped, const boo
 	return false;
 }
 
-bool OLD_remSnd::IsStreamed() {
+bool remSnd::IsStreamed() {
 	return mStreamed;
 }
 
-bool OLD_remSnd::LoadWavFile( const std::string &Filename ) {
+bool remSnd::LoadWavFile( const std::string &Filename ) {
 	SndInfo		buffer;
 	ALenum		format;
 	ALvoid		*data;
@@ -279,7 +279,7 @@ bool OLD_remSnd::LoadWavFile( const std::string &Filename ) {
 	return true;
 }
 
-bool OLD_remSnd::LoadOggFile( const std::string &Filename, const bool Streamed ) {
+bool remSnd::LoadOggFile( const std::string &Filename, const bool Streamed ) {
 	int				i, DynBuffs = 1, BlockSize;
 	// OAL specific
 	SndInfo			buffer;
@@ -363,7 +363,7 @@ bool OLD_remSnd::LoadOggFile( const std::string &Filename, const bool Streamed )
 	return true;
 }
 
-bool OLD_remSnd::ReadOggBlock( ALuint BufID, const size_t Size ) {
+bool remSnd::ReadOggBlock( ALuint BufID, const size_t Size ) {
 	// vars
 	char eof = 0;
 	int	current_section;
@@ -399,11 +399,11 @@ bool OLD_remSnd::ReadOggBlock( ALuint BufID, const size_t Size ) {
 	return ret > 0;
 }
 
-void OLD_remSnd::Play() {
+void remSnd::Play() {
 	alSourcePlay( mSourceID );
 }
 
-void OLD_remSnd::Close() {
+void remSnd::Close() {
 	alSourceStop( mSourceID );
 
 	if ( alIsSource( mSourceID ) ) {
@@ -416,7 +416,7 @@ void OLD_remSnd::Close() {
 	}
 }
 
-void OLD_remSnd::Update() {
+void remSnd::Update() {
 	if ( !mStreamed ) {
 		return;
 	}
@@ -455,11 +455,11 @@ void OLD_remSnd::Update() {
 	}
 }
 
-void OLD_remSnd::Stop() {
+void remSnd::Stop() {
 	alSourceStop( mSourceID );
 }
 
-void OLD_remSnd::Move( const float X, const float Y, const float Z ) {
+void remSnd::Move( const float X, const float Y, const float Z ) {
 	ALfloat Pos[ 3 ] = { X, Y, Z };
 	alSourcefv( mSourceID, AL_POSITION, Pos );
 }

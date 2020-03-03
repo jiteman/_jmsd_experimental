@@ -12,8 +12,6 @@
 
 #include "myfuns.h"
 
-#include "jmsf/stdal/stdal_stl.h"
-
 #include <process.h>
 
 
@@ -60,7 +58,7 @@ bool wid::GetEnable()
 void  wid::SetEnable(bool en)
 {
 	if(en)data[0]|=1; else data[0]&=~1;
-	
+
 }
 
 void wid::SetIntVal(int val)
@@ -141,7 +139,7 @@ void SetWidText(int id, std::string& txt)
 #define MENU_BUTT_W 400	 //ширина кнопок
 #define MENU_BUTT_H 40   //высота кнопок
 #define MENU_BUTT_D 20   //расстояние между кнопками
-  
+
 void NewMenuForm(int nm,std::string* menu_strings)
 {
 	int j=1;
@@ -204,7 +202,7 @@ std::string GetListCurItem(const char* s)
 	std::string ss;
 	for(i=1;i<n;i++)
 	{
-		
+
 		if(s[i]==';'){if(!res)break;res--;}
 		else
 		if(!res)ss.push_back(s[i]);
@@ -220,7 +218,7 @@ void StandardWidAction(wid *www)
 
 	switch(www->type)
 	{
-	
+
 	case 3:
 		www->text[0]=(www->text[0]=='V')?' ':'V';
 		break;
@@ -233,7 +231,7 @@ void StandardWidAction(wid *www)
 	case 5:
 		if(!www->text[0])break;
 		n=GetListSize(www->text.c_str()+1);
-		
+
 		if((char)www->text[0]>0)
 		{
 			tmpi=((mPos.y-www->y)*(n+1))/www->h;
@@ -253,7 +251,7 @@ void StandardWidAction(wid *www)
 	default:
 		return;
 	}
-	
+
 }
 
 wid* GetWDJ(int id)
@@ -276,7 +274,7 @@ wid* GetWDJ(int id)
 void SendChar(char ch)
 {
 	if(cur_wdj_id==-1)return;
-	
+
 
 	wid* www=GetWDJ(cur_wdj_id);
 	switch(www->type)
@@ -316,7 +314,7 @@ void CloseWids()
 			break;
 		}
 	}
-	
+
 }
 void UpdateWidData()
 {
@@ -343,7 +341,7 @@ void UpdateWidData()
 				GetWDJ(10+i)->SetIntVal(int(BackColor[i]*100));
 				GetWDJ(13+i)->SetIntVal(int(PolyColor[i]*100));
 			}
-		
+
 	break;
 	case 5:
 		GetWDJ(10)->SetIntVal(MyConf.sound_val);
@@ -354,24 +352,24 @@ void UpdateWidData()
 	case 7:
 		GetFiles(GetWDJ(4)->text,".str");
 		GetWDJ(0)->SetEnable(GetWDJ(4)->text[0]!=0);
-		
+
 	break;
 	case 8:
 		GetFiles(GetWDJ(4)->text,".str");
-		
+
 
 	break;
 	case 10:// Скорость игры
 		GetWDJ(10)->SetIntVal(FixSpeed);
 		GetWDJ(14)->SetIntVal(MyConf.steps_per_frame-1);
 
-	break;	
+	break;
 	case 11:// отображение
 		GetWDJ(5)->SetIntVal(MyConf.show_tracks);
 		GetWDJ(6)->SetIntVal(MyConf.shadows_on);
 		GetWDJ(7)->SetIntVal(MyConf.lifebar_on);
 
-	break;	
+	break;
 	}
 }
 void GoToWDJ(int i)// если i==-2, то переход к пред. форме
@@ -395,18 +393,18 @@ void GoToWDJ(int i)// если i==-2, то переход к пред. форм�
 void ActWid()
 {
 	int i;
-	
+
 	wid *www=GetWDJ(mPos.x,mPos.y);
 	if(!www)return;
 	int cw=www->id;
 	cur_wdj_id=www->id;
 
-	
 
-	
+
+
 	StandardWidAction(www);
-	
-	
+
+
 	switch(cur_wdj)
 	{
 	case 0:
@@ -452,7 +450,7 @@ void ActWid()
 			MyConf.PlNum=GetWDJ(13)->GetIntVal()+2;
 			MyConf.MY_PLAYER=GetWDJ(14)->GetIntVal();
 			Warfog_is=GetWDJ(105)->GetIntVal()?true:false;
-		
+
 			if(sock_init)
 			{
 				sock_init=4;
@@ -465,9 +463,9 @@ void ActWid()
 			break;
 		case 1:if(sock_init){sock_init=7;GoToWDJ(-2);}else GoToWDJ(-2);
 			break;
-		
+
 		}
-		break;	
+		break;
 	case 3:// настройки
 		switch(cw)
 		{
@@ -528,11 +526,11 @@ void ActWid()
 		}
 		break;
 	case 6:// игровые опции
-		switch(cw) 
+		switch(cw)
 		{
 		case 0:
 			MyConf.ScrollSpeed=GetWDJ(11)->GetIntVal();
-			GoToWDJ(-2); 
+			GoToWDJ(-2);
 			break;
 		case 1:GoToWDJ(-2);
 			break;
@@ -541,35 +539,35 @@ void ActWid()
 		}
 		break;
 	case 7:// Загрузить
-		
 
-		switch(cw) 
+
+		switch(cw)
 		{
 		case 0:
 			//if(GetWDJ(4)->text.size()==1)break;
 			if(LoadGame(GetListCurItem(GetWDJ(4)->text.c_str())+std::string(".str")))
-			{ GoToWDJ(-1); status&=~16; } 
+			{ GoToWDJ(-1); status&=~16; }
 			break;
 		case 1:
-			GoToWDJ(-2); 
+			GoToWDJ(-2);
 			break;
 		}
 		break;
 	case 8:// Сохранить
-		
 
-		switch(cw) 
+
+		switch(cw)
 		{
 		case 0:
 			if(GetWDJ(5)->text.size())
 			{
 				SaveGame(GetWDJ(5)->text+std::string(".str"));
-				GoToWDJ(-1); 
+				GoToWDJ(-1);
 				status&=~16;
 			}
 			break;
 		case 1:
-			GoToWDJ(-2); 
+			GoToWDJ(-2);
 			break;
 		case 4:
 			GetWDJ(5)->text=GetListCurItem(GetWDJ(4)->text.c_str());
@@ -577,9 +575,9 @@ void ActWid()
 		}
 		break;
 	case 9:// новая игра
-		
 
-		switch(cw) 
+
+		switch(cw)
 		{
 		case 0:
 			GoToWDJ(2);
@@ -590,7 +588,7 @@ void ActWid()
 			//sock_is_inited=true;
 			GoToWDJ(12);
 			GetWDJ(9)->text=LSTRING("Connecting to server...","Соединение с сервером...");
-			//cur_wdj=prev_wdj; 
+			//cur_wdj=prev_wdj;
 			break;
 		case 2:
 			GoToWDJ(-2);
@@ -598,43 +596,43 @@ void ActWid()
 		}
 		break;
 	case 10:// Скорость игры
-		switch(cw) 
+		switch(cw)
 		{
 		case 0:
 			FixSpeed=GetWDJ(10)->GetIntVal()?true:false;
-			
+
 			MyConf.steps_per_frame=1+GetWDJ(14)->GetIntVal();
-			GoToWDJ(-2); 
+			GoToWDJ(-2);
 			break;
 		case 1:GoToWDJ(-2);
 			break;
 		}
-		break;	
+		break;
 	case 11:// отображение
-		switch(cw) 
+		switch(cw)
 		{
 		case 0:
 			MyConf.show_tracks=GetWDJ(5)->GetIntVal()?true:false;
 			MyConf.shadows_on=GetWDJ(6)->GetIntVal()?true:false;
 			MyConf.lifebar_on=GetWDJ(7)->GetIntVal()?true:false;
 
-			GoToWDJ(-2); 
+			GoToWDJ(-2);
 			break;
 		case 1:GoToWDJ(-2);
 			break;
 		}
-		break;	
+		break;
 	case 12:// соединение с сервером
-		switch(cw) 
+		switch(cw)
 		{
 		case 0:
 			ClearSock();
-		//	GoToWDJ(-2); 
+		//	GoToWDJ(-2);
 			break;
 		}
-		break;	
+		break;
 	}
-		
+
 }
 void InitWDJ()
 {
@@ -643,7 +641,7 @@ void InitWDJ()
 	std::string opt_menu[]={LSTRING("settings","настройки"),LSTRING("Graphic","Графика"),LSTRING("Sound","Звук"),LSTRING("Game","Игра"),LSTRING("Back","Назад")};
 	std::string new_game[]={LSTRING("new game","новая игра"),LSTRING("Single","Одиночная"),LSTRING("Multiplayer","По сети"),LSTRING("Back","Назад")};
 	//std::string new_game[]={"новая игра","Одиночная","По локальной сети","Назад"};
-	
+
 	NewMenuForm(4,main_menu);
 	NewMenuForm(6,game_menu);
 

@@ -38,6 +38,7 @@ if ( WIN32 )
 	list( APPEND ${PROJECT_NAME}_CXX_FLAGS "/wd4668" ) # '' is not defined as a preprocessor macro, replacing with '0' for '#if/#elif'
 #	list( APPEND ${PROJECT_NAME}_CXX_FLAGS "/wd4702" ) # unreachable code
 	list( APPEND ${PROJECT_NAME}_CXX_FLAGS "/wd4838" ) # conversion from '' to '' requires a narrowing conversion
+	list( APPEND ${PROJECT_NAME}_CXX_FLAGS "/wd4996" ) # '': was declared deprecated
 
 	string( REPLACE ";" " " ${PROJECT_NAME}_CXX_FLAGS_STR "${${PROJECT_NAME}_CXX_FLAGS}" )
 

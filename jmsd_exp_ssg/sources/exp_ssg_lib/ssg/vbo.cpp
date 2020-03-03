@@ -9,8 +9,9 @@
 #include "open_gl.h"
 
 #include <malloc.h>
-
 #include <cassert>
+
+#include "include_Windows.h"
 
 VBO_drawer vbo;
 
@@ -328,7 +329,7 @@ bool VBO_drawer::InitVBO()
 	GLenum err = glewInit();
 	if (GLEW_OK != err)
 	{
-		MessageBox( 0, L"Cann't init glew!\n", L"Error", MB_OK | MB_ICONERROR );
+		MessageBox( 0, "Cann't init glew!\n", "Error", MB_OK | MB_ICONERROR );
 		return 0;
 	}
 
@@ -350,6 +351,7 @@ bool VBO_drawer::InitVBO()
 
 	return true;
 }
+
 void VBO_drawer::UnInitVBO()
 {
 	int i;
@@ -364,6 +366,15 @@ void VBO_drawer::UnInitVBO()
 	//UnInitPolyVBO();
 }
 
+unsigned VBO_drawer::get_vertex_id( size_t const vertex_identifier_index ) {
+	assert( vertex_identifier_index < VBO_NUM );
+	return this->vertexId[ vertex_identifier_index ];
+}
+
+unsigned VBO_drawer::get_index_id( size_t index_identifier_index ) {
+	assert( index_identifier_index < VBO_NUM );
+	return this->indexId[ index_identifier_index ];
+}
 
 void VBO_drawer::StartUnit()
 {

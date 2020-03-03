@@ -38,7 +38,8 @@ public:
 	bool InitVBO();
 	void UnInitVBO();
 
-
+	unsigned get_vertex_id( size_t vertex_identifier_index );
+	unsigned get_index_id( size_t index_identifier_index );
 
 	void StartUnit();
 	void StartBase();

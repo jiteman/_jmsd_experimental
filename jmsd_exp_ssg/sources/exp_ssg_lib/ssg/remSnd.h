@@ -10,7 +10,7 @@
 #define NUM_OF_DYNBUF	2		// num buffers in queue
 
 
-class OLD_remSnd
+class remSnd
 {
 public:
 	ALfloat mVel[3];
@@ -27,8 +27,8 @@ public:
 	void Stop();
 
 	// Construction/destruction
-	OLD_remSnd();
-	virtual ~OLD_remSnd();
+	remSnd();
+	virtual ~remSnd();
 
 	// OAL specific vars
 	ALuint mSourceID;
@@ -49,5 +49,5 @@ private:
 
 // Public standalone functions
 extern std::string GetSndInfo();
-extern bool InitializeOpenAL();
-extern void DestroyOpenAL();
+extern bool global_initializeSoundSubsystem();
+extern void global_uninitializeSoundSubsystem();

@@ -42,28 +42,17 @@ int Building=0;
 unsigned int GameTime=0;
 
 
-void revansh()
-{
-	tka tmp;
-	int i = 0;
-	int p = 0;
+void revansh() {
+	PlHere = ~0;
+	MyConf.PlNum = 8;
+	global_onScreenMessages.AddElToBeg( MyMessage( LSTRING( "Reinforcement..", "Пришло подкрепление" ) ) );
 
-	int k = GameTime % BasesNum;
+	for ( size_t p = 0; p < PLAYERS_NUM; p++ ) {
+		tka const tmp = RandFreeTka();
 
-	PlHere=~0;
-	MyConf.PlNum=8;
-	global_onScreenMessages.AddElToBeg(MyMessage(LSTRING("Reinforcement..","Пришло подкрепление")));
-
-	//while(UnitsNum>MAXSLD-REVANSH_NUM)DeleteUnit(0);
-	for(p=0;p<PLAYERS_NUM;p++)
-	{
-		tmp = RandFreeTka();
-//		tmp=(Bases+k)->pos;
-//		(Bases+k)->pl=p;
-//		k++;
-//		if(k==BasesNum)k=0;
-	for(i=0;i<REVANSH_NUM/PLAYERS_NUM;i++)
-		AddUnit(tmp,(char)p|16,i%UNIT_TYPES,tka(0,0));
+		for ( size_t i = 0; i < REVANSH_NUM / PLAYERS_NUM; i++ ) {
+			AddUnit( tmp, ( char ) p | 16, i % UNIT_TYPES, tka( 0, 0 ) );
+		}
 	}
 
 }
@@ -210,7 +199,7 @@ void NewGame()
 	MapW = (MyConf.map_size+1)*(FIELDSIZEX/4);
 	MapH = (MyConf.map_size+1)*(FIELDSIZEY/4);
 
-	global_diplomation.SetAll((char)0xFF);
+	global_diplomation.SetAll( char( 0xFF ) );
 
 	DrawButton((float)(WIDTH/2-300),(float)(HEIGHT/2-20),600,40,LSTRING("Creating random map...","Идёт создание случайной карты..."),0);
 //	DrawMyText((int)(WIDTH/2-100),(int)(HEIGHT/2-15),200,30,std::string("Идёт создание случайной карты..."),ArialFont);
