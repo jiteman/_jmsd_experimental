@@ -45,7 +45,10 @@ unsigned int GameTime=0;
 void revansh()
 {
 	tka tmp;
-	int i,p,k=GameTime%BasesNum;
+	int i = 0;
+	int p = 0;
+
+	int k = GameTime % BasesNum;
 
 	PlHere=~0;
 	MyConf.PlNum=8;
@@ -113,7 +116,7 @@ void UpdateWiner()
 			mes.AddElToBeg(MyMessage("Игрок победил.",k));
 		PlHere&=~tmpc;
 	}
-	
+
 	if(c<=1)
 	{
 		revansh();
@@ -149,7 +152,7 @@ void UpdateWiner()
 		else
 			global_onScreenMessages.AddElToBeg(MyMessage(std::string(LSTRING("Player ","Игрок "))+IntToString(i)+std::string(LSTRING(" wins."," победил.")),i));
 	}
-	
+
 	if(sm<=1)
 	{
 		revansh();
@@ -184,7 +187,7 @@ void NewGame()
 	int fl;
 	tka startpos[PLAYERS_NUM],ttt;
 
-	
+
 	GameTime=0;
 	net_cnt=0;
 	ClearGame();
@@ -215,33 +218,33 @@ void NewGame()
 
 	CreateRandPolys();
 	//memset(PlParams,0,sizeof(PlayerParams));
-	
+
 	for(i=0;i<(MAX_BASE/4)*(MyConf.bases_num+1);i++)
 	{
 		do{ttt=RandFreeTka();}while(ttt.x<BASE_OTST||ttt.y<BASE_OTST||ttt.x>MapW*KLET_SIZE-BASE_OTST||ttt.y>MapH*KLET_SIZE-BASE_OTST);
 		AddBase(ttt,-1);
 	}
-	
-	
+
+
 	for(i=0;i<PLAYERS_NUM;i++)
 	{
 //		PlParams[i].money=500;
 	if(PLAYER_IS_HERE(i))
 	{
-		
+
 		lll=1000;
 		do
 		{
 			fl=0;
 			bb=MyRand()%BasesNum;
 			startpos[i]=(Bases+bb)->pos;
-			
+
 			for(j=0;j<i;j++)if(abs(startpos[i].x-startpos[j].x)+abs(startpos[i].y-startpos[j].y)<lll)fl=1;
 			lll--;
 		}while(fl);
 		//(Bases+bb)->level=BASE_LEVEL_NUM-1;
 		(Bases+bb)->pl=i;
-		
+
 		for(j=0;j<300;j++)AddUnit(startpos[i]+tka(RND11*4,RND11*4),i|16,3,tka(0,0));
 
 	}
@@ -278,37 +281,37 @@ void prepare()
 	InitUnits();
     InitPoly();
 	InitWDJ();
-	
+
 	status|=16;
 
 	PLColor[0][0]=1.0f;
 	PLColor[0][1]=0.0f;
 	PLColor[0][2]=0.0f;
-	
+
 	PLColor[1][0]=0.0f;
 	PLColor[1][1]=0.5f;
 	PLColor[1][2]=0.0f;
-	
+
 	PLColor[2][0]=0.0f;
 	PLColor[2][1]=0.2f;
 	PLColor[2][2]=1.0f;
-	
+
 	PLColor[3][0]=0.0f;
 	PLColor[3][1]=0.8f;
 	PLColor[3][2]=0.8f;
-	
+
 	PLColor[4][0]=1.0f;
 	PLColor[4][1]=0.0f;
 	PLColor[4][2]=1.0f;
-	
+
 	PLColor[5][0]=1.0f;
 	PLColor[5][1]=1.0f;
 	PLColor[5][2]=0.0f;
-	
+
 	PLColor[6][0]=0.4f;
 	PLColor[6][1]=0.4f;
 	PLColor[6][2]=0.4f;
-	
+
 	PLColor[7][0]=1.0f;
 	PLColor[7][1]=1.0f;
 	PLColor[7][2]=1.0f;
@@ -316,7 +319,7 @@ void prepare()
 
 void GameStep()
 {
-	
+
 	if(sock_init)return;
 
 	if(is_online)
@@ -331,7 +334,7 @@ void GameStep()
 		}
 
 		net_cnt=0;
-		
+
 		PrepareClientMessage();
 
 		MakeDataExchange();
@@ -340,7 +343,7 @@ void GameStep()
 	BB(1);
 	BB(22);
 
-	
+
 	CurPlay.renull();
 	ababua++;
 	GameTime++;
@@ -351,21 +354,21 @@ void GameStep()
 	FlyMiss();
 	BB1(24);
 	BB(23);
-	if(GameTime%UPDATE_TIME==0) 
+	if(GameTime%UPDATE_TIME==0)
 	{
-		UpDateBases(); 
+		UpDateBases();
 //		Build_start++;
 	}
-	
+
 
 /*	if(Building_is)
 	{
-		if(GameTime%GROW_TIME==0)   
+		if(GameTime%GROW_TIME==0)
 		{
 			if(!TryBuildUnits())Building_is=false;
 			if(UnitsNum>9000)Building_is=false;
 		}
-	}else 
+	}else
 	if(Build_start>=UnitsNum)
 	{
 		Building_is=true;
@@ -377,20 +380,20 @@ void GameStep()
 		if(Building==1)TryBuildUnits((char)0xFF);
 		Building--;
 	}
-	
+
 	if(GameTime%DEFEND_TIME==0)UpdateDefenders();
 	if(GameTime%AI_TIME==3)
 	{
 		ActAI();
 	}
-	
+
 	if(Warfog_is)
 	{
 		if(GameTime%WARFOG_TIME==0)UpdateWarfog();
 		GrowWarfog();
 	}
 	BB1(23);
-	
+
 	if(!is_online)
 	{
 		BB(29);

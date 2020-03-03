@@ -5,7 +5,7 @@
 
 
 #define ANIMATION_NUM 1000
-#define MAX_ANIM_SIZE 5 
+#define MAX_ANIM_SIZE 5
 
 struct sld;
 
@@ -17,17 +17,21 @@ public:
 	int des;
 	tka pos;
 	virtual void Draw()=0;
-	
+
 	Anim(){}
 	virtual ~Anim(){}
 };
+
 class FlashAnim: public Anim
 {
 public:
-	FlashAnim(){}
-	FlashAnim(tka& npos,int a);
+	FlashAnim()
+	{}
+
+	FlashAnim( tka const &npos, int a );
 	virtual void Draw();
 };
+
 class PMonAnim: public Anim
 {
 public:
@@ -37,7 +41,7 @@ public:
 	virtual void Draw();
 };
 
-extern Anim* anim[ANIMATION_NUM]; 
+extern Anim* anim[ANIMATION_NUM];
 extern int AnimNum;
 
 void ActAnimations();

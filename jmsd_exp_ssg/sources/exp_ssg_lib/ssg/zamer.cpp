@@ -1,7 +1,9 @@
 #include "zamer.h"
 
 #include "Report.h"
-#include "temporary_windows_include.h"
+
+
+#include "include_Windows.h"
 
 
 Zamer ZZZ;
@@ -26,10 +28,12 @@ void Zamer::StartBlock(int i)
 		if(!(blocks+i)->start)
 			(blocks+i)->start=timeGetTime();
 }
+
 Zamer::Zamer()
 {
-	memset(counter,0,MAX_COUNTERS*sizeof(DWORD));
+	::std::memset( counter, 0, sizeof( counter[ 0 ] ) * MAX_COUNTERS );
 }
+
 void Zamer::WriteReport()
 {
 	int i,sz=0,j;
@@ -42,7 +46,7 @@ void Zamer::WriteReport()
 	nm[5]="Pushing";
 	nm[6]="Action";
 	nm[7]="MoveCheck";
-	
+
 	nm[8]="Display.MapOb.Back";
 	nm[9]="Display.MapOb";
 	nm[10]="Display.MapOb.Bases";

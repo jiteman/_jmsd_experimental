@@ -1,21 +1,22 @@
 #pragma once
 
 
-#include "al.h"
-#include <fstream>
 #include "vorbis/vorbisfile.h"
+#include "AL/al.h"
+
+#include <fstream>
 
 
 #define NUM_OF_DYNBUF	2		// num buffers in queue
 
 
-class OLD_remSnd  
+class OLD_remSnd
 {
 public:
 	ALfloat mVel[3];
 	ALfloat mPos[3];
 	bool mLooped;
-	
+
 	// Functions
 	bool Open( const std::string &Filename, bool Looped, bool Streamed );
 	bool IsStreamed();

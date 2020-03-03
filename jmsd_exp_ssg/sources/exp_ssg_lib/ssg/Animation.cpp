@@ -63,11 +63,10 @@ void ActAnimations()
 		if(!anim[i]->des) DeleteAnimation(i); else i++;
 	}
 }
-FlashAnim::FlashAnim(tka& npos,int a)
-{
-	des=30;
-	pos=npos;
-	ang=a;
+FlashAnim::FlashAnim( tka const &npos, int a ) {
+	des = 30;
+	pos = npos;
+	ang = a;
 
 }
 

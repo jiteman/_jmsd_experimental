@@ -1,25 +1,18 @@
-#include "_OLD_remSnd.h"
+#include "remSnd.h"
 
 #include "vorbis/codec.h"
 
-#include "al.h"
-#include "alc.h"
-#include "alu.h"
-#include "alut.h"
+#include "AL/alc.h"
+
+// #include "alu.h"
+// #include "alut.h"
 
 #include <map>
 #include <string>
 #include <sstream>
 
 
-// #include <windows.h>
-
-
-// #pragma comment(lib, "alut.lib")
-// #pragma comment(lib, "OpenAL32.lib")
-// #pragma comment(lib, "ogg.lib")
-// #pragma comment(lib, "vorbisfile.lib")
-
+#include "include_Windows.h"
 
 //using namespace std;
 

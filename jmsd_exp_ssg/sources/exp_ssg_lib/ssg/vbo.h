@@ -4,6 +4,8 @@
 #include "Units.h"
 #include "Bases.h"
 
+#include <vector>
+
 
 #define VBO_NUM 10
 
@@ -13,7 +15,7 @@ public:
 	unsigned un_txtId[ UNIT_TYPES ][ 4 ]; // для каждого типа юнита(и для каждого из 4-х типов повреждений) свои текстурные коорд.
 	unsigned b_txtId[BASE_LEVEL_NUM];//для баз
 	unsigned fog_colId;//для границы тумана
-	
+
 private:
 	unsigned vertexId[ VBO_NUM ];
 	unsigned indexId[ VBO_NUM ];
@@ -32,7 +34,7 @@ public:
 	unsigned *_obstacleShadowIndexIdentifiers;
 	unsigned *_obstacleShadowIndexNumbers;
 
-public:	
+public:
 	bool InitVBO();
 	void UnInitVBO();
 
@@ -43,7 +45,7 @@ public:
 	void StartMissile();
 	void StartKrug();
 
-	
+
 
 	void SwitchToUnit(char type,char life);
 	void SwitchToBase(char type);
@@ -57,10 +59,14 @@ public:
 	void UnInitPolyVBO();
 
 	VBO_drawer(){_obstacleVertexIdentifiers=0;}
-	
+
 };
 
 extern VBO_drawer vbo;
 
-void transfering_to_vector_addElemVBO( float *el, size_t sizeOfElement, float **arr, int **ind );
+void transfering_to_vector_addElementVBO_2(
+	::std::vector< float > const &element,
+	::std::vector< ::std::vector< float > > *vectorArray,
+	::std::vector< int > *indexArray );
+
 void AddElemVBO(float* el,int el_size,float**arr,int**ind);

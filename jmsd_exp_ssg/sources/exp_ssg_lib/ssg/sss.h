@@ -1,8 +1,8 @@
 #pragma once
 
-#include "sss_dll.h"
+#include "exp_ssg_lib.h"
 
-#include "temporary_windows_include.h"
+#include "include_Windows.h"
 
 
-JMSF_SSS_DLL_INTERFACE int sss_WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow );
+JMSD_EXP_SSG_LIBRARY_SHARED_INTERFACE int sss_WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow );

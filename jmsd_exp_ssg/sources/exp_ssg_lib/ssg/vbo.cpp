@@ -10,19 +10,17 @@
 
 #include <malloc.h>
 
-#include "jmsf/stdal/stdal_stl.h"
-#include "jmsf/Should.h"
-
+#include <cassert>
 
 VBO_drawer vbo;
 
 void transfering_to_vector_addElementVBO_2(
-	const std::vector< float > &element,
-	std::vector< std::vector< float > > *vectorArray,
-	std::vector< int > *indexArray )
+	::std::vector< float > const &element,
+	::std::vector< ::std::vector< float > > *vectorArray,
+	::std::vector< int > *indexArray )
 {
-	::jmsf::Should::neverBeNull( vectorArray );
-	::jmsf::Should::neverBeNull( indexArray );
+	assert( vectorArray != nullptr );
+	assert( indexArray != nullptr );
 
 	if ( vectorArray == nullptr || indexArray == nullptr ) return;
 
@@ -117,7 +115,7 @@ void VBO_drawer::InitUnitsVBO() {
 	tka un_txt[UNIT_TYPES][4][4];
 	int quad_i[]={0,1,3,2};
 
-	for ( ::jmsf::natural_size i = 0; i < UNIT_TYPES; i+= 1 ) {
+	for ( size_t i = 0; i < UNIT_TYPES; i+= 1 ) {
 		::glGenBuffersARB( 4, un_txtId[ i ] );
 	}
 
@@ -127,8 +125,8 @@ void VBO_drawer::InitUnitsVBO() {
 	::glBindBufferARB ( GL_ELEMENT_ARRAY_BUFFER_ARB, indexId[ 0 ] );
 	::glBufferDataARB ( GL_ELEMENT_ARRAY_BUFFER_ARB, 4 * sizeof( int ), quad_i, GL_STATIC_DRAW_ARB );
 
-	for ( ::jmsf::natural_size i = 0; i < UNIT_TYPES; i += 1 ) {
-		for ( ::jmsf::natural_size j = 0; j < 4; j += 1 ) {
+	for ( size_t i = 0; i < UNIT_TYPES; i += 1 ) {
+		for ( size_t j = 0; j < 4; j += 1 ) {
 			( un_txt[ i ][ j ] )->setBoth( static_cast< float >( i ) / UNIT_TYPES, static_cast< float >( 3 - j ) / 4 );
 			( un_txt[ i ][ j ] + 1 )->setBoth( static_cast< float >( i + 1 ) / UNIT_TYPES, static_cast< float >( 3 - j ) / 4 );
 			( un_txt[ i ][ j ] + 2 )->setBoth( static_cast< float >( i + 1 ) / UNIT_TYPES, static_cast< float >( 4 - j ) / 4 );
@@ -208,7 +206,7 @@ void VBO_drawer::InitKrugVBO()
 		tmpt.rotate(sa,ca);
 	}
 	id[i]=i;
-	
+
 
 	glBindBufferARB ( GL_ARRAY_BUFFER_ARB, vertexId[3] );
 	glBufferDataARB ( GL_ARRAY_BUFFER_ARB, (FOG_CIRC_NUM+1) * sizeof ( tka ), cc, GL_STATIC_DRAW_ARB );
@@ -223,7 +221,7 @@ void VBO_drawer::InitKrugVBO()
 	glGenBuffersARB (1, &fog_colId);
 	glBindBufferARB ( GL_ARRAY_BUFFER_ARB, fog_colId );
 	glBufferDataARB ( GL_ARRAY_BUFFER_ARB, 8*FOG_CIRC_NUM * sizeof ( float ), col, GL_STATIC_DRAW_ARB );
-	
+
 	delete[] cc;
 	delete[] id;
 	delete[] id1;
@@ -235,7 +233,7 @@ void VBO_drawer::InitPolyVBO() {
 // 	float *arr;
 // 	int* ind;
 // 	tka** cur=Poly;
-	
+
 	_obstacleVertexIdentifiers = new unsigned[ global_quantityOfObstacles ];
 	_obstacleIndexIdentifiers = new unsigned[ global_quantityOfObstacles ];
 	::glGenBuffersARB( global_quantityOfObstacles, _obstacleVertexIdentifiers );
@@ -348,7 +346,7 @@ bool VBO_drawer::InitVBO()
 	//if(PolyNum)InitPolyVBO();
 
 	glBindBufferARB ( GL_ARRAY_BUFFER_ARB,         0 );
-	glBindBufferARB ( GL_ELEMENT_ARRAY_BUFFER_ARB, 0 );	
+	glBindBufferARB ( GL_ELEMENT_ARRAY_BUFFER_ARB, 0 );
 
 	return true;
 }
