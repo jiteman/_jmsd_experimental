@@ -113,7 +113,7 @@ void NewWid(wid www) {
 
 	int i = 0;
 
-	for ( i; i < wid_num[ n ] - 1; i++ ) {
+	for ( ; i < wid_num[ n ] - 1; i++ ) {
 		wdj[ n ][ i ] = old[ i ];
 	}
 
@@ -350,12 +350,12 @@ void UpdateWidData()
 	case 6://настройки игры
 	break;
 	case 7:
-		GetFiles(GetWDJ(4)->text,".str");
+		GetFiles( &GetWDJ( 4 )->text, ".str" );
 		GetWDJ(0)->SetEnable(GetWDJ(4)->text[0]!=0);
 
 	break;
 	case 8:
-		GetFiles(GetWDJ(4)->text,".str");
+		GetFiles( &GetWDJ( 4 )->text, ".str" );
 
 
 	break;
@@ -417,7 +417,7 @@ void ActWid()
 			break;
 		case 2:GoToWDJ(3);
 			break;
-		case 3:SendMessage(hWnd,WM_CLOSE,0,0);
+		case 3:SendMessage(global_hWnd,WM_CLOSE,0,0);
 			break;
 		}
 		break;
@@ -436,7 +436,7 @@ void ActWid()
 			break;
 		case 4:GoToWDJ(0);
 			break;
-		case 5:SendMessage(hWnd,WM_CLOSE,0,0);
+		case 5:SendMessage(global_hWnd,WM_CLOSE,0,0);
 			break;
 		}
 		break;

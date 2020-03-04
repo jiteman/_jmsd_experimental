@@ -114,41 +114,48 @@ void UpdateWiner()
 
 */
 
-void UpdateWiner()
-{
-	int sm=0,k,i;
-	char tmpc=1;
-	for(i=0;i<8;i++,tmpc=tmpc<<1)
-		if(PlHere&tmpc)
-		{
-			if(!score[i])
-			{
-				if(i==MyConf.MY_PLAYER)
-				{
-					global_onScreenMessages.AddElToBeg(MyMessage(LSTRING("You lose.","Ты проиграл.")));
-					if(!is_online){revansh();return;}
-				}
-				else
-					global_onScreenMessages.AddElToBeg(MyMessage(std::string(LSTRING("Player ","Игрок "))+IntToString(i)+std::string(LSTRING(" lose."," проиграл.")),i));
-				PlHere&=~tmpc;
-			}else {sm++;k=i;}
-		}
+void UpdateWiner() {
+	int sm = 0;
+	int k = 0;
 
-	if(sm==1)
-	{
-		if(k==MyConf.MY_PLAYER)
-			global_onScreenMessages.AddElToBeg(MyMessage(LSTRING("You win!!!","Ты победил!!!")));
-		else
-			global_onScreenMessages.AddElToBeg(MyMessage(std::string(LSTRING("Player ","Игрок "))+IntToString(i)+std::string(LSTRING(" wins."," победил.")),i));
+	char tmpc = 1;
+
+	for ( size_t i = 0; i < 8; i++, tmpc = tmpc << 1 ) {
+		if ( PlHere & tmpc ) {
+			if ( !score[ i ] ) {
+				if ( i == MyConf.MY_PLAYER ) {
+					global_onScreenMessages.AddElToBeg( MyMessage( LSTRING( "You lose.", "Ты проиграл." ) ) );
+
+					if ( !is_online ) {
+						revansh();
+						return;
+					}
+				} else {
+					global_onScreenMessages.AddElToBeg(
+						MyMessage( ::std::string( LSTRING( "Player ", "Игрок " ) ) + IntToString( i ) + ::std::string( LSTRING( " lose.", " проиграл." ) ), i ) );
+				}
+
+				PlHere &= ~tmpc;
+			} else {
+				sm++;
+				k = i;
+			}
+		}
 	}
 
-	if(sm<=1)
-	{
+	if ( sm == 1 ) {
+		if ( k == MyConf.MY_PLAYER ) {
+			global_onScreenMessages.AddElToBeg( MyMessage( LSTRING( "You win!!!", "Ты победил!!!" ) ) );
+		} else {
+			global_onScreenMessages.AddElToBeg(
+				MyMessage( ::std::string( LSTRING( "Player ", "Игрок " ) ) + IntToString( k ) + ::std::string( LSTRING( " wins.", " победил." ) ), k ) );
+		}
+	}
+
+	if ( sm <= 1 ) {
 		revansh();
 	}
 }
-
-
 
 void ClearGame()
 {
@@ -199,11 +206,11 @@ void NewGame()
 	MapW = (MyConf.map_size+1)*(FIELDSIZEX/4);
 	MapH = (MyConf.map_size+1)*(FIELDSIZEY/4);
 
-	global_diplomation.SetAll( char( 0xFF ) );
+	global_diplomation.SetAll( static_cast< char >( 0xFF ) );
 
 	DrawButton((float)(WIDTH/2-300),(float)(HEIGHT/2-20),600,40,LSTRING("Creating random map...","Идёт создание случайной карты..."),0);
 //	DrawMyText((int)(WIDTH/2-100),(int)(HEIGHT/2-15),200,30,std::string("Идёт создание случайной карты..."),ArialFont);
-	SwapBuffers(hDC);
+	SwapBuffers(global_hDC);
 
 	CreateRandPolys();
 	//memset(PlParams,0,sizeof(PlayerParams));
@@ -366,7 +373,7 @@ void GameStep()
 */
 	if(Building>0)
 	{
-		if(Building==1)TryBuildUnits((char)0xFF);
+		if(Building==1)TryBuildUnits( static_cast< char >( 0xFF ) );
 		Building--;
 	}
 

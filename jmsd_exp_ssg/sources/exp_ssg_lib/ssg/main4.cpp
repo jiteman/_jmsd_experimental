@@ -274,9 +274,9 @@ LRESULT CALLBACK WndProc( HWND hWnd, unsigned int Message, WPARAM wParam, LPARAM
 
 		vbo.UnInitVBO();
 		ChangeDisplaySettings(NULL, 0);
-		wglMakeCurrent(hDC,NULL);
-		wglDeleteContext(hRC);
-		ReleaseDC(hWnd,hDC);
+		wglMakeCurrent(global_hDC,NULL);
+		wglDeleteContext(global_hRC);
+		ReleaseDC(hWnd,global_hDC);
 
 
 	OpenRpt();
@@ -298,10 +298,10 @@ LRESULT CALLBACK WndProc( HWND hWnd, unsigned int Message, WPARAM wParam, LPARAM
 	return 0;
 }
 
-int sss_WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
-	EnumDisplaySettings(0,ENUM_CURRENT_SETTINGS,&dmScreenSettings);
-	defWIDTH=dmScreenSettings.dmPelsWidth;
-	defHEIGHT=dmScreenSettings.dmPelsHeight;
+int sss_WinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpCmdLine*/, int /*nCmdShow*/ ) {
+	EnumDisplaySettings(0,ENUM_CURRENT_SETTINGS,&global_dmScreenSettings);
+	defWIDTH=global_dmScreenSettings.dmPelsWidth;
+	defHEIGHT=global_dmScreenSettings.dmPelsHeight;
 
 	LoadSetings();
 	int i,t;
@@ -315,32 +315,32 @@ int sss_WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, 
 	wc.cbClsExtra		= 0;
 	wc.cbWndExtra		= 0;
 	wc.hInstance		= hInstance;
-	wc.hIcon			= ::LoadIcon( hInstance, L"icon1.ico" );
+	wc.hIcon			= ::LoadIcon( hInstance, "icon1.ico" );
 	wc.hCursor			= ::LoadCursor(NULL, IDC_ARROW);
 	wc.hbrBackground	= NULL;
 	wc.lpszMenuName		= NULL;
-	wc.lpszClassName	= L"OpenGL WinClass";
+	wc.lpszClassName	= "OpenGL WinClass";
 
 	if ( !RegisterClass( &wc ) ) {
-		MessageBox( 0, L"Failed To Register The Window Class.", L"Error", MB_OK | MB_ICONERROR );
+		MessageBox( 0, "Failed To Register The Window Class.", "Error", MB_OK | MB_ICONERROR );
 		return FALSE;
 	}
 
-	hWnd = CreateWindow( L"OpenGL WinClass", L"Str", WS_POPUP | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, WIDTH, HEIGHT, NULL, NULL,	hInstance, NULL );
+	global_hWnd = CreateWindow( "OpenGL WinClass", "Str", WS_POPUP | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, WIDTH, HEIGHT, NULL, NULL,	hInstance, NULL );
 
-	if ( !hWnd ) {
-		MessageBox( 0, L"Window Creation Error.", L"Error", MB_OK | MB_ICONERROR );
+	if ( !global_hWnd ) {
+		MessageBox( 0, "Window Creation Error.", "Error", MB_OK | MB_ICONERROR );
 		return FALSE;
 	}
 
 	InitWindow();
 
-	ShowWindow(hWnd, SW_SHOW);
+	ShowWindow(global_hWnd, SW_SHOW);
 	SetCursorPos(WIDTH/2, HEIGHT/2);
 //	ShowCursor(1);
 
-	UpdateWindow(hWnd);
-	SetFocus(hWnd);
+	UpdateWindow(global_hWnd);
+	SetFocus(global_hWnd);
 
 	SetVSync(1);
 
@@ -390,7 +390,7 @@ int sss_WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, 
 						BB1( 2 );
 
 						BB( 32 );
-						SwapBuffers( hDC );			// Переключить буфер экрана
+						SwapBuffers( global_hDC );			// Переключить буфер экрана
 						BB1( 32 );
 
 						if ( sock_init ) {
@@ -416,6 +416,7 @@ int sss_WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, 
 						break;
 
 					default:
+						break;
 				}
 			}
 		}

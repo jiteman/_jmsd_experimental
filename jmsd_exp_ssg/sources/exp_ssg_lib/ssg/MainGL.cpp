@@ -7,10 +7,10 @@
 #include "Wid.h"
 
 
-HGLRC hRC;		// Постоянный контекст рендеринга
-HDC hDC;			// Приватный контекст устройства GDI
-HWND		hWnd;// Сохранение дискриптора окна
-DEVMODE dmScreenSettings;			// Режим работы
+HGLRC global_hRC;		// Постоянный контекст рендеринга
+HDC global_hDC;			// Приватный контекст устройства GDI
+HWND global_hWnd;// Сохранение дискриптора окна
+DEVMODE global_dmScreenSettings;			// Режим работы
 
 
 int WIDTH;
@@ -80,20 +80,20 @@ void InitWindow()
 	DEVMODE tmpd;
 	EnumDisplaySettings(0,ENUM_CURRENT_SETTINGS,&tmpd);
 
-	MoveWindow(hWnd,0,0,WIDTH,HEIGHT,0);
+	MoveWindow(global_hWnd,0,0,WIDTH,HEIGHT,0);
 
-	memset(&dmScreenSettings, 0, sizeof(DEVMODE));	// Очистка для хранения установок
-	dmScreenSettings.dmSize	= sizeof(DEVMODE);		// Размер структуры Devmode
-	dmScreenSettings.dmPelsWidth	= WIDTH;			// Ширина экрана
-	dmScreenSettings.dmPelsHeight	= HEIGHT;			// Высота экрана
-	dmScreenSettings.dmFields	= DM_PELSWIDTH | DM_PELSHEIGHT | DM_DISPLAYFREQUENCY;	// Режим Пиксела
+	memset(&global_dmScreenSettings, 0, sizeof(DEVMODE));	// Очистка для хранения установок
+	global_dmScreenSettings.dmSize	= sizeof(DEVMODE);		// Размер структуры Devmode
+	global_dmScreenSettings.dmPelsWidth	= WIDTH;			// Ширина экрана
+	global_dmScreenSettings.dmPelsHeight	= HEIGHT;			// Высота экрана
+	global_dmScreenSettings.dmFields	= DM_PELSWIDTH | DM_PELSHEIGHT | DM_DISPLAYFREQUENCY;	// Режим Пиксела
 
-	dmScreenSettings.dmDisplayFrequency=tmpd.dmDisplayFrequency;
+	global_dmScreenSettings.dmDisplayFrequency=tmpd.dmDisplayFrequency;
 
 
 
-	ChangeDisplaySettings(&dmScreenSettings, CDS_FULLSCREEN);
-	OnCreate(hWnd);
+	ChangeDisplaySettings(&global_dmScreenSettings, CDS_FULLSCREEN);
+	OnCreate(global_hWnd);
 }
 void SetResolution(char res)
 {
@@ -150,8 +150,8 @@ GLvoid OnCreate( HWND hWnd_p ) {
     pfd.cAlphaBits = 8;
     pfd.iLayerType = PFD_MAIN_PLANE;
 
-	hDC = GetDC( hWnd_p ); // Получить контекст устройства для окна
-	PixelFormat = ChoosePixelFormat( hDC, &pfd );
+	global_hDC = GetDC( hWnd_p ); // Получить контекст устройства для окна
+	PixelFormat = ChoosePixelFormat( global_hDC, &pfd );
 
 	// Найти ближайшее совпадение для нашего формата пикселов
 	if ( !PixelFormat ) {
@@ -160,21 +160,21 @@ GLvoid OnCreate( HWND hWnd_p ) {
 		return;
 	}
 
-	if ( !SetPixelFormat( hDC, PixelFormat, &pfd ) ) {
+	if ( !SetPixelFormat( global_hDC, PixelFormat, &pfd ) ) {
 		MessageBox( 0, "Can't Set The PixelFormat.", "Error", MB_OK | MB_ICONERROR );
 		PostQuitMessage( 0 );
 		return;
 	}
 
-	hRC = ::wglCreateContext( hDC );
+	global_hRC = ::wglCreateContext( global_hDC );
 
-	if ( !hRC ) {
+	if ( !global_hRC ) {
 		MessageBox( 0, "Can't Create A GL Rendering Context.", "Error", MB_OK | MB_ICONERROR );
 		PostQuitMessage( 0 );
 		return;
 	}
 
-	if ( !wglMakeCurrent( hDC, hRC ) ) {
+	if ( !wglMakeCurrent( global_hDC, global_hRC ) ) {
 		MessageBox( 0, "Can't activate GLRC.", "Error", MB_OK | MB_ICONERROR );
 		PostQuitMessage( 0 );
 		return;

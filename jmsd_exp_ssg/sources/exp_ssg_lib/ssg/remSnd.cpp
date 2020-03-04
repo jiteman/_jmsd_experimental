@@ -307,9 +307,9 @@ bool remSnd::LoadOggFile( const std::string &Filename, const bool Streamed ) {
 
 	// Check for existance of sound
 	if ( !Streamed ) 	{
-		for ( TBuf::iterator i = Buffers.begin(); i != Buffers.end(); i++ ) {
-			if ( i->second.Filename == Filename ) {
-				BufID = i->first;
+		for ( TBuf::iterator buffer_iterator = Buffers.begin(); buffer_iterator != Buffers.end(); buffer_iterator++ ) {
+			if ( buffer_iterator->second.Filename == Filename ) {
+				BufID = buffer_iterator->first;
 			}
 		}
 
@@ -363,21 +363,18 @@ bool remSnd::LoadOggFile( const std::string &Filename, const bool Streamed ) {
 	return true;
 }
 
-bool remSnd::ReadOggBlock( ALuint BufID, const size_t Size ) {
-	// vars
-	char eof = 0;
-	int	current_section;
-	long TotalRet = 0, ret;
-	char *PCM;
-
+bool remSnd::ReadOggBlock( ALuint BufID, size_t const Size ) {
 	if ( Size < 1 ) {
 		return false;
 	}
 
-	PCM = new char[ Size ];
+	char *PCM = new char[ Size ];
+	size_t TotalRet = 0;
+	long ret = 0;
 
 	// Read loop
 	while ( TotalRet < Size ) {
+		int	current_section = 0;
 		ret = ov_read( mVF, PCM + TotalRet, Size - TotalRet, 0, 2, 1, &current_section );
 
 		// if end of file or read limit exceeded
@@ -396,6 +393,7 @@ bool remSnd::ReadOggBlock( ALuint BufID, const size_t Size ) {
 	}
 
 	delete[] PCM;
+
 	return ret > 0;
 }
 

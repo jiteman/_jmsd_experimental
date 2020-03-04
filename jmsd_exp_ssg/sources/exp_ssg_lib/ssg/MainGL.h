@@ -6,10 +6,10 @@
 #include "open_gl.h"
 
 
-extern HGLRC hRC;		// Постоянный контекст рендеринга
-extern HDC hDC;			// Приватный контекст устройства GDI
-extern HWND		hWnd;// Сохранение дискриптора окна
-extern DEVMODE dmScreenSettings;			// Режим работы
+extern HGLRC global_hRC;		// Постоянный контекст рендеринга
+extern HDC global_hDC;			// Приватный контекст устройства GDI
+extern HWND		global_hWnd;// Сохранение дискриптора окна
+extern DEVMODE global_dmScreenSettings;			// Режим работы
 
 
 extern int WIDTH;
