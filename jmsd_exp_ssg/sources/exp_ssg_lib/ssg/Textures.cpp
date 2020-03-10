@@ -8,7 +8,7 @@
 
 // CTexture *Texture;
 // TextureImage global_Textures[TEX_TYPES];
-::sf::Texture global_Textures[ TEX_TYPES ];
+::sf::Texture *global_Textures[ TEX_TYPES ] = {};
 
 ::sf::Image LoadTextureWithAlphaFromFile( ::std::string const path_to_texture_file ) {
 	::sf::Image loadedImage;
@@ -49,35 +49,37 @@ GLvoid LoadGLTextures(GLvoid)
 
 //	Texture->LoadTexture( "textures\\anim.png", &global_Textures[ 21 ], 1 );
 
-	global_Textures[ 0 ].loadFromFile( "textures\\cursor.png" );
+	global_init_textures();
 
-	global_Textures[ 1 ].loadFromImage( LoadTextureWithAlphaFromFile( "textures\\missile.png" ) );
+	global_Textures[ 0 ]->loadFromFile( "textures\\cursor.png" );
 
-
-	global_Textures[ 2 ].loadFromFile( "textures\\states.png" );
-	global_Textures[ 3 ].loadFromFile( "textures\\wid.png" );
-	global_Textures[ 4 ].loadFromFile( "textures\\digits.png" );
-	global_Textures[ 5 ].loadFromFile( "textures\\arial_font.png" );
-	global_Textures[ 6 ].loadFromFile( "textures\\attack_cursor.png" );
-	global_Textures[ 7 ].loadFromFile( "textures\\frame1.png" );
-	global_Textures[ 8 ].loadFromFile( "textures\\frame2.png" );
-	global_Textures[ 9 ].loadFromFile( "textures\\frame3.png" );
-
-	global_Textures[ 10 ].loadFromImage( LoadTextureWithAlphaFromFile( "textures\\Units.png" ) );
-	global_Textures[ 11 ].loadFromImage( LoadTextureWithAlphaFromFile( "textures\\Bases.png" ) );
-	global_Textures[ 12 ].loadFromImage( LoadTextureWithAlphaFromFile( "textures\\bg2.jpg" ) );
+	global_Textures[ 1 ]->loadFromImage( LoadTextureWithAlphaFromFile( "textures\\missile.png" ) );
 
 
-	global_Textures[ 13 ].loadFromImage( LoadTextureWithAlphaFromFile( "textures\\p1.tga" ) );
-	global_Textures[ 14 ].loadFromImage( LoadTextureWithAlphaFromFile( "textures\\p2.tga" ) );
-	global_Textures[ 15 ].loadFromImage( LoadTextureWithAlphaFromFile( "textures\\p3.tga" ) );
-	global_Textures[ 16 ].loadFromImage( LoadTextureWithAlphaFromFile( "textures\\p4.tga" ) );
-	global_Textures[ 17 ].loadFromImage( LoadTextureWithAlphaFromFile( "textures\\p5.tga" ) );
-	global_Textures[ 18 ].loadFromImage( LoadTextureWithAlphaFromFile( "textures\\p6.tga" ) );
-	global_Textures[ 19 ].loadFromImage( LoadTextureWithAlphaFromFile( "textures\\p7.tga" ) );
-	global_Textures[ 20 ].loadFromImage( LoadTextureWithAlphaFromFile( "textures\\p8.tga" ) );
+	global_Textures[ 2 ]->loadFromFile( "textures\\states.png" );
+	global_Textures[ 3 ]->loadFromFile( "textures\\wid.png" );
+	global_Textures[ 4 ]->loadFromFile( "textures\\digits.png" );
+	global_Textures[ 5 ]->loadFromFile( "textures\\arial_font.png" );
+	global_Textures[ 6 ]->loadFromFile( "textures\\attack_cursor.png" );
+	global_Textures[ 7 ]->loadFromFile( "textures\\frame1.png" );
+	global_Textures[ 8 ]->loadFromFile( "textures\\frame2.png" );
+	global_Textures[ 9 ]->loadFromFile( "textures\\frame3.png" );
 
-	global_Textures[ 21 ].loadFromImage( LoadTextureWithAlphaFromFile( "textures\\anim.png" ) );
+	global_Textures[ 10 ]->loadFromImage( LoadTextureWithAlphaFromFile( "textures\\Units.png" ) );
+	global_Textures[ 11 ]->loadFromImage( LoadTextureWithAlphaFromFile( "textures\\Bases.png" ) );
+	global_Textures[ 12 ]->loadFromImage( LoadTextureWithAlphaFromFile( "textures\\bg2.jpg" ) );
+
+
+	global_Textures[ 13 ]->loadFromImage( LoadTextureWithAlphaFromFile( "textures\\p1.tga" ) );
+	global_Textures[ 14 ]->loadFromImage( LoadTextureWithAlphaFromFile( "textures\\p2.tga" ) );
+	global_Textures[ 15 ]->loadFromImage( LoadTextureWithAlphaFromFile( "textures\\p3.tga" ) );
+	global_Textures[ 16 ]->loadFromImage( LoadTextureWithAlphaFromFile( "textures\\p4.tga" ) );
+	global_Textures[ 17 ]->loadFromImage( LoadTextureWithAlphaFromFile( "textures\\p5.tga" ) );
+	global_Textures[ 18 ]->loadFromImage( LoadTextureWithAlphaFromFile( "textures\\p6.tga" ) );
+	global_Textures[ 19 ]->loadFromImage( LoadTextureWithAlphaFromFile( "textures\\p7.tga" ) );
+	global_Textures[ 20 ]->loadFromImage( LoadTextureWithAlphaFromFile( "textures\\p8.tga" ) );
+
+	global_Textures[ 21 ]->loadFromImage( LoadTextureWithAlphaFromFile( "textures\\anim.png" ) );
 
 
 	CFile f1;
@@ -179,3 +181,16 @@ GLvoid LoadGLTextures(GLvoid)
 //{
 
 //}
+
+void global_init_textures() {
+	for ( size_t texture_index = 0; texture_index < TEX_TYPES; ++texture_index ) {
+		global_Textures[ TEX_TYPES ] = new ::sf::Texture;
+	}
+}
+
+void global_reset_textures() {
+	for ( size_t texture_index = 0; texture_index < TEX_TYPES; ++texture_index ) {
+		delete global_Textures[ TEX_TYPES ];
+		global_Textures[ TEX_TYPES ] = nullptr;
+	}
+}
