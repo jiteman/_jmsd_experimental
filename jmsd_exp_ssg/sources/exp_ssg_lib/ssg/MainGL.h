@@ -25,9 +25,9 @@ void SetResolution(char res);
 void Begin2D ( void );
 void End2D ( void );
 
-GLvoid InitGL(GLsizei Width, GLsizei Height);
+bool InitGL(GLsizei Width, GLsizei Height);
 GLvoid ReSizeGLScene(GLsizei Width, GLsizei Height);
-GLvoid OnCreate(HWND hWnd);
+bool OnCreate(HWND hWnd);
 
 
 GLvoid gluOrtho2D( GLdouble left, GLdouble right, GLdouble bottom, GLdouble top );

@@ -26,17 +26,35 @@ std::string operator +( const std::string &s1, const std::string &s2 ) {
 
 void InitMusic() {
 	for ( int i = 0; i < MUSICS_NUMBER; i++ ) {
-		remSnd *newMusic = new remSnd;
-
 		remSnd **currentMusicSlot = &global_Music[ i ];
+		remSnd *newMusic = new remSnd;
 
 		if ( newMusic->Open( std::string( "Music//m" ) + IntToString( i ) + std::string( ".OGG" ), 0, 0 ) ) {
 			newMusic->Move( 0, 0, 0 );
 			*currentMusicSlot = newMusic;
-			newMusic = nullptr;
 		} else {
-			*currentMusicSlot = nullptr;
+			*currentMusicSlot = newMusic;
 		}
+	}
+}
+
+void ReleaseMusic() {
+	for ( size_t index =0; index < MUSICS_NUMBER; index += 1 ) {
+		delete global_Music[ index ];
+		global_Music[ index ] = nullptr;
+	}
+}
+
+void InitSound() {
+	for ( size_t index = 0; index < SOUNDS_NUMBER; index += 1 ) {
+		global_Snd3D[ index ] = new remSnd;
+	}
+}
+
+void ReleaseSound() {
+	for ( size_t index = 0; index < SOUNDS_NUMBER; index += 1 ) {
+		delete global_Snd3D[ index ];
+		global_Snd3D[ index ] = nullptr;
 	}
 }
 
@@ -111,7 +129,7 @@ void SetEffectsVolume( float const v ) {
 }
 
 void SetMusucVolume( float const v ) {
-	for ( size_t i = 0; i < SOUNDS_NUMBER; i++ ) {
+	for ( size_t i = 0; i < MUSICS_NUMBER; i++ ) {
 		::alSourcef( global_Music[ i ]->mSourceID, AL_GAIN, v );
 	}
 }

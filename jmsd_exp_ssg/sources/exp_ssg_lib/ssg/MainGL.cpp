@@ -49,12 +49,13 @@ GLvoid ReSizeGLScene(GLsizei /*Width*/, GLsizei /*Height*/)
 //	Begin2D();
 }
 
-GLvoid InitGL( GLsizei /*Width*/, GLsizei /*Height*/ )	// Вызвать после создания окна GL
+bool InitGL( GLsizei /*Width*/, GLsizei /*Height*/ )	// Вызвать после создания окна GL
 {
 //	Texture = new CTexture();
 
 
-    LoadGLTextures();
+    if ( !LoadGLTextures() ) return false;
+
 	glClearColor(0,0,0,0);
 
 
@@ -73,6 +74,8 @@ GLvoid InitGL( GLsizei /*Width*/, GLsizei /*Height*/ )	// Вызвать пос�
 	//glShadeModel(GL_FLAT);
 //	glEnable(GL_LINE_STIPPLE);
 	//glEnable(GL_LINE_SMOOTH);
+
+	return true;
 }
 
 void InitWindow()
@@ -90,9 +93,8 @@ void InitWindow()
 
 	global_dmScreenSettings.dmDisplayFrequency=tmpd.dmDisplayFrequency;
 
-
-
 	ChangeDisplaySettings(&global_dmScreenSettings, CDS_FULLSCREEN);
+
 	OnCreate(global_hWnd);
 }
 void SetResolution(char res)
@@ -135,8 +137,7 @@ void ChangeResolution( const char res ) {
 	}
 }
 
-GLvoid OnCreate( HWND hWnd_p ) {
-	RECT Screen; // используется позднее для размеров окна
+bool OnCreate( HWND hWnd_p ) {
 	GLuint PixelFormat;
 	PIXELFORMATDESCRIPTOR pfd = { sizeof( PIXELFORMATDESCRIPTOR ) };
 
@@ -157,13 +158,13 @@ GLvoid OnCreate( HWND hWnd_p ) {
 	if ( !PixelFormat ) {
 		MessageBox( 0, "Can't Find A Suitable PixelFormat.", "Error", MB_OK | MB_ICONERROR );
 		PostQuitMessage( 0 );
-		return;
+		return false;
 	}
 
 	if ( !SetPixelFormat( global_hDC, PixelFormat, &pfd ) ) {
 		MessageBox( 0, "Can't Set The PixelFormat.", "Error", MB_OK | MB_ICONERROR );
 		PostQuitMessage( 0 );
-		return;
+		return false;
 	}
 
 	global_hRC = ::wglCreateContext( global_hDC );
@@ -171,17 +172,25 @@ GLvoid OnCreate( HWND hWnd_p ) {
 	if ( !global_hRC ) {
 		MessageBox( 0, "Can't Create A GL Rendering Context.", "Error", MB_OK | MB_ICONERROR );
 		PostQuitMessage( 0 );
-		return;
+		return false;
 	}
 
 	if ( !wglMakeCurrent( global_hDC, global_hRC ) ) {
 		MessageBox( 0, "Can't activate GLRC.", "Error", MB_OK | MB_ICONERROR );
 		PostQuitMessage( 0 );
-		return;
+		return false;
 	}
 
-	GetClientRect( hWnd_p, &Screen );
-	InitGL( Screen.right, Screen.bottom );
+	RECT Screen;
+	::GetClientRect( hWnd_p, &Screen );
+
+	if ( !InitGL( Screen.right, Screen.bottom ) ) {
+		MessageBox( 0, "Can't initialize OpenGL infrastructure or load resources.", "Error", MB_OK | MB_ICONERROR );
+		PostQuitMessage( 0 );
+		return false;
+	}
+
+	return true;
 }
 
 GLvoid gluOrtho2D( GLdouble const left, GLdouble const right, GLdouble const bottom, GLdouble const top ) {

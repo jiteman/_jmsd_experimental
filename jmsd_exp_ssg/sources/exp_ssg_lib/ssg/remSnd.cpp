@@ -1,5 +1,7 @@
 #include "remSnd.h"
 
+#include "Sound.h"
+
 #include "vorbis/codec.h"
 
 #include "AL/alc.h"
@@ -112,11 +114,17 @@ bool global_initializeSoundSubsystem()
     alListenerfv(AL_POSITION,    ListenerPos);
     alListenerfv(AL_VELOCITY,    ListenerVel);
     alListenerfv(AL_ORIENTATION, ListenerOri);
+
+    ::InitMusic();
+    ::InitSound();
+
 	return true;
 }
 
-void global_uninitializeSoundSubsystem()
-{
+void global_uninitializeSoundSubsystem() {
+	::ReleaseSound();
+	::ReleaseMusic();
+
 	// Clear all buffers and sources
 	for (TBuf::iterator i = Buffers.begin(); i != Buffers.end(); i++)
 		alDeleteBuffers(1, &i->second.ID);

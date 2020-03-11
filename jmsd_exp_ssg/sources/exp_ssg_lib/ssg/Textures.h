@@ -64,7 +64,7 @@
 extern ::sf::Texture *global_Textures[ TEX_TYPES ];
 
 ::sf::Image LoadTextureWithAlphaFromFile( ::std::string const path_to_texture_file );
-GLvoid LoadGLTextures(GLvoid);
+bool LoadGLTextures();
 
 void global_init_textures();
 void global_reset_textures();

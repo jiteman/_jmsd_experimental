@@ -8,7 +8,7 @@
 
 // CTexture *Texture;
 // TextureImage global_Textures[TEX_TYPES];
-::sf::Texture *global_Textures[ TEX_TYPES ] = {};
+::sf::Texture *global_Textures[ TEX_TYPES ]; // = {};
 
 ::sf::Image LoadTextureWithAlphaFromFile( ::std::string const path_to_texture_file ) {
 	::sf::Image loadedImage;
@@ -20,7 +20,7 @@
 	return alphaAppliedImage;
 }
 
-GLvoid LoadGLTextures(GLvoid)
+bool LoadGLTextures()
 {
 //	Texture->LoadTexture( "textures\\cursor.png", &global_Textures[ 0 ], 0 );
 //	Texture->LoadTexture( "textures\\missile.png", &global_Textures[ 1 ], 1 );
@@ -51,46 +51,56 @@ GLvoid LoadGLTextures(GLvoid)
 
 	global_init_textures();
 
-	global_Textures[ 0 ]->loadFromFile( "textures\\cursor.png" );
+	bool have_been_all_textures_loaded = true;
 
-	global_Textures[ 1 ]->loadFromImage( LoadTextureWithAlphaFromFile( "textures\\missile.png" ) );
+	::sf::Texture *the_texture_0 = global_Textures[ 0 ];
 
+	if ( the_texture_0 == nullptr ) return false;
 
-	global_Textures[ 2 ]->loadFromFile( "textures\\states.png" );
-	global_Textures[ 3 ]->loadFromFile( "textures\\wid.png" );
-	global_Textures[ 4 ]->loadFromFile( "textures\\digits.png" );
-	global_Textures[ 5 ]->loadFromFile( "textures\\arial_font.png" );
-	global_Textures[ 6 ]->loadFromFile( "textures\\attack_cursor.png" );
-	global_Textures[ 7 ]->loadFromFile( "textures\\frame1.png" );
-	global_Textures[ 8 ]->loadFromFile( "textures\\frame2.png" );
-	global_Textures[ 9 ]->loadFromFile( "textures\\frame3.png" );
+	have_been_all_textures_loaded = !have_been_all_textures_loaded ? false : global_Textures[ 0 ]->loadFromFile( "textures\\cursor.png" ) ;
 
-	global_Textures[ 10 ]->loadFromImage( LoadTextureWithAlphaFromFile( "textures\\Units.png" ) );
-	global_Textures[ 11 ]->loadFromImage( LoadTextureWithAlphaFromFile( "textures\\Bases.png" ) );
-	global_Textures[ 12 ]->loadFromImage( LoadTextureWithAlphaFromFile( "textures\\bg2.jpg" ) );
+	have_been_all_textures_loaded = !have_been_all_textures_loaded ? false : global_Textures[ 1 ]->loadFromImage( LoadTextureWithAlphaFromFile( "textures\\missile.png" ) );
 
 
-	global_Textures[ 13 ]->loadFromImage( LoadTextureWithAlphaFromFile( "textures\\p1.tga" ) );
-	global_Textures[ 14 ]->loadFromImage( LoadTextureWithAlphaFromFile( "textures\\p2.tga" ) );
-	global_Textures[ 15 ]->loadFromImage( LoadTextureWithAlphaFromFile( "textures\\p3.tga" ) );
-	global_Textures[ 16 ]->loadFromImage( LoadTextureWithAlphaFromFile( "textures\\p4.tga" ) );
-	global_Textures[ 17 ]->loadFromImage( LoadTextureWithAlphaFromFile( "textures\\p5.tga" ) );
-	global_Textures[ 18 ]->loadFromImage( LoadTextureWithAlphaFromFile( "textures\\p6.tga" ) );
-	global_Textures[ 19 ]->loadFromImage( LoadTextureWithAlphaFromFile( "textures\\p7.tga" ) );
-	global_Textures[ 20 ]->loadFromImage( LoadTextureWithAlphaFromFile( "textures\\p8.tga" ) );
+	have_been_all_textures_loaded = !have_been_all_textures_loaded ? false : global_Textures[ 2 ]->loadFromFile( "textures\\states.png" );
+	have_been_all_textures_loaded = !have_been_all_textures_loaded ? false : global_Textures[ 3 ]->loadFromFile( "textures\\wid.png" );
+	have_been_all_textures_loaded = !have_been_all_textures_loaded ? false : global_Textures[ 4 ]->loadFromFile( "textures\\digits.png" );
+	have_been_all_textures_loaded = !have_been_all_textures_loaded ? false : global_Textures[ 5 ]->loadFromFile( "textures\\arial_font.png" );
+	have_been_all_textures_loaded = !have_been_all_textures_loaded ? false : global_Textures[ 6 ]->loadFromFile( "textures\\attack_cursor.png" );
+	have_been_all_textures_loaded = !have_been_all_textures_loaded ? false : global_Textures[ 7 ]->loadFromFile( "textures\\frame1.png" );
+	have_been_all_textures_loaded = !have_been_all_textures_loaded ? false : global_Textures[ 8 ]->loadFromFile( "textures\\frame2.png" );
+	have_been_all_textures_loaded = !have_been_all_textures_loaded ? false : global_Textures[ 9 ]->loadFromFile( "textures\\frame3.png" );
 
-	global_Textures[ 21 ]->loadFromImage( LoadTextureWithAlphaFromFile( "textures\\anim.png" ) );
+	have_been_all_textures_loaded = !have_been_all_textures_loaded ? false : global_Textures[ 10 ]->loadFromImage( LoadTextureWithAlphaFromFile( "textures\\Units.png" ) );
+	have_been_all_textures_loaded = !have_been_all_textures_loaded ? false : global_Textures[ 11 ]->loadFromImage( LoadTextureWithAlphaFromFile( "textures\\Bases.png" ) );
+	have_been_all_textures_loaded = !have_been_all_textures_loaded ? false : global_Textures[ 12 ]->loadFromImage( LoadTextureWithAlphaFromFile( "textures\\bg2.jpg" ) );
+
+
+	have_been_all_textures_loaded = !have_been_all_textures_loaded ? false : global_Textures[ 13 ]->loadFromImage( LoadTextureWithAlphaFromFile( "textures\\p1.tga" ) );
+	have_been_all_textures_loaded = !have_been_all_textures_loaded ? false : global_Textures[ 14 ]->loadFromImage( LoadTextureWithAlphaFromFile( "textures\\p2.tga" ) );
+	have_been_all_textures_loaded = !have_been_all_textures_loaded ? false : global_Textures[ 15 ]->loadFromImage( LoadTextureWithAlphaFromFile( "textures\\p3.tga" ) );
+	have_been_all_textures_loaded = !have_been_all_textures_loaded ? false : global_Textures[ 16 ]->loadFromImage( LoadTextureWithAlphaFromFile( "textures\\p4.tga" ) );
+	have_been_all_textures_loaded = !have_been_all_textures_loaded ? false : global_Textures[ 17 ]->loadFromImage( LoadTextureWithAlphaFromFile( "textures\\p5.tga" ) );
+	have_been_all_textures_loaded = !have_been_all_textures_loaded ? false : global_Textures[ 18 ]->loadFromImage( LoadTextureWithAlphaFromFile( "textures\\p6.tga" ) );
+	have_been_all_textures_loaded = !have_been_all_textures_loaded ? false : global_Textures[ 19 ]->loadFromImage( LoadTextureWithAlphaFromFile( "textures\\p7.tga" ) );
+	have_been_all_textures_loaded = !have_been_all_textures_loaded ? false : global_Textures[ 20 ]->loadFromImage( LoadTextureWithAlphaFromFile( "textures\\p8.tga" ) );
+
+	have_been_all_textures_loaded = !have_been_all_textures_loaded ? false : global_Textures[ 21 ]->loadFromImage( LoadTextureWithAlphaFromFile( "textures\\anim.png" ) );
+
+	if ( !have_been_all_textures_loaded ) return false;
 
 
 	CFile f1;
 
 	if ( !f1.Open( "arial_font", OPEN_EXISTING ) ) {
-		return;
+		return false;
 	}
 
 	f1.Read( ArialFont.ch, 224 * sizeof( FontChar ) );
 	ArialFont.txt = &( TEXTURE_ARIAL_FONT );
 	f1.Close();
+
+	return true;
 }
 
 //void MultAlpha( TextureImage *txt )
@@ -184,13 +194,13 @@ GLvoid LoadGLTextures(GLvoid)
 
 void global_init_textures() {
 	for ( size_t texture_index = 0; texture_index < TEX_TYPES; ++texture_index ) {
-		global_Textures[ TEX_TYPES ] = new ::sf::Texture;
+		global_Textures[ texture_index ] = new ::sf::Texture;
 	}
 }
 
 void global_reset_textures() {
 	for ( size_t texture_index = 0; texture_index < TEX_TYPES; ++texture_index ) {
-		delete global_Textures[ TEX_TYPES ];
-		global_Textures[ TEX_TYPES ] = nullptr;
+		delete global_Textures[ texture_index ];
+		global_Textures[ texture_index ] = nullptr;
 	}
 }

@@ -17,13 +17,29 @@
 #define MES_BOX_W 600
 #define MES_BOX_Y ( HEIGHT - ICON_SIZE * 2 )
 
-struct MyMessage
-{
+struct MyMessage {
 	std::string val;
-	float col[3];
-	MyMessage(){}
-	MyMessage(std::string ms){val=ms;col[0]=1;col[1]=1;col[2]=1;}
-	MyMessage(std::string ms,char cl){val=ms;col[0]=PLColor[cl][0];col[1]=PLColor[cl][1];col[2]=PLColor[cl][2];}
+	float col[ 3 ];
+
+	MyMessage() = default;
+
+	MyMessage( ::std::string const &ms )
+		:
+			val( ms )
+	{
+		col[ 0 ] = 1;
+		col[ 1 ] = 1;
+		col[ 2 ] = 1;
+	}
+
+	MyMessage( ::std::string const &ms, char const cl)
+		:
+			val( ms	)
+	{
+		col[ 0 ] = PLColor[ cl ][ 0 ];
+		col[ 1 ] = PLColor[ cl ][ 1 ];
+		col[ 2 ] = PLColor[ cl ][ 2 ];
+	}
 };
 
 struct FontChar {
@@ -56,9 +72,6 @@ extern int tmp_info;
 
 void DrawMes();
 void DrawInformation();
-
-
-
 
 void DrawMenu();
 void DrawNumber(int x1,int y1,int h,int numb);

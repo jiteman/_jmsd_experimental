@@ -5,9 +5,13 @@
 
 CFile global_file;
 
-void CloseRpt()	{global_file.Close();}
-void OpenRpt()
-{global_file.Open("MyReport.txt",CREATE_ALWAYS);}
+void CloseRpt()	{
+	global_file.Close();
+}
+
+void OpenRpt() {
+	global_file.Open( "MyReport.txt", CREATE_ALWAYS );
+}
 
 void PutChar1(char ch)
 {
@@ -41,8 +45,8 @@ void PutInt(int i)
 		n--;
 		PutChar1(a[n]);
 	}while(n);
-	
-		
+
+
 	//PutChar1('}');
 }
 void PutDW(DWORD i)
@@ -50,7 +54,7 @@ void PutDW(DWORD i)
 	//PutChar1('{');
 	char a[20],n=0;
 	do
-	{ 
+	{
 		a[n]='0'+(char)(i%10);
 		i/=10;
 		n++;
@@ -60,8 +64,8 @@ void PutDW(DWORD i)
 		n--;
 		PutChar1(a[n]);
 	}while(n);
-	
-		
+
+
 	//PutChar1('}');
 }
 void PutFloat(float val)

@@ -271,25 +271,31 @@ wid* GetWDJ(int id)
 	}
 	return 0;
 }
-void SendChar(char ch)
-{
-	if(cur_wdj_id==-1)return;
+
+void SendChar( char const ch ) {
+	if ( cur_wdj_id == -1 ) return;
 
 
-	wid* www=GetWDJ(cur_wdj_id);
-	switch(www->type)
-	{
-	case 6:
-		if(ch==8)
-		{
-			if(www->text.size())www->text.resize(www->text.size()-1);
+	wid *www = ::GetWDJ( cur_wdj_id );
+
+	switch ( www->type ) {
+		case 6:
+			if ( ch == 8 ) {
+				if ( www->text.size() ) {
+					www->text.resize( www->text.size() - 1 );
+				}
+
+				break;
+			}
+
+			if ( ( ch >= '0' && ch <= '9' ) || ( ch >= 'A' && ch <= 'Z' ) || ch == 32 ) {
+				www->text.push_back( ch );
+			}
+
 			break;
-		}
-		if((ch>='0' && ch<='9')||(ch>='A' && ch<='Z')|| ch==32)
-			www->text.push_back(ch);
-		break;
 	}
 }
+
 void CloseWids()
 {
 	int i,n;

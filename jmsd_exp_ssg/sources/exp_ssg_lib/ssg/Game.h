@@ -51,6 +51,6 @@ void UpdateWiner();
 
 void ClearGame();
 void NewGame();
-void prepare();
+bool prepare();
 
 void GameStep();

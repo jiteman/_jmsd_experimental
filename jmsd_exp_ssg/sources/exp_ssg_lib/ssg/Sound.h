@@ -19,7 +19,12 @@ extern st< std::string > CurPlay;
 
 void PlayWavFile( const std::string &fname, tka pos = tka( -999, -999 ) );
 void PlayMusic();
+
 void InitMusic();
+void ReleaseMusic();
+
+void InitSound();
+void ReleaseSound();
 
 void SetEffectsVolume(float v);
 void SetMusucVolume(float v);

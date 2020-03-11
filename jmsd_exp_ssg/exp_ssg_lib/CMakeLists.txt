@@ -78,6 +78,11 @@ set( ${PROJECT_NAME}_DEPENDENCY_LIBS_VAR
 	tpc_sfml
 	${tpc_glew_DEPENDENCY_LIBS}
 	tpc_glew )
+
+if ( WIN32 )
+	list( APPEND ${PROJECT_NAME}_DEPENDENCY_LIBS_VAR Glu32.lib )
+endif()
+
 list( REMOVE_DUPLICATES ${PROJECT_NAME}_DEPENDENCY_LIBS_VAR )
 target_link_libraries( ${PROJECT_NAME} ${${PROJECT_NAME}_DEPENDENCY_LIBS_VAR} )
 

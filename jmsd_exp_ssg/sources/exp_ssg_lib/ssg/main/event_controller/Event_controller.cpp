@@ -1,27 +1,32 @@
-#include "Menu.h"
-#include "Control.h"
-#include "Wid.h"
-#include "Graph2d.h"
-#include "Bases.h"
-#include "Sound.h"
-#include "MainGl.h"
-#include "Game.h"
-#include "Group.h"
-#include "GUI.h"
-#include "Ai.h"
-#include "remSnd.h"
-#include "Polygon.h"
-#include "Filer.h"
-#include "vbo.h"
-#include "Report.h"
+#include "Event_controller.h"
 
-#include "Zamer.h"
 
-#include "sock.h"
+#include "ssg/MainGL.h"
+#include "ssg/Graph2d.h"
+#include "ssg/vbo.h"
 
-#include "include_Windows.h"
+#include "ssg/GUI.h"
+#include "ssg/Menu.h"
+#include "ssg/wid.h"
 
-#include "sss.h"
+#include "ssg/Sound.h"
+#include "ssg/remSnd.h"
+
+
+#include "ssg/Control.h"
+#include "ssg/Game.h"
+
+#include "ssg/Bases.h"
+#include "ssg/Group.h"
+#include "ssg/AI.h"
+#include "ssg/Polygon.h"
+
+#include "ssg/Filer.h"
+
+#include "ssg/sock.h"
+
+#include "ssg/Report.h"
+#include "ssg/zamer.h"
 
 
 LRESULT CALLBACK WndProc( HWND hWnd, unsigned int Message, WPARAM wParam, LPARAM lParam ) {
@@ -32,7 +37,7 @@ LRESULT CALLBACK WndProc( HWND hWnd, unsigned int Message, WPARAM wParam, LPARAM
 			}
 
 			//status&=~5;
-			omR = MOUSETKA();
+			omR = ::MOUSETKA();
 			SelIsR = 1;
 			break;
 
@@ -104,12 +109,13 @@ LRESULT CALLBACK WndProc( HWND hWnd, unsigned int Message, WPARAM wParam, LPARAM
 			break;
 
     case WM_KEYDOWN:
-//		tmp_info=(int)wParam;
+		if ( wParam == 115 ) {
+			SendMessage( hWnd, WM_DESTROY, 0, 0 );
+			break;
+		}
 
-		if(wParam==115){SendMessage(hWnd,WM_DESTROY,0,0);break;}
-		if(cur_wdj!=-1)
-		{
-			SendChar((char)wParam);
+		if ( cur_wdj != -1 ) {
+			SendChar( ( char ) wParam );
 			break;
 		}
 
@@ -125,36 +131,30 @@ LRESULT CALLBACK WndProc( HWND hWnd, unsigned int Message, WPARAM wParam, LPARAM
 
 		if(status&64){if(wParam==8)mess.resize(mess.size()-1);else mess.push_back((char)(wParam));break;}
 */
-		if(wParam==27)
-		{
-			if(cur_wdj==-1)
-			{
-				status|=16;
-				cur_wdj=1;
+		if ( wParam == 27 ) {
+			if ( cur_wdj == -1 ) {
+				status |= 16;
+				cur_wdj = 1;
 			}
 
 			break;
 		}
-		if(wParam>='0'&&wParam<='0'+UNIT_TYPES){SelectAllUnits(wParam-'0',true);break;}
-//		if(wParam>='0'&&wParam<='0'+UNIT_TYPES){SelectGroup(wParam-'0');break;}
 
-		if((int)wParam == 46)
-			{ DeleteSelection();}
-/*		{
-			if(sel.beg)
-				OrdMan.AddOrder(new Order(3,&sel,1));
-			if(GrpSel.beg)
-				OrdMan.AddOrder(new Order(4,&GrpSel,1));
+		if ( wParam >= '0' && wParam <= '0' + UNIT_TYPES ) {
+			SelectAllUnits( wParam - '0', true );
+			break;
+		}
 
-		}*/
+		if ( ( int )wParam == 'F' ) {
+			DeleteSelection();
+		}
 
-
-		if(wParam=='G')
-		{
-			if(sel.beg)
-				global_OrdMan.AddOrder(new Order(3,&sel,0));
-			else
-				global_OrdMan.AddOrder(new Order(5,0));
+		if ( wParam == 'G' ) {
+			if ( sel.beg ) {
+				global_OrdMan.AddOrder( new Order( 3, &sel, 0 ) );
+			} else {
+				global_OrdMan.AddOrder( new Order( 5, 0 ) );
+			}
 
 			//if(sel.beg) GroupSelected();else AutoCreateGroup(MyConf.MY_PLAYER);
 			break;
@@ -247,10 +247,13 @@ LRESULT CALLBACK WndProc( HWND hWnd, unsigned int Message, WPARAM wParam, LPARAM
 			revansh();
 		}
 
-	break;
+		break;
 
 	case WM_CREATE:
-		OnCreate(hWnd);
+		{
+//			bool const is_created = OnCreate(hWnd);
+		}
+		break;
 
 	break;
 
@@ -279,17 +282,17 @@ LRESULT CALLBACK WndProc( HWND hWnd, unsigned int Message, WPARAM wParam, LPARAM
 		ReleaseDC(hWnd,global_hDC);
 
 
-	OpenRpt();
-	ZZZ.WriteReport();
-	CloseRpt();
+		OpenRpt();
+		ZZZ.WriteReport();
+		CloseRpt();
 
 
 		PostQuitMessage(0);
+		break;
 
-	break;
 	case WM_SIZE:
-	ReSizeGLScene(LOWORD(lParam),HIWORD(lParam));
-	break;
+		ReSizeGLScene(LOWORD(lParam),HIWORD(lParam));
+		break;
 
 	default:
 		return (DefWindowProc(hWnd, Message, wParam, lParam));
@@ -298,127 +301,3 @@ LRESULT CALLBACK WndProc( HWND hWnd, unsigned int Message, WPARAM wParam, LPARAM
 	return 0;
 }
 
-int sss_WinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpCmdLine*/, int /*nCmdShow*/ ) {
-	EnumDisplaySettings(0,ENUM_CURRENT_SETTINGS,&global_dmScreenSettings);
-	defWIDTH=global_dmScreenSettings.dmPelsWidth;
-	defHEIGHT=global_dmScreenSettings.dmPelsHeight;
-
-	LoadSetings();
-	int i,t;
-	MSG		msg;	// Структура сообщения Windows
-	WNDCLASS	wc; // Структура класса Windows для установки типа окна
-	DWORD LastTick[GAME_TIMERS_NUM]={0,0,0,0}, CurTick;
-	const DWORD TickNum[GAME_TIMERS_NUM]={1000,30,20,15};
-
-	wc.style			= CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-	wc.lpfnWndProc		= (WNDPROC) WndProc;
-	wc.cbClsExtra		= 0;
-	wc.cbWndExtra		= 0;
-	wc.hInstance		= hInstance;
-	wc.hIcon			= ::LoadIcon( hInstance, "icon1.ico" );
-	wc.hCursor			= ::LoadCursor(NULL, IDC_ARROW);
-	wc.hbrBackground	= NULL;
-	wc.lpszMenuName		= NULL;
-	wc.lpszClassName	= "OpenGL WinClass";
-
-	if ( !RegisterClass( &wc ) ) {
-		MessageBox( 0, "Failed To Register The Window Class.", "Error", MB_OK | MB_ICONERROR );
-		return FALSE;
-	}
-
-	global_hWnd = CreateWindow( "OpenGL WinClass", "Str", WS_POPUP | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, WIDTH, HEIGHT, NULL, NULL,	hInstance, NULL );
-
-	if ( !global_hWnd ) {
-		MessageBox( 0, "Window Creation Error.", "Error", MB_OK | MB_ICONERROR );
-		return FALSE;
-	}
-
-	InitWindow();
-
-	ShowWindow(global_hWnd, SW_SHOW);
-	SetCursorPos(WIDTH/2, HEIGHT/2);
-//	ShowCursor(1);
-
-	UpdateWindow(global_hWnd);
-	SetFocus(global_hWnd);
-
-	SetVSync(1);
-
-	prepare();
-
-
-	if(!vbo.InitVBO())return 0;
-
-	timeBeginPeriod(1);
-
-
-
-    ShowCursor(0);
-	for ( ;; ) {
-		BB(0);
-
-		while ( PeekMessage( &msg, NULL, 0, 0, PM_NOREMOVE ) ) {
-			if ( GetMessage( &msg, NULL, 0, 0 ) ) {
-				TranslateMessage( &msg );
-				DispatchMessage( &msg );
-			} else {
-				return TRUE;
-			}
-		}
-
-		BB1(0);
-
-		if ( !( FixSpeed || ( status & ( 16 ) ) ) ) {
-			GameStep();
-		}
-
-		CurTick = GetTickCount();
-
-		for ( t = 0; t < GAME_TIMERS_NUM; t++ ) {
-			if ( CurTick - LastTick[ t ] >= TickNum[ t ] ) {
-				LastTick[ t ] = CurTick;
-
-				switch ( t ) {
-					case 0:
-						fps = ababua;
-						ababua = 0;
-						break;
-
-					case 1:
-						BB( 2 );
-						MyDisplay();				// Нарисовать сцену
-						BB1( 2 );
-
-						BB( 32 );
-						SwapBuffers( global_hDC );			// Переключить буфер экрана
-						BB1( 32 );
-
-						if ( sock_init ) {
-							InitSockProc();
-						}
-
-						break;
-
-					case 2:
-						PlayMusic();
-						MouseProc();
-						break;
-
-					case 3:
-						if ( is_online ) {
-							GameStep();
-						} else if ( !( ( status & ( 16 ) ) || !FixSpeed ) ) {
-							for( i = 0; i < MyConf.steps_per_frame; i++ ) {
-								GameStep();
-							}
-						}
-
-						break;
-
-					default:
-						break;
-				}
-			}
-		}
-	}
-}

@@ -255,7 +255,7 @@ void NewGame()
 
 }
 
-void prepare()
+bool prepare()
 {
 //	InitKrug();
 
@@ -269,7 +269,8 @@ void prepare()
 //	for(i=0;i<PLAYERS_NUM;i++)GOOD_F_COST[i]=i*10+50;
 	MapW = 100;
 	MapH = 100;
-	global_initializeSoundSubsystem();
+
+	if ( !global_initializeSoundSubsystem() ) return false;
 
 	SetEffectsVolume( MyConf.sound_val / 100.0f );
 	SetMusucVolume( MyConf.music_val / 100.0f );
@@ -311,6 +312,8 @@ void prepare()
 	PLColor[7][0]=1.0f;
 	PLColor[7][1]=1.0f;
 	PLColor[7][2]=1.0f;
+
+	return true;
 }
 
 void GameStep()
