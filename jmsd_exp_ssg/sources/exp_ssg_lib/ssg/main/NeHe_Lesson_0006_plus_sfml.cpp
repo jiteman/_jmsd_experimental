@@ -1,4 +1,4 @@
-#include "NeHe_Lesson_0006_plus.h"
+#include "NeHe_Lesson_0006_plus_sfml.h"
 
 /*
  *		This Code Was Created By Jeff Molofee 2000
@@ -17,16 +17,16 @@
 #include <cstdio>			// Header File For Standard Input/Output
 
 
-namespace nehe_lesson_0006_plus {
+namespace nehe_lesson_0006_plus_sfml {
 
-HDC			global_hDC=NULL;		// Private GDI Device Context
-HGLRC		global_hRC=NULL;		// Permanent Rendering Context
-HWND		global_hWnd=NULL;		// Holds Our Window Handle
+HDC			global_hDC = NULL;		// Private GDI Device Context
+HGLRC		global_hRC = NULL;		// Permanent Rendering Context
+HWND		global_hWnd = NULL;		// Holds Our Window Handle
 HINSTANCE	global_hInstance;		// Holds The Instance Of The Application
 
-bool	global_keys[256];			// Array Used For The Keyboard Routine
-bool	global_active=TRUE;		// Window Active Flag Set To TRUE By Default
-bool	global_fullscreen=TRUE;	// Fullscreen Flag Set To Fullscreen Mode By Default
+bool	global_keys[ 256 ];			// Array Used For The Keyboard Routine
+bool	global_active = true;		// Window Active Flag Set To TRUE By Default
+bool	global_fullscreen = true;	// Fullscreen Flag Set To Fullscreen Mode By Default
 
 GLfloat	global_xrot; // X Rotation ( NEW )
 GLfloat	global_yrot; // Y Rotation ( NEW )
@@ -423,13 +423,13 @@ LRESULT CALLBACK WndProc(	HWND	hWnd,			// Handle For This Window
 
 		case WM_KEYDOWN:							// Is A Key Being Held Down?
 		{
-			global_keys[wParam] = TRUE;					// If So, Mark It As TRUE
+			global_keys[ wParam ] = TRUE;					// If So, Mark It As TRUE
 			return 0;								// Jump Back
 		}
 
 		case WM_KEYUP:								// Has A Key Been Released?
 		{
-			global_keys[wParam] = FALSE;					// If So, Mark It As FALSE
+			global_keys[ wParam ] = FALSE;					// If So, Mark It As FALSE
 			return 0;								// Jump Back
 		}
 
@@ -444,11 +444,11 @@ LRESULT CALLBACK WndProc(	HWND	hWnd,			// Handle For This Window
 	return DefWindowProc(hWnd,uMsg,wParam,lParam);
 }
 
-int NeHe_lesson_0006_plus() {
+int NeHe_lesson_0006_plus_sfml() {
 	// Ask The User Which Screen Mode They Prefer
 	if (MessageBox(NULL,"Would You Like To Run In Fullscreen Mode?", "Start FullScreen?",MB_YESNO|MB_ICONQUESTION)==IDNO)
 	{
-		global_fullscreen=FALSE;							// Windowed Mode
+		global_fullscreen = false; // Windowed Mode
 	}
 
 	if ( global_fullscreen ) {
@@ -520,4 +520,4 @@ int NeHe_lesson_0006_plus() {
 }
 
 
-} // namespace nehe_lesson_0006_plus
+} // namespace nehe_lesson_0006_plus_sfml

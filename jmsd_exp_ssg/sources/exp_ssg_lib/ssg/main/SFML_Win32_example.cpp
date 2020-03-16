@@ -4,6 +4,7 @@
 // Headers
 ////////////////////////////////////////////////////////////
 #include <SFML/Graphics.hpp>
+#include <SFML/OpenGL.hpp>
 #include "include_Windows.h"
 #include <cmath>
 
@@ -67,18 +68,18 @@ int sfml_win32_example_main()
     windowClass.hCursor       = 0;
     windowClass.hbrBackground = reinterpret_cast<HBRUSH>(COLOR_BACKGROUND);
     windowClass.lpszMenuName  = NULL;
-    windowClass.lpszClassName = TEXT("SFML App");
+    windowClass.lpszClassName = TEXT( "SFML App" );
     RegisterClass(&windowClass);
 
     // Let's create the main window
-    HWND window = CreateWindow(TEXT("SFML App"), TEXT("SFML Win32"), WS_SYSMENU | WS_VISIBLE, 200, 200, 660, 520, NULL, NULL, instance, NULL);
+    HWND window = CreateWindow( TEXT( "SFML App" ), TEXT( "SFML Win32" ), WS_SYSMENU | WS_VISIBLE, 200, 200, 660, 520, NULL, NULL, instance, NULL );
 
     // Add a button for exiting
-    button = CreateWindow(TEXT("BUTTON"), TEXT("Quit"), WS_CHILD | WS_VISIBLE, 560, 440, 80, 40, window, NULL, instance, NULL);
+    button = CreateWindow( TEXT( "BUTTON" ), TEXT( "Quit" ), WS_CHILD | WS_VISIBLE, 560, 440, 80, 40, window, NULL, instance, NULL );
 
     // Let's create two SFML views
-    HWND view1 = CreateWindow(TEXT("STATIC"), NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS, 20,  20, 300, 400, window, NULL, instance, NULL);
-    HWND view2 = CreateWindow(TEXT("STATIC"), NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS, 340, 20, 300, 400, window, NULL, instance, NULL);
+    HWND view1 = CreateWindow( TEXT("STATIC"), NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS, 20,  20, 300, 400, window, NULL, instance, NULL );
+    HWND view2 = CreateWindow( TEXT("STATIC"), NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS, 340, 20, 300, 400, window, NULL, instance, NULL );
     sf::RenderWindow SFMLView1(view1);
     sf::RenderWindow SFMLView2(view2);
 
