@@ -15,6 +15,8 @@ struct zblock
 	float val;
 };
 
+void zamer_timeBeginPeriod( unsigned int const period );
+
 class Zamer {
 
 	zblock blocks[ MAX_ZBLOCKS ];

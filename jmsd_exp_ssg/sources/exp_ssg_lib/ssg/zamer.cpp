@@ -5,11 +5,16 @@
 
 #include "include_Windows.h"
 
+#include <timeapi.h>
+
 
 Zamer ZZZ;
 
 
-// #pragma comment(lib,"Winmm.lib")
+
+void zamer_timeBeginPeriod( unsigned int const period ) {
+	timeBeginPeriod( period );
+}
 
 void Zamer::EndBlock(int i)
 {

@@ -9,12 +9,16 @@
  */
 
 #include "SFML/Graphics.hpp"
+#include "SFML/OpenGL.hpp"
 
 #include "include_Windows.h"
-#include <gl\gl.h>			// Header File For The OpenGL32 Library
-#include <gl\glu.h>			// Header File For The GLu32 Library
+// #include <gl\gl.h>			// Header File For The OpenGL32 Library
+// #include <gl\glu.h>			// Header File For The GLu32 Library
+
+#include "graphic_user_interface/Dialog_message_box.h"
 
 #include <cstdio>			// Header File For Standard Input/Output
+#include <cassert>
 
 
 namespace nehe_lesson_0006_plus_sfml {
@@ -445,10 +449,22 @@ LRESULT CALLBACK WndProc(	HWND	hWnd,			// Handle For This Window
 }
 
 int NeHe_lesson_0006_plus_sfml() {
-	// Ask The User Which Screen Mode They Prefer
-	if (MessageBox(NULL,"Would You Like To Run In Fullscreen Mode?", "Start FullScreen?",MB_YESNO|MB_ICONQUESTION)==IDNO)
-	{
-		global_fullscreen = false; // Windowed Mode
+	{ // cross_platform
+		auto selection = ::jmsd::graphic_user_interface::Dialog_message_box::show(
+			"Whould you like to run in fullscreen mode?",
+			"Start Full Screen Mode?",
+			::jmsd::graphic_user_interface::Dialog_message_box::Style::Warning,
+			::jmsd::graphic_user_interface::Dialog_message_box::Buttons::YesNo );
+
+		if ( selection == ::jmsd::graphic_user_interface::Dialog_message_box::Selection::Yes ) {
+			global_fullscreen = true;
+		} else if ( selection == ::jmsd::graphic_user_interface::Dialog_message_box::Selection::No ) {
+			global_fullscreen = false;
+		} else if ( selection == ::jmsd::graphic_user_interface::Dialog_message_box::Selection::Cancel ) {
+			global_fullscreen = false;
+		} else {
+			assert( false );
+		}
 	}
 
 	if ( global_fullscreen ) {

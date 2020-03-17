@@ -68,7 +68,7 @@ int ssg_Application() {
 
 	if ( !vbo.InitVBO() ) return 1;
 
-	timeBeginPeriod(1);
+	zamer_timeBeginPeriod(1);
 
 	ShowCursor(0);
 

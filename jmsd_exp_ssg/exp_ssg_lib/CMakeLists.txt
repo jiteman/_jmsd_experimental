@@ -44,6 +44,19 @@ endif()
 
 list( APPEND header_and_source_files ${platform_header_and_source_files} )
 
+set( platform_to_remove_header_and_source_files
+	"Dialog_message_box_Linux_implementation"
+	"Dialog_message_box_Osx_implementation"
+	"Dialog_message_box_Windows_implementation" )
+
+if( UNIX )
+	JMSD_REMOVE_FILE_FROM_THE_LIST( platform_to_remove_header_and_source_files "Dialog_message_box_Linux_implementation" )
+elseif( WIN32 )
+	JMSD_REMOVE_FILE_FROM_THE_LIST( platform_to_remove_header_and_source_files "Dialog_message_box_Windows_implementation" )
+endif()
+
+JMSD_REMOVE_FILES_FROM_THE_LIST( header_and_source_files platform_to_remove_header_and_source_files )
+
 add_library( ${PROJECT_NAME} SHARED ${header_and_source_files} )
 
 
