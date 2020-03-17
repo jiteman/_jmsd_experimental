@@ -448,7 +448,9 @@ LRESULT CALLBACK WndProc(	HWND	hWnd,			// Handle For This Window
 	return DefWindowProc(hWnd,uMsg,wParam,lParam);
 }
 
-int NeHe_lesson_0006_plus_sfml() {
+::std::unique_ptr< ::sf::Window > global_sfml_window;
+
+void Ask_user_for_fullscreen_mode() {
 	{ // cross_platform
 		auto selection = ::jmsd::graphic_user_interface::Dialog_message_box::show(
 			"Whould you like to run in fullscreen mode?",
@@ -466,73 +468,61 @@ int NeHe_lesson_0006_plus_sfml() {
 			assert( false );
 		}
 	}
+}
 
-	if ( global_fullscreen ) {
-		DEVMODEA local_dmScreenSettings = {};
-
-		::EnumDisplaySettings( 0, ENUM_CURRENT_SETTINGS, &local_dmScreenSettings );
-		DWORD default_screen_width = local_dmScreenSettings.dmPelsWidth;
-		DWORD default_screen_height = local_dmScreenSettings.dmPelsHeight;
-		DWORD default_screen_bit_depth = local_dmScreenSettings.dmBitsPerPel;
-
-		// Create Our OpenGL Window
-		if ( !CreateGLWindow( "NeHe's OpenGL Framework", default_screen_width, default_screen_height, default_screen_bit_depth, true ) ) {
-			return 0; // Quit If Window Was Not Created
-		}
-	} else {
-		// Create Our OpenGL Window
-		if ( !CreateGLWindow( "NeHe's OpenGL Framework", 800, 600, 24, false ) ) {
-			return 0; // Quit If Window Was Not Created
-		}
+void Create_Sfml_window() {
+	if ( !global_sfml_window ) {
+		global_sfml_window = ::std::make_unique< ::sf::Window >();
 	}
 
-	MSG msg {}; // Windows Message Structure
+	::std::string const windows_caption = "NeHe lesson 0006 plus with sfml";
 
-	BOOL done = FALSE; // Bool Variable To Exit Loop
+	if ( global_fullscreen ) {
+		global_sfml_window->create( ::sf::VideoMode::getDesktopMode(), windows_caption, ::sf::Style::Fullscreen );
 
-	while(!done)									// Loop That Runs While done=FALSE
-	{
-		if (PeekMessage(&msg,NULL,0,0,PM_REMOVE))	// Is There A Message Waiting?
-		{
-			if (msg.message==WM_QUIT)				// Have We Received A Quit Message?
-			{
-				done=TRUE;							// If So done=TRUE
-			}
-			else									// If Not, Deal With Window Messages
-			{
-				TranslateMessage(&msg);				// Translate The Message
-				DispatchMessage(&msg);				// Dispatch The Message
-			}
-		}
-		else										// If There Are No Messages
-		{
-			// Draw The Scene.  Watch For ESC Key And Quit Messages From DrawGLScene()
-			if ((global_active && !DrawGLScene()) || global_keys[VK_ESCAPE])	// Active?  Was There A Quit Received?
-			{
-				done=TRUE;							// ESC or DrawGLScene Signalled A Quit
-			}
-			else									// Not Time To Quit, Update Screen
-			{
-				SwapBuffers(global_hDC);					// Swap Buffers (Double Buffering)
+	} else {
+		global_sfml_window->create( ::sf::VideoMode( 800, 600 ), windows_caption, ::sf::Style::Default );
+	}
+
+	global_sfml_window->setVerticalSyncEnabled( true );
+}
+
+bool Run_window_cycle_until_quit() {
+	bool is_quiting = true;
+
+	while ( global_sfml_window->isOpen() ) {
+		global_sfml_window->display();
+
+		::sf::Event windows_event;
+
+		while ( global_sfml_window->pollEvent( windows_event ) ) {
+			if ( windows_event.type == ::sf::Event::Closed ) {
+				global_sfml_window->close();
+				is_quiting = true;
 			}
 
-			if (global_keys[VK_F1])						// Is F1 Being Pressed?
-			{
-				global_keys[VK_F1]=FALSE;					// If So Make Key FALSE
-				KillGLWindow();						// Kill Our Current Window
-				global_fullscreen=!global_fullscreen;				// Toggle Fullscreen / Windowed Mode
-				// Recreate Our OpenGL Window
-				if (!CreateGLWindow("NeHe's OpenGL Framework Texture Mapping Tutorial",800,600,24,global_fullscreen))
-				{
-					return 0;						// Quit If Window Was Not Created
+			if ( windows_event.type == ::sf::Event::KeyPressed ) {
+				if ( windows_event.key.code == ::sf::Keyboard::F1 ) {
+					global_fullscreen = global_fullscreen ? false : true;
+					global_sfml_window->close();
+					is_quiting = false;
 				}
 			}
 		}
 	}
 
-	// Shutdown
-	KillGLWindow();									// Kill The Window
-	return (msg.wParam);							// Exit The Program
+	return is_quiting;
+}
+
+int NeHe_lesson_0006_plus_sfml() {
+	Ask_user_for_fullscreen_mode();
+
+	do {
+		Create_Sfml_window();
+
+	} while ( !Run_window_cycle_until_quit() );
+
+	return 0;
 }
 
 
