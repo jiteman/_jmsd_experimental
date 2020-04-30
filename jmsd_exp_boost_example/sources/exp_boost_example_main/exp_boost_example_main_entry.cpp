@@ -13,6 +13,8 @@ using namespace std;
 
 namespace po = boost::program_options;
 
+void boost_main();
+
 void boost_main() {
 
     po::options_description desc("Allowed options");
