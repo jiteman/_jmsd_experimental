@@ -11,13 +11,10 @@
 using namespace std;
 #include <iostream>
 
-namespace po = boost::program_options;
-
 void boost_main();
 
 void boost_main() {
-
-    po::options_description desc("Allowed options");
+    ::boost::program_options::options_description desc("Allowed options");
     desc.add_options()
         ("help", "produce help message")
         ;
