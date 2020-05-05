@@ -9,8 +9,9 @@ JMSD_SHOW_PROJECT_HEADER()
 include( ${JMSD_COMPONENT_CMAKE_SETTINGS_PATH}/exp-boost-example-set-compiler-settings.cmake )
 set( JMSD_THIS_PROJECT_SOURCE_ROOT ${JMSD_COMPONENT_SOURCE_ROOT_PATH}/exp_boost_example )
 
-
-cmake_policy( SET CMP0074 NEW ) # In CMake 3.12 and above the find_package(<PackageName>) command now searches prefixes specified by the <PackageName>_ROOT CMake variable and the <PackageName>_ROOT environment variable.
+if ( CMAKE_VERSION VERSION_GREATER_EQUAL 3.12 )
+	cmake_policy( SET CMP0074 NEW ) # In CMake 3.12 and above the find_package(<PackageName>) command now searches prefixes specified by the <PackageName>_ROOT CMake variable and the <PackageName>_ROOT environment variable.
+endif()	
 
 ## external dependencies
 # set( Boost_USE_DEBUG_LIBS OFF )
@@ -21,7 +22,7 @@ set( Boost_USE_MULTITHREADED ON )
 set( Boost_NO_SYSTEM_PATHS ON )
 
 if ( ${CMAKE_BUILD_TYPE} STREQUAL "Debug" )
-	set( Boost_USE_DEBUG_RUNTIME ON )
+	set( Boost_USE_DEBUG_RUNTIME OFF )
 endif()
 
 # set( BOOST_INCLUDEDIR $ENV{BOOST_INCLUDEDIR} )
@@ -72,7 +73,7 @@ link_directories( ${Boost_LIBRARY_DIRS} )
 
 ## project target section
 set( ${PROJECT_NAME}_DEPENDENCY_LIBS_VAR
-	)
+	"" )
 list( REMOVE_DUPLICATES ${PROJECT_NAME}_DEPENDENCY_LIBS_VAR )
 target_link_libraries( ${PROJECT_NAME} ${${PROJECT_NAME}_DEPENDENCY_LIBS_VAR} ${Boost_LIBRARIES} )
 

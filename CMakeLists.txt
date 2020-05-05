@@ -7,10 +7,12 @@ JMSD_SHOW_PROJECT_GROUP_HEADER()
 
 
 add_subdirectory( jmsd_exp_component )
-add_subdirectory( jmsd_exp_sfml )
 ##add_subdirectory( jmsd_exp_boost_example )
 
-if( WIN32 )
+if( UNIX )
+
+elseif( WIN32 )
+	add_subdirectory( jmsd_exp_sfml )
 	add_subdirectory( jmsd_exp_ssg )
 endif()
 
